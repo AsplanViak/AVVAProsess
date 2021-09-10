@@ -34,8 +34,38 @@ __beta__ = False  # Knapp deaktivert hos brukere som ikke har spesifikt aktivert
 # Finn flere variabler her:
 # https://pyrevit.readthedocs.io/en/latest/articles/scriptanatomy.html
 
-from pyrevit import DB, UI  # Dette er alt du trenger for å få tilgang til nesten hele Revit sin API.
-from pyrevit import script, forms  # Se eksempelbruk under
+import clr
+import sys
+import math
+import msvcrt
+
+clr.AddReference('ProtoGeometry')
+from Autodesk.DesignScript.Geometry import *
+
+clr.AddReference("RevitServices")
+import RevitServices
+from RevitServices.Persistence import DocumentManager
+from RevitServices.Transactions import TransactionManager
+
+doc = DocumentManager.Instance.CurrentDBDocument
+uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
+
+clr.AddReference("RevitNodes")
+import Revit
+
+clr.ImportExtensions(Revit.Elements)
+clr.ImportExtensions(Revit.GeometryConversion)
+
+clr.AddReference("RevitAPI")
+import Autodesk
+from Autodesk.Revit.DB import *
+
+clr.AddReference("RevitAPIUI")
+from Autodesk.Revit.UI import *
+
+from System.Collections.Generic import List
+
+from Autodesk.Revit.DB.Plumbing import *
 
 #if __shiftclick__:  # variabel som er True hvis bruker shiftklikker
 #    klikkmetode = "Shiftklikk"
