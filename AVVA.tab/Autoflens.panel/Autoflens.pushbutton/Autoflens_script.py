@@ -34,6 +34,9 @@ __beta__ = False  # Knapp deaktivert hos brukere som ikke har spesifikt aktivert
 # Finn flere variabler her:
 # https://pyrevit.readthedocs.io/en/latest/articles/scriptanatomy.html
 
+from pyrevit import DB, UI  # Dette er alt du trenger for å få tilgang til nesten hele Revit sin API.
+from pyrevit import script, forms  # Se eksempelbruk under
+
 import clr
 import sys
 import math
