@@ -675,8 +675,7 @@ if len(output_report_errors):
     for j in report_errors_compressed:
         report_tekst = report_tekst + ' - ' + j[0][0] + ' ' + str(j[0][1]) + ': ' + str(j[1]) + ' stk \r\n'
 
-button = TaskDialogCommonButtons.
-None
+button = TaskDialogCommonButtons.None
 result = TaskDialogResult.Ok
 TaskDialog.Show('Autoflens ferdig', report_tekst, button)
 
