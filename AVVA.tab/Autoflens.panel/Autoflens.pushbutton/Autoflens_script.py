@@ -38,6 +38,13 @@ from pyrevit import DB, UI  # Dette er alt du trenger for å få tilgang til nes
 from pyrevit import script, forms  # Se eksempelbruk under
 from pyrevit import forms, HOST_APP, script
 
+import traceback
+from rpw import revit, DB
+from rpw.base import BaseObjectWrapper
+from rpw.exceptions import RpwException
+from rpw.utils.logger import logger
+
+
 #from AVSnippets import Parametere as PA
 import AVSnippets as AVS
 from Autodesk.Revit import DB, Exceptions
@@ -93,6 +100,143 @@ from Autodesk.Revit.DB.Plumbing import *
 #          "alt-klikk på knapp for å lese kildekode med mer informasjon."
 #forms.alert(melding, title=klikkmetode, cancel=True, yes=True, no=True, retry=True, exit=True)
 
+
+### start python transaction wrapper
+
+class Transaction(BaseObjectWrapper):
+    """
+    Simplifies transactions by applying ``Transaction.Start()`` and
+    ``Transaction.Commit()`` before and after the context.
+    Automatically rolls back if exception is raised.
+
+    >>> from rpw import db
+    >>> with db.Transaction('Move Wall'):
+    >>>     wall.DoSomething()
+
+    >>> with db.Transaction('Move Wall') as t:
+    >>>     wall.DoSomething()
+    >>>     assert t.HasStarted() is True
+    >>> assert t.HasEnded() is True
+
+    Wrapped Element:
+        self._revit_object = `Revit.DB.Transaction`
+
+    """
+
+    _revit_object_class = DB.Transaction
+
+    def __init__(self, name=None, doc=revit.doc):
+        if name is None:
+            name = 'RPW Transaction'
+        super(Transaction, self).__init__(DB.Transaction(doc, name))
+        self.transaction = self._revit_object
+
+    def __enter__(self):
+        self.transaction.Start()
+        return self
+
+    def __exit__(self, exception, exception_msg, tb):
+        if exception:
+            self.transaction.RollBack()
+            logger.error('Error in Transaction Context: has rolled back.')
+            # traceback.print_tb(tb)
+            # raise exception # Let exception through
+        else:
+            try:
+                self.transaction.Commit()
+            except Exception as exc:
+                self.transaction.RollBack()
+                logger.error('Error in Transaction Commit: has rolled back.')
+                logger.error(exc)
+                raise
+
+    @staticmethod
+    def ensure(name):
+        """ Transaction Manager Decorator
+
+        Decorate any function with ``@Transaction.ensure('Transaction Name')``
+        and the funciton will run within a Transaction Context.
+
+        Args:
+            name (str): Name of the Transaction
+
+        >>> from rpw import db
+        >>> @db.Transaction.ensure('Do Something')
+        >>> def set_some_parameter(wall, value):
+        >>>     wall.parameters['Comments'].value = value
+        >>>
+        >>> set_some_parameter(wall, value)
+        """
+        from functools import wraps
+
+        def wrap(f):
+            @wraps(f)
+            def wrapped_f(*args, **kwargs):
+                with Transaction(name):
+                    return_value = f(*args, **kwargs)
+                return return_value
+            return wrapped_f
+        return wrap
+
+    # TODO: Add  __repr__ with Transaction Status
+    # TODO: Merge Transaction Status
+    # TODO: add check for if transaction is in progress, especially for ensure
+    # TODO: add ensure to TransactionGroup
+
+
+class TransactionGroup(BaseObjectWrapper):
+    """
+    Similar to Transaction, but for ``DB.Transaction Group``
+
+    >>> from rpw import db
+    >>> with db.TransacationGroup('Do Major Task'):
+    >>>     with db.Transaction('Do Task'):
+    >>>         # Do Stuff
+
+    >>> from rpw import db
+    >>> with db.TransacationGroup('Do Major Task', assimilate=False):
+    >>>     with db.Transaction('Do Task'):
+    >>>         # Do Stuff
+    """
+
+    _revit_object_class = DB.TransactionGroup
+
+    def __init__(self, name=None, assimilate=True, doc=revit.doc):
+        """
+            Args:
+                name (str): Name of the Transaction
+                assimilate (bool): If assimilates is ``True``,
+                    transaction history is `squashed`.
+        """
+        if name is None:
+            name = 'RPW Transaction Group'
+        super(TransactionGroup, self).__init__(DB.TransactionGroup(doc, name))
+        self.transaction_group = self._revit_object
+        self.assimilate = assimilate
+
+    def __enter__(self):
+        self.transaction_group.Start()
+        return self.transaction_group
+
+    def __exit__(self, exception, exception_msg, tb):
+        if exception:
+            self.transaction_group.RollBack()
+            logger.error('Error in TransactionGroup Context: has rolled back.')
+        else:
+            try:
+                if self.assimilate:
+                    self.transaction_group.Assimilate()
+                else:
+                    self.transaction_group.Commit()
+            except Exception as exc:
+                self.transaction_group.RollBack()
+                logger.error('Error in TransactionGroup Commit: \
+                              has rolled back.')
+                logger.error(exc)
+                raise exc
+
+### slutt python transaction wrapper
+
 pipingSystem = FilteredElementCollector(doc).OfClass(PipingSystemType).ToElements()
 
 output_report = []
@@ -109,9 +253,9 @@ for i in pipingSystem:
 def measure(startpoint, point):
     return startpoint.DistanceTo(point)
 
-
+@db.Transaction.ensure('Copy element')
 def copyElement(element, oldloc, loc):
-    TransactionManager.Instance.EnsureInTransaction(doc)
+    #TransactionManager.Instance.EnsureInTransaction(doc)
     elementlist = List[ElementId]()
     elementlist.Add(element.Id)
     OffsetZ = (oldloc.Z - loc.Z) * -1
@@ -120,7 +264,7 @@ def copyElement(element, oldloc, loc):
     direction = XYZ(OffsetX, OffsetY, OffsetZ)
     newelementId = ElementTransformUtils.CopyElements(doc, elementlist, direction)
     newelement = doc.GetElement(newelementId[0])
-    TransactionManager.Instance.TransactionTaskDone()
+    #TransactionManager.Instance.TransactionTaskDone()
     return newelement
 
 
@@ -150,7 +294,7 @@ debug7 = []
 tempfamtype = None
 xAxis = XYZ(1, 0, 0)
 
-
+@db.Transaction.ensure('Place fitting')
 def placeFitting(duct, point, familytype, lineDirection):
     toggle = False
     isVertical = False
@@ -185,7 +329,7 @@ def placeFitting(duct, point, familytype, lineDirection):
             height = c.Height
             break
 
-    TransactionManager.Instance.EnsureInTransaction(doc)
+    #TransactionManager.Instance.EnsureInTransaction(doc)
     # point = XYZ(point.X,point.Y,point.Z-level.Elevation)
     point = XYZ(point.X, point.Y, point.Z)
 
@@ -250,23 +394,23 @@ def placeFitting(duct, point, familytype, lineDirection):
     #		conn.Width = width
     #		conn.Height = height
     #		connpoints.append(conn.Origin)
-    TransactionManager.Instance.TransactionTaskDone()
+    #TransactionManager.Instance.TransactionTaskDone()
     # result[newfam] = connpoints
     return newfam
 
-
+@db.Transaction.ensure('Connect elements')
 def ConnectElements(duct, fitting):
     ductconns = duct.ConnectorManager.Connectors
     fittingconns = fitting.MEPModel.ConnectorManager.Connectors
 
-    TransactionManager.Instance.EnsureInTransaction(doc)
+    #TransactionManager.Instance.EnsureInTransaction(doc)
     for conn in fittingconns:
         for ductconn in ductconns:
             result = ductconn.Origin.IsAlmostEqualTo(conn.Origin)
             if result:
                 ductconn.ConnectTo(conn)
                 break
-    TransactionManager.Instance.TransactionTaskDone()
+    #TransactionManager.Instance.TransactionTaskDone()
     return result
 
 
@@ -282,6 +426,18 @@ class FamOpt1(IFamilyLoadOptions):
     def OnFamilyFound(self, familyInUse, overwriteParameterValues): return True
 
     def OnSharedFamilyFound(self, familyInUse, source, overwriteParameterValues): return True
+
+
+#function for å endre type connector
+@db.Transaction.ensure('Change connection type')
+def changecontype(con):
+
+    if(con.get_Parameter(BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM).Set(20)):
+        return true
+    else:
+        return false
+
+
 
 
 ###########################################################
@@ -430,8 +586,8 @@ for i in EQ:
                         valve_family_name = valve_family.Name
                         if valve_family.Name not in checked_valve_families:
 
-                            trans1 = TransactionManager.Instance
-                            trans1.ForceCloseTransaction()  # just to make sure everything is closed down
+                            #trans1 = TransactionManager.Instance
+                            #trans1.ForceCloseTransaction()  # just to make sure everything is closed down
 
                             famdoc = doc.EditFamily(valve_family)
 
@@ -452,15 +608,21 @@ for i in EQ:
                                             BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM).AsValueString() == 'Global':
                                         debug4.append('treff på global')
                                         try:  # this might fail if the parameter exists or for some other reason
-                                            trans1.EnsureInTransaction(famdoc)
+                                            #trans1.EnsureInTransaction(famdoc)
                                             # famdoc.FamilyManager.AddParameter(par_name, par_grp, par_type, inst_or_typ)
                                             ###a.get_Parameter(BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM).SetValueString('Domestic Cold Water')
 
-                                            a.get_Parameter(
-                                                BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM).Set(20)
+                                            #a.get_Parameter(BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM).Set(20)
+
+                                            if(changecontype(a)):
+                                                pass
+                                            else:
+                                                debug4.append('feil ved forsøk på å endre con type')
+
+
                                             # 20 is the integer-id for Domestic Cold Water
 
-                                            trans1.ForceCloseTransaction()
+                                            #trans1.ForceCloseTransaction()
                                             famdoc.LoadFamily(doc, FamOpt1())
                                             # result.append(True)
                                             debug4.append('jabadadoo')
@@ -488,13 +650,16 @@ for i in EQ:
 ###########################################################################
 
 
-TransactionManager.Instance.EnsureInTransaction(doc)
+#TransactionManager.Instance.EnsureInTransaction(doc)
+transaction = Transaction(doc)
+transaction.Start('activate flange type')
 for typ in flange_family_type:
     if typ != 0:
         if typ.IsActive == False:
             typ.Activate()
             doc.Regenerate()
-TransactionManager.Instance.TransactionTaskDone()
+transaction.commit()
+#TransactionManager.Instance.TransactionTaskDone()
 
 debug2 = []
 
@@ -576,8 +741,11 @@ for i, duct in enumerate(pipe):
                 need_to_flip = f_cons[1].GetMEPConnectorInfo().IsPrimary
             debug2.append('need_to_flip: ' + str(need_to_flip))
 
-        TransactionManager.Instance.EnsureInTransaction(doc)
+        #TransactionManager.Instance.EnsureInTransaction(doc)
+        transaction = Transaction(doc)
+        transaction.start('Flip and move flange')
         if need_to_flip:
+
             vector = valve_connector[i].CoordinateSystem.BasisY
 
             line = Autodesk.Revit.DB.Line.CreateBound(valve_connector[i].Origin, valve_connector[i].Origin + vector)
@@ -652,7 +820,8 @@ for i, duct in enumerate(pipe):
         # except:
         # debug2.append('fail 2')
 
-        TransactionManager.Instance.TransactionTaskDone()
+        #TransactionManager.Instance.TransactionTaskDone()
+        transaction.Commit()
 
         # add to output report
         # output_report.append(duct_piping_system_type)
