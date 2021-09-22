@@ -282,7 +282,7 @@ def CheckValveConnectors(valve_family):
             debug4.append('mech equipment?')
     famdoc.Close(False)
 
-def AddFlange(pipe, valve_connector, gasket)
+def AddFlange(pipe, valve_connector, gasket):
     transaction = Transaction(doc)
     transaction.Start("Add flange")
     pointlist = valve_connector.Origin
