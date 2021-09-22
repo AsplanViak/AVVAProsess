@@ -302,7 +302,7 @@ def AddFlange(pipe, valve_connector, gasket):
     # create duct location line
     ductline = pipe.Location.Curve
     lineDirection = ductline.Direction
-    new_flange = placeFitting(duct, pointlist, familytype, lineDirection)
+    new_flange = placeFitting(pipe, pointlist, familytype, lineDirection)
 
     transaction.Commit()
     return new_flange
