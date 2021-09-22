@@ -520,7 +520,8 @@ for i in EQ:
                         else:
                             # ny variant, bruker bounding box location
                             debug2.append('ny variant, bruker bounding box')
-                            try:                bb = valve.get_BoundingBox(None)
+                            try:                
+                                bb = valve.get_BoundingBox(None)
                                 if not bb is None:
                                     centre = bb.Min + (bb.Max - bb.Min) / 2
                             except:
