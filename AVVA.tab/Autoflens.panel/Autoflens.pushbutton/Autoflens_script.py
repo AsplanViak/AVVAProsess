@@ -109,14 +109,14 @@ class Transaction(BaseObjectWrapper):
     ``Transaction.Commit()`` before and after the context.
     Automatically rolls back if exception is raised.
 
-    >>> from rpw import db
-    >>> with db.Transaction('Move Wall'):
-    >>>     wall.DoSomething()
+  #  >>> from rpw import db
+  #  >>> with db.Transaction('Move Wall'):
+  #  >>>     wall.DoSomething()
 
-    >>> with db.Transaction('Move Wall') as t:
-    >>>     wall.DoSomething()
-    >>>     assert t.HasStarted() is True
-    >>> assert t.HasEnded() is True
+  #  >>> with db.Transaction('Move Wall') as t:
+  #  >>>     wall.DoSomething()
+  #  >>>     assert t.HasStarted() is True
+  #  >>> assert t.HasEnded() is True
 
     Wrapped Element:
         self._revit_object = `Revit.DB.Transaction`
