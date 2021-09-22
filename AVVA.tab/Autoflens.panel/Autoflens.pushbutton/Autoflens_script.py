@@ -604,6 +604,9 @@ for i, duct in enumerate(pipe):
                     centre = bb.Min + (bb.Max - bb.Min) / 2
             except:
                 debug2.append('feil med bounding box løsning')
+                button = TaskDialogCommonButtons.None
+                result = TaskDialogResult.Ok
+                TaskDialog.Show('Feil', 'feil med boundingbox', button)
             # if flange_a_con_position.DistanceTo(valve_location[i].Point) < flange_b_con_position.DistanceTo(valve_location[i].Point):
 
             if flange_a_con_position.DistanceTo(centre) < flange_b_con_position.DistanceTo(centre):
