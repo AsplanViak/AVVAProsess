@@ -520,7 +520,7 @@ for i in EQ:
                         else:
                             # ny variant, bruker bounding box location
                             debug2.append('ny variant, bruker bounding box')
-                            try:                
+                            try:
                                 bb = valve.get_BoundingBox(None)
                                 if not bb is None:
                                     centre = bb.Min + (bb.Max - bb.Min) / 2
@@ -679,12 +679,12 @@ if len(output_report_errors):
 
     report_tekst = report_tekst + '\r\nFølgende flenser ble IKKE lagt til eller er feilplassert: \r\n \r\n'
     for j in report_errors_compressed:
-        report_tekst = report_tekst + ' - ' + j[0][0] + ' ' + str(j[0][1]) + ': ' + str(j[1]) + ' stk ' + str(j[0][2] + '\r\n'
+        report_tekst = report_tekst + ' - ' + j[0][0] + ' ' + str(j[0][1]) + ': ' + str(j[1]) + ' stk ' + str(j[0][2]) + '\r\n'
 
 button = TaskDialogCommonButtons.None
 result = TaskDialogResult.Ok
-#TaskDialog.Show('Autoflens ferdig', report_tekst, button)
-TaskDialog.Show('Autoflens ferdig',  ' '.join([str(elem) for elem in debug4]), button)
+TaskDialog.Show('Autoflens ferdig', report_tekst, button)
+#TaskDialog.Show('Autoflens ferdig',  ' '.join([str(elem) for elem in debug4]), button)
 
 # OUT = debug2
 # OUT = EQ_families
