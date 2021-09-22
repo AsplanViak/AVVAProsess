@@ -777,7 +777,8 @@ if len(output_report_errors):
 
 button = TaskDialogCommonButtons.None
 result = TaskDialogResult.Ok
-TaskDialog.Show('Autoflens ferdig', report_tekst, button)
+#TaskDialog.Show('Autoflens ferdig', report_tekst, button)
+TaskDialog.Show('Autoflens ferdig', debug4, button)
 
 # OUT = debug2
 # OUT = EQ_families
