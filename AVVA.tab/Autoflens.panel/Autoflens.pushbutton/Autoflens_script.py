@@ -188,15 +188,15 @@ class TransactionGroup(BaseObjectWrapper):
     """
     Similar to Transaction, but for ``DB.Transaction Group``
 
-    >>> from rpw import db
-    >>> with db.TransacationGroup('Do Major Task'):
-    >>>     with db.Transaction('Do Task'):
-    >>>         # Do Stuff
+    #>>> from rpw import db
+    #>>> with db.TransacationGroup('Do Major Task'):
+    #>>>     with db.Transaction('Do Task'):
+    #>>>         # Do Stuff
 
-    >>> from rpw import db
-    >>> with db.TransacationGroup('Do Major Task', assimilate=False):
-    >>>     with db.Transaction('Do Task'):
-    >>>         # Do Stuff
+    #>>> from rpw import db
+    #>>> with db.TransacationGroup('Do Major Task', assimilate=False):
+    #>>>     with db.Transaction('Do Task'):
+    #>>>         # Do Stuff
     """
 
     _revit_object_class = DB.TransactionGroup
@@ -253,7 +253,7 @@ for i in pipingSystem:
 def measure(startpoint, point):
     return startpoint.DistanceTo(point)
 
-@db.Transaction.ensure('Copy element')
+@DB.Transaction.ensure('Copy element')
 def copyElement(element, oldloc, loc):
     #TransactionManager.Instance.EnsureInTransaction(doc)
     elementlist = List[ElementId]()
@@ -294,7 +294,7 @@ debug7 = []
 tempfamtype = None
 xAxis = XYZ(1, 0, 0)
 
-@db.Transaction.ensure('Place fitting')
+@DB.Transaction.ensure('Place fitting')
 def placeFitting(duct, point, familytype, lineDirection):
     toggle = False
     isVertical = False
@@ -398,7 +398,7 @@ def placeFitting(duct, point, familytype, lineDirection):
     # result[newfam] = connpoints
     return newfam
 
-@db.Transaction.ensure('Connect elements')
+@DB.Transaction.ensure('Connect elements')
 def ConnectElements(duct, fitting):
     ductconns = duct.ConnectorManager.Connectors
     fittingconns = fitting.MEPModel.ConnectorManager.Connectors
@@ -429,7 +429,7 @@ class FamOpt1(IFamilyLoadOptions):
 
 
 #function for å endre type connector
-@db.Transaction.ensure('Change connection type')
+@DB.Transaction.ensure('Change connection type')
 def changecontype(con):
 
     if(con.get_Parameter(BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM).Set(20)):
