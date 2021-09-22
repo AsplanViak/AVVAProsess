@@ -530,7 +530,7 @@ for typ in flange_family_type:
         if typ.IsActive == False:
             typ.Activate()
             doc.Regenerate()
-transaction2.commit()
+transaction2.Commit()
 #TransactionManager.Instance.TransactionTaskDone()
 
 debug2 = []
