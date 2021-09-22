@@ -63,7 +63,7 @@ from RevitServices.Transactions import TransactionManager
 
 #doc = DocumentManager.Instance.CurrentDBDocument
 doc = HOST_APP.doc
-uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
+#uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
 
 clr.AddReference("RevitNodes")
 import Revit
