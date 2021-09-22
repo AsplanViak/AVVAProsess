@@ -253,9 +253,11 @@ for i in pipingSystem:
 def measure(startpoint, point):
     return startpoint.DistanceTo(point)
 
-@DB.Transaction.ensure('Copy element')
+#@DB.Transaction.ensure('Copy element')
 def copyElement(element, oldloc, loc):
     #TransactionManager.Instance.EnsureInTransaction(doc)
+    transaction = Transaction(doc)
+    transaction.Start("Copy element")
     elementlist = List[ElementId]()
     elementlist.Add(element.Id)
     OffsetZ = (oldloc.Z - loc.Z) * -1
@@ -265,6 +267,7 @@ def copyElement(element, oldloc, loc):
     newelementId = ElementTransformUtils.CopyElements(doc, elementlist, direction)
     newelement = doc.GetElement(newelementId[0])
     #TransactionManager.Instance.TransactionTaskDone()
+    transaction.Commit()
     return newelement
 
 
