@@ -36,6 +36,17 @@ __beta__ = False  # Knapp deaktivert hos brukere som ikke har spesifikt aktivert
 
 from pyrevit import DB, UI  # Dette er alt du trenger for å få tilgang til nesten hele Revit sin API.
 from pyrevit import script, forms  # Se eksempelbruk under
+from pyrevit import forms, HOST_APP, script
+
+#from AVSnippets import Parametere as PA
+import AVSnippets as AVS
+from Autodesk.Revit import DB, Exceptions
+
+#import datetime
+#import AVSnippets.Excel as avsexcel
+
+from pyrevit.forms import alert
+
 
 import clr
 import sys
@@ -50,7 +61,8 @@ import RevitServices
 from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
-doc = DocumentManager.Instance.CurrentDBDocument
+#doc = DocumentManager.Instance.CurrentDBDocument
+doc = HOST_APP.doc
 uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
 
 clr.AddReference("RevitNodes")
