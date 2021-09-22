@@ -615,7 +615,7 @@ for i, duct in enumerate(pipe):
 
         #TransactionManager.Instance.EnsureInTransaction(doc)
         transaction = Transaction(doc)
-        transaction.start('Flip and move flange')
+        transaction.start('Flip flange')
         if need_to_flip:
 
             vector = valve_connector[i].CoordinateSystem.BasisY
@@ -628,7 +628,10 @@ for i, duct in enumerate(pipe):
         ##Move to right place
         # find primary and secondardy connector
 
-        doc.Regenerate()
+        transaction.Commit()
+
+        transaction = Transaction(doc)
+        transaction.start('Move flange')
 
         if f_cons[0].GetMEPConnectorInfo().IsPrimary:
             # debug2.append('primary')
@@ -639,11 +642,15 @@ for i, duct in enumerate(pipe):
             secondary_con_id = 0
         # debug2.append('secondary')
 
-        doc.Regenerate()
+        #doc.Regenerate()
 
         new_flange.Location.Move((valve_connector[i].Origin - f_cons[secondary_con_id].Origin))
 
-        doc.Regenerate()
+        #doc.Regenerate()
+        transaction.Commit()
+
+        transaction = Transaction(doc)
+        transaction.start('Modify pipe endpoints')
 
         # modify pipe endpoints
         try:
@@ -660,7 +667,8 @@ for i, duct in enumerate(pipe):
         except:
             debug2.append('fail')
 
-        doc.Regenerate()
+        #doc.Regenerate()
+        transaction.Commit()
 
         # duct_piping_system_type = pipe_connector[i].MEPSystem
         # duct_piping_system_type = pipe[i].get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsElementId()
@@ -677,6 +685,8 @@ for i, duct in enumerate(pipe):
             if sys == duct_piping_system_type:
                 rorsystem = list_piping_system[k]
 
+        transaction = Transaction(doc)
+        transaction.start('Connect pipes to flange')
         # try:
         if 1:
             # disconnect
@@ -688,7 +698,8 @@ for i, duct in enumerate(pipe):
             # doc.Regenerate()
             f_cons[secondary_con_id].ConnectTo(valve_connector[i])
 
-            doc.Regenerate()
+            #doc.Regenerate()
+
         # except:
         # debug2.append('fail 2')
 
