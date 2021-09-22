@@ -523,14 +523,14 @@ for i in EQ:
 
 
 #TransactionManager.Instance.EnsureInTransaction(doc)
-transaction = Transaction(doc, 'activate flange type')
-transaction.Start()
+transaction2 = Transaction(doc)
+transaction2.Start('activate flange type')
 for typ in flange_family_type:
     if typ != 0:
         if typ.IsActive == False:
             typ.Activate()
             doc.Regenerate()
-transaction.commit()
+transaction2.commit()
 #TransactionManager.Instance.TransactionTaskDone()
 
 debug2 = []
