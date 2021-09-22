@@ -297,8 +297,11 @@ debug7 = []
 tempfamtype = None
 xAxis = XYZ(1, 0, 0)
 
-@DB.Transaction.ensure('Place fitting')
+#@DB.Transaction.ensure('Place fitting')
 def placeFitting(duct, point, familytype, lineDirection):
+    transaction = Transaction(doc)
+    transaction.Start("Place fitting")
+
     toggle = False
     isVertical = False
 
@@ -399,10 +402,14 @@ def placeFitting(duct, point, familytype, lineDirection):
     #		connpoints.append(conn.Origin)
     #TransactionManager.Instance.TransactionTaskDone()
     # result[newfam] = connpoints
+    transaction.Commit()
     return newfam
 
-@DB.Transaction.ensure('Connect elements')
+#@DB.Transaction.ensure('Connect elements')
 def ConnectElements(duct, fitting):
+    transaction = Transaction(doc)
+    transaction.Start("Connect elements")
+
     ductconns = duct.ConnectorManager.Connectors
     fittingconns = fitting.MEPModel.ConnectorManager.Connectors
 
@@ -414,6 +421,7 @@ def ConnectElements(duct, fitting):
                 ductconn.ConnectTo(conn)
                 break
     #TransactionManager.Instance.TransactionTaskDone()
+    transaction.Commit()
     return result
 
 
@@ -432,12 +440,16 @@ class FamOpt1(IFamilyLoadOptions):
 
 
 #function for å endre type connector
-@DB.Transaction.ensure('Change connection type')
+#@DB.Transaction.ensure('Change connection type')
 def changecontype(con):
+    transaction = Transaction(doc)
+    transaction.Start("Change connection type")
 
     if(con.get_Parameter(BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM).Set(20)):
+        transaction.Commit()
         return true
     else:
+        transaction.Commit()
         return false
 
 
