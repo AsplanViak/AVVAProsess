@@ -467,7 +467,7 @@ for i in EQ:
                                         except:  # you might want to import traceback for a more detailed error report
                                             # result.append(False)
                                             debug4.append('neeeeei')
-                                            trans1.ForceCloseTransaction()
+                                            #trans1.ForceCloseTransaction()
                                 except:
                                     debug4.append('mech equipment?')
 
