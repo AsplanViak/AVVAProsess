@@ -285,8 +285,8 @@ def CheckValveConnectors(valve_family):
     famdoc.Close(False)
 
 def AddFlange(pipe, valve_connector, gasket):
-    transaction = Transaction(doc)
-    transaction.Start("Add flange")
+    #transaction = Transaction(doc)
+    #transaction.Start("Add flange")
     pointlist = valve_connector.Origin
 
     # Krage-løsflens
@@ -306,7 +306,7 @@ def AddFlange(pipe, valve_connector, gasket):
     lineDirection = ductline.Direction
     new_flange = placeFitting(pipe, pointlist, familytype, lineDirection)
 
-    transaction.Commit()
+    #transaction.Commit()
     return new_flange
 
 
