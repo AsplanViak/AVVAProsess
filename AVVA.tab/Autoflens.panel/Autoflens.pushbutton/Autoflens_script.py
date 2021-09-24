@@ -550,7 +550,7 @@ for i in EQ:
 
                         # add to output report
 
-                        if status == 'ok':
+                        if status == '':
                             try:
                                 output_report.append(
                                     list([str(duct_piping_system_type),
