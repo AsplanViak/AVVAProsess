@@ -561,7 +561,7 @@ for i in EQ:
                             continue
 
                         # add to output report
-                        output_report.append(report(duct_piping_system_type,pipe_connector, status))
+                        output_report.append(report(duct_piping_system_type,pipe_connector, ''))
 
 
 report_tekst = ''
