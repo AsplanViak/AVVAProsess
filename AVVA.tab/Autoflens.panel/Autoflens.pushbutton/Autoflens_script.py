@@ -579,13 +579,14 @@ for i in EQ:
                             # modify pipe endpoints
                             if pipe_endpoint_id == 0:
                                 new_pipeline = DB.Line.CreateBound(f_cons[primary_con_id].Origin,
-                                                                   pipe.DB.Location.Curve.GetEndPoint(1))
-                                pipe.DB.Location.Curve = new_pipeline
+                                                                   pipe.Location.Curve.GetEndPoint(1))
+                                pipe.Location.Curve = new_pipeline
+
                                 debug2.append('a modify pipe endpoints')
                             else:
-                                new_pipeline = DB.Line.CreateBound(pipe.DB.Location.Curve.GetEndPoint(0),
+                                new_pipeline = DB.Line.CreateBound(pipe.Location.Curve.GetEndPoint(0),
                                                                    f_cons[primary_con_id].Origin)
-                                pipe.DB.Location.Curve = new_pipeline
+                                pipe.Location.Curve = new_pipeline
                                 debug2.append('b modify pipe endpoints')
 
                         #except:
