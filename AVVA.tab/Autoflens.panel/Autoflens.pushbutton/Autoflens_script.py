@@ -500,7 +500,7 @@ for i in EQ:
                             new_flange.Location.Move(1232131)
                         except:
                             status = status + ' Feil ved flytting.'
-                            DeleteEntity(new_flange)
+                            doc.Delete(new_flange.Id)
                             continue
 
                         ########################
