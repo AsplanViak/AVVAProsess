@@ -129,7 +129,8 @@ def GetClosestDirection(faminstance, lineDirection):
 
 
 debug = []
-
+debug2 = []
+debug4 = []
 debug7 = []
 
 # global variables for rotating new families
