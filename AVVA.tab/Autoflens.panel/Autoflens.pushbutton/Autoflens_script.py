@@ -401,7 +401,11 @@ for i in EQ:
                 connectors = i.ConnectorManager.Connectors
             except:
                 connectors = []
-        if len(connectors) == 0:
+        # modify connectorset to be subscriptable
+        cons = []
+        for kk in connectors:
+            cons.append(kk)
+        if len(cons) == 0:
             continue
 
         # Checking the connector-types of the family
