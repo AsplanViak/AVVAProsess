@@ -79,8 +79,7 @@ from Autodesk.Revit.DB.Plumbing import *
 
 pipingSystem = FilteredElementCollector(doc).OfClass(PipingSystemType).ToElements()
 
-transaction = Transaction(doc)
-transaction.Start("Full script")
+
 
 output_report = []
 output_report_errors = []
@@ -391,6 +390,36 @@ valve_number_of_connectors = []
 checked_valve_families = []
 
 for i in EQ:
+    # Filter out flanges and other parts where type-name i "Standard"
+    if i.Name != 'Standard':
+        # Filter out equipment without connectors
+        # Find connectors
+        try:
+            connectors = i.MEPModel.ConnectorManager.Connectors
+        except:
+            try:
+                connectors = i.ConnectorManager.Connectors
+            except:
+                connectors = []
+        if len(connectors) == 0:
+            continue
+
+        # Checking the connector-types of the family
+        valve_type_id = i.GetTypeId()
+        valve_element_type = doc.GetElement(valve_type_id)
+        valve_family = valve_element_type.Family
+        valve_family_name = valve_family.Name
+        if valve_family.Name not in checked_valve_families:
+            #transaction.Commit()
+            CheckValveConnectors(valve_family)
+            #transaction = Transaction(doc)
+            #transaction.Start("Continue main script")
+            checked_valve_families.append(valve_family_name)
+
+transaction = Transaction(doc)
+transaction.Start("Autoflens")
+
+for i in EQ:
     # for i in []:
     # Filter out flanges and other parts where type-name i "Standard"
 
@@ -473,7 +502,8 @@ for i in EQ:
                         else:
                             gasket = True
 
-                        # Checking the connector-types of the family
+
+                        ''''# Checking the connector-types of the family
                         valve_type_id = i.GetTypeId()
                         valve_element_type = doc.GetElement(valve_type_id)
                         valve_family = valve_element_type.Family
@@ -485,6 +515,7 @@ for i in EQ:
                             transaction.Start("Continue main script")
 
                             checked_valve_families.append(valve_family_name)
+                        '''
 
                         #####################
                         #add flange
@@ -547,18 +578,13 @@ for i in EQ:
 
 
                         if need_to_flip:
-
-                            #transaction = Transaction(doc)
-                            #transaction.Start('Flip flange')
-                            #try:
-                            if 1:
+                            try:
                                 vector = valve_connector.CoordinateSystem.BasisY
                                 line = Autodesk.Revit.DB.Line.CreateBound(valve_connector.Origin, valve_connector.Origin + vector)
                                 #line = UnwrapElement(line)
                                 flipped = new_flange.Location.Rotate(line,math.pi)
-                            #except:
+                            except:
                                 status = status + ' failed to flip'
-                            #transaction.Commit()
                         doc.Regenerate()
                         ###################################
                         # Move flange
