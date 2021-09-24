@@ -82,8 +82,6 @@ def measure(startpoint, point):
 
 
 def copyElement(element, oldloc, loc):
-    # transaction = Transaction(doc)
-    # transaction.Start("Copy element")
     elementlist = List[DB.ElementId]()
     elementlist.Add(element.Id)
     OffsetZ = (oldloc.Z - loc.Z) * -1
@@ -92,8 +90,6 @@ def copyElement(element, oldloc, loc):
     direction = DB.XYZ(OffsetX, OffsetY, OffsetZ)
     newelementId = DB.ElementTransformUtils.CopyElements(doc, elementlist, direction)
     newelement = doc.GetElement(newelementId[0])
-
-    # transaction.Commit()
     return newelement
 
 
@@ -165,9 +161,6 @@ def placeFitting(duct, point, familytype, lineDirection):
     if radius < 45 / 304.8 / 2:
         return 0
 
-    # transaction = Transaction(doc)
-    # transaction.Start("Place fitting")
-
     newfam = doc.Create.NewFamilyInstance(point, familytype, level, DB.Structure.StructuralType.NonStructural)
     doc.Regenerate()
     transform = newfam.GetTransform()
@@ -198,13 +191,11 @@ def placeFitting(duct, point, familytype, lineDirection):
 
     newfam.LookupParameter('Nominal Radius').Set(radius)
 
-    # transaction.Commit()
+
     return newfam
 
 
 def ConnectElements(duct, fitting):
-    # transaction = Transaction(doc)
-    # transaction.Start("Connect elements")
 
     ductconns = duct.ConnectorManager.Connectors
     fittingconns = fitting.MEPModel.ConnectorManager.Connectors
@@ -215,8 +206,7 @@ def ConnectElements(duct, fitting):
             if result:
                 ductconn.ConnectTo(conn)
                 break
-    # TransactionManager.Instance.TransactionTaskDone()
-    # transaction.Commit()
+
     return result
 
 
@@ -236,16 +226,10 @@ class FamOpt1:
 
 
 # function for å endre type connector
-# @DB.Transaction.ensure('Change connection type')
 def changecontype(con):
-    # transaction = Transaction(doc)
-    # transaction.Start("Change connection type")
-
     if (con.get_Parameter(DB.BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM).Set(20)):
-        # transaction.Commit()
         return True
     else:
-        # transaction.Commit()
         return False
 
 
@@ -325,15 +309,12 @@ for l in PA1:
         flange_family_type[3] = l
         break
 
-# transaction2 = Transaction(doc)
-# transaction2.Start('activate flange type')
+
 for typ in flange_family_type:
     if typ != 0:
         if typ.IsActive == False:
             typ.Activate()
             doc.Regenerate()
-# transaction2.Commit()
-
 
 # prepare connection filter for later collector within family editor
 con_cat_list = [DB.BuiltInCategory.OST_ConnectorElem]
@@ -395,10 +376,7 @@ for i in EQ:
         valve_family = valve_element_type.Family
         valve_family_name = valve_family.Name
         if valve_family.Name not in checked_valve_families:
-            # transaction.Commit()
             CheckValveConnectors(valve_family)
-            # transaction = Transaction(doc)
-            # transaction.Start("Continue main script")
             checked_valve_families.append(valve_family_name)
 
 transaction = DB.Transaction(doc)
@@ -429,7 +407,7 @@ for i in EQ:
             refs = None
             try:
                 refs = [doc.GetElement(x.Owner.Id) for x in j.AllRefs if
-                        x.Owner.Id != j.Owner.Id and x.DB.ConnectorType != DB.ConnectorType.Logical]
+                        x.Owner.Id != j.Owner.Id and x.ConnectorType != DB.ConnectorType.Logical]
             except:
                 refs = None
             if type(refs) == list:
@@ -439,7 +417,7 @@ for i in EQ:
                     refs = refs[0]
 
             for y in j.AllRefs:
-                if y.Owner.Id != j.Owner.Id and y.DB.ConnectorType != DB.ConnectorType.Logical:
+                if y.Owner.Id != j.Owner.Id and y.ConnectorType != DB.ConnectorType.Logical:
                     pipecon = y
 
             # check if connected to straight pipe
@@ -575,8 +553,7 @@ for i in EQ:
                         ###################################
                         # Move flange
                         ###################################
-                        # transaction = Transaction(doc)
-                        # transaction.Start('Move flange')
+
                         try:
                             if f_cons[0].GetMEPConnectorInfo().IsPrimary:
                                 # debug2.append('primary')
@@ -589,14 +566,13 @@ for i in EQ:
                             new_flange.Location.Move((valve_connector.Origin - f_cons[secondary_con_id].Origin))
                         except:
                             status = status + ' failed to move'
-                        # transaction.Commit()
+
 
                         ########################
                         # Modify pipe endpoints
                         ########################
 
-                        # transaction = Transaction(doc)
-                        # transaction.Start('Modify pipe endpoints')
+
                         doc.Regenerate()
                         try:
                             # modify pipe endpoints
@@ -613,7 +589,7 @@ for i in EQ:
 
                         except:
                             status = status + 'failed to modify pipe endpoints'
-                        # transaction.Commit()
+
                         doc.Regenerate()
                         duct_piping_system_type = pipe.get_Parameter(
                             DB.BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
@@ -625,8 +601,7 @@ for i in EQ:
                         ##########################################
                         # Connect pipes to flange
                         ##########################################
-                        # transaction = Transaction(doc)
-                        # transaction.Start('Connect pipes to flange')
+
                         try:
 
                             # disconnect
@@ -641,7 +616,6 @@ for i in EQ:
 
                         except:
                             status = status + ' failed to connect pipes to flange'
-                        # transaction.Commit()
 
                         # add to output report
                         # output_report.append(duct_piping_system_type)
