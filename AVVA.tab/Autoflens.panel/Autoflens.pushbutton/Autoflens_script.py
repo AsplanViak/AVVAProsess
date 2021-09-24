@@ -79,6 +79,9 @@ from Autodesk.Revit.DB.Plumbing import *
 
 pipingSystem = FilteredElementCollector(doc).OfClass(PipingSystemType).ToElements()
 
+transaction = Transaction(doc)
+transaction.Start("Full script")
+
 output_report = []
 output_report_errors = []
 
@@ -94,9 +97,9 @@ def measure(startpoint, point):
     return startpoint.DistanceTo(point)
 
 def copyElement(element, oldloc, loc):
-    #TransactionManager.Instance.EnsureInTransaction(doc)
-    transaction = Transaction(doc)
-    transaction.Start("Copy element")
+
+    #transaction = Transaction(doc)
+    #transaction.Start("Copy element")
     elementlist = List[ElementId]()
     elementlist.Add(element.Id)
     OffsetZ = (oldloc.Z - loc.Z) * -1
@@ -105,8 +108,8 @@ def copyElement(element, oldloc, loc):
     direction = XYZ(OffsetX, OffsetY, OffsetZ)
     newelementId = ElementTransformUtils.CopyElements(doc, elementlist, direction)
     newelement = doc.GetElement(newelementId[0])
-    #TransactionManager.Instance.TransactionTaskDone()
-    transaction.Commit()
+
+    #transaction.Commit()
     return newelement
 
 
@@ -173,7 +176,7 @@ def placeFitting(duct, point, familytype, lineDirection):
             height = c.Height
             break
 
-    #TransactionManager.Instance.EnsureInTransaction(doc)
+
     # point = XYZ(point.X,point.Y,point.Z-level.Elevation)
     point = XYZ(point.X, point.Y, point.Z)
 
@@ -181,8 +184,8 @@ def placeFitting(duct, point, familytype, lineDirection):
     if radius < 45 / 304.8 / 2:
         return 0
 
-    transaction = Transaction(doc)
-    transaction.Start("Place fitting")
+    #transaction = Transaction(doc)
+    #transaction.Start("Place fitting")
 
     newfam = doc.Create.NewFamilyInstance(point, familytype, level, Structure.StructuralType.NonStructural)
     doc.Regenerate()
@@ -214,18 +217,18 @@ def placeFitting(duct, point, familytype, lineDirection):
 
     newfam.LookupParameter('Nominal Radius').Set(radius)
 
-    transaction.Commit()
+    #transaction.Commit()
     return newfam
 
 
 def ConnectElements(duct, fitting):
-    transaction = Transaction(doc)
-    transaction.Start("Connect elements")
+    #transaction = Transaction(doc)
+    #transaction.Start("Connect elements")
 
     ductconns = duct.ConnectorManager.Connectors
     fittingconns = fitting.MEPModel.ConnectorManager.Connectors
 
-    #TransactionManager.Instance.EnsureInTransaction(doc)
+
     for conn in fittingconns:
         for ductconn in ductconns:
             result = ductconn.Origin.IsAlmostEqualTo(conn.Origin)
@@ -233,7 +236,7 @@ def ConnectElements(duct, fitting):
                 ductconn.ConnectTo(conn)
                 break
     #TransactionManager.Instance.TransactionTaskDone()
-    transaction.Commit()
+    #transaction.Commit()
     return result
 
 
@@ -254,14 +257,14 @@ class FamOpt1(IFamilyLoadOptions):
 #function for å endre type connector
 #@DB.Transaction.ensure('Change connection type')
 def changecontype(con):
-    transaction = Transaction(doc)
-    transaction.Start("Change connection type")
+    #transaction = Transaction(doc)
+    #transaction.Start("Change connection type")
 
     if(con.get_Parameter(BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM).Set(20)):
-        transaction.Commit()
+        #transaction.Commit()
         return true
     else:
-        transaction.Commit()
+        #transaction.Commit()
         return false
 
 def CheckValveConnectors(valve_family):
@@ -286,8 +289,6 @@ def CheckValveConnectors(valve_family):
     famdoc.Close(False)
 
 def AddFlange(pipe, valve_connector, gasket):
-    #transaction = Transaction(doc)
-    #transaction.Start("Add flange")
     pointlist = valve_connector.Origin
 
     # Krage-løsflens
@@ -307,7 +308,7 @@ def AddFlange(pipe, valve_connector, gasket):
     lineDirection = ductline.Direction
     new_flange = placeFitting(pipe, pointlist, familytype, lineDirection)
 
-    #transaction.Commit()
+
     return new_flange
 
 
@@ -341,16 +342,16 @@ for l in PA1:
         break
 
 
-#TransactionManager.Instance.EnsureInTransaction(doc)
-transaction2 = Transaction(doc)
-transaction2.Start('activate flange type')
+
+#transaction2 = Transaction(doc)
+#transaction2.Start('activate flange type')
 for typ in flange_family_type:
     if typ != 0:
         if typ.IsActive == False:
             typ.Activate()
             doc.Regenerate()
-transaction2.Commit()
-#TransactionManager.Instance.TransactionTaskDone()
+#transaction2.Commit()
+
 
 
 # prepare connection filter for later collector within family editor
@@ -541,8 +542,8 @@ for i in EQ:
 
                         if need_to_flip:
 
-                            transaction = Transaction(doc)
-                            transaction.Start('Flip flange')
+                            #transaction = Transaction(doc)
+                            #transaction.Start('Flip flange')
                             try:
                                 vector = valve_connector.CoordinateSystem.BasisY
                                 line = Autodesk.Revit.DB.Line.CreateBound(valve_connector.Origin, valve_connector.Origin + vector)
@@ -550,13 +551,13 @@ for i in EQ:
                                 flipped = new_flange.Location.Rotate(line,math.pi)
                             except:
                                 status = status + ' failed to flip'
-                            transaction.Commit()
+                            #transaction.Commit()
 
                         ###################################
                         # Move flange
                         ###################################
-                        transaction = Transaction(doc)
-                        transaction.Start('Move flange')
+                        #transaction = Transaction(doc)
+                        #transaction.Start('Move flange')
                         try:
                             if f_cons[0].GetMEPConnectorInfo().IsPrimary:
                                 # debug2.append('primary')
@@ -569,14 +570,14 @@ for i in EQ:
                             new_flange.Location.Move((valve_connector.Origin - f_cons[secondary_con_id].Origin))
                         except:
                             status = status + ' failed to move'
-                        transaction.Commit()
+                        #transaction.Commit()
 
                         ########################
                         # Modify pipe endpoints
                         ########################
 
-                        transaction = Transaction(doc)
-                        transaction.Start('Modify pipe endpoints')
+                        #transaction = Transaction(doc)
+                        #transaction.Start('Modify pipe endpoints')
                         try:
                         # modify pipe endpoints
                             if pipe_endpoint_id == 0:
@@ -590,7 +591,7 @@ for i in EQ:
 
                         except:
                             status = stauts + 'failed to modify pipe endpoints'
-                        transaction.Commit()
+                        #transaction.Commit()
 
 
                         duct_piping_system_type = pipe.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
@@ -602,8 +603,8 @@ for i in EQ:
                         ##########################################
                         # Connect pipes to flange
                         ##########################################
-                        transaction = Transaction(doc)
-                        transaction.Start('Connect pipes to flange')
+                        #transaction = Transaction(doc)
+                        #transaction.Start('Connect pipes to flange')
                         try:
 
                             # disconnect
@@ -618,7 +619,7 @@ for i in EQ:
 
                         except:
                             status = status + ' failed to connect pipes to flange'
-                        transaction.Commit()
+                        #transaction.Commit()
 
                         # add to output report
                         # output_report.append(duct_piping_system_type)
@@ -680,6 +681,9 @@ if len(output_report_errors):
     report_tekst = report_tekst + '\r\nFølgende flenser ble IKKE lagt til eller er feilplassert: \r\n \r\n'
     for j in report_errors_compressed:
         report_tekst = report_tekst + ' - ' + j[0][0] + ' ' + str(j[0][1]) + ': ' + str(j[1]) + ' stk ' + str(j[0][2]) + '\r\n'
+
+
+transaction.Commit()
 
 button = TaskDialogCommonButtons.None
 result = TaskDialogResult.Ok
