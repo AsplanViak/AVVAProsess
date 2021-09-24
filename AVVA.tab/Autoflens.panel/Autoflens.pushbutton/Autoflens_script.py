@@ -496,6 +496,8 @@ for i in EQ:
                         else:
                             status = "ok"
 
+                        doc.Regenerate()
+
                         #########################
                         # check if flange need to be flipped
                         ########################
@@ -545,10 +547,11 @@ for i in EQ:
 
 
                         if need_to_flip:
-
+                            doc.Regenerate()
                             #transaction = Transaction(doc)
                             #transaction.Start('Flip flange')
                             try:
+
                                 vector = valve_connector.CoordinateSystem.BasisY
                                 line = Autodesk.Revit.DB.Line.CreateBound(valve_connector.Origin, valve_connector.Origin + vector)
                                 line = UnwrapElement(line)
@@ -556,7 +559,7 @@ for i in EQ:
                             except:
                                 status = status + ' failed to flip'
                             #transaction.Commit()
-
+                        doc.Regenerate()
                         ###################################
                         # Move flange
                         ###################################
@@ -582,6 +585,7 @@ for i in EQ:
 
                         #transaction = Transaction(doc)
                         #transaction.Start('Modify pipe endpoints')
+                        doc.Regenerate()
                         try:
                         # modify pipe endpoints
                             if pipe_endpoint_id == 0:
@@ -597,7 +601,7 @@ for i in EQ:
                             status = stauts + 'failed to modify pipe endpoints'
                         #transaction.Commit()
 
-
+                        doc.Regenerate()
                         duct_piping_system_type = pipe.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
 
                         for k, sys in enumerate(list_piping_system_id):
@@ -619,7 +623,7 @@ for i in EQ:
                             pipe_connector.ConnectTo(f_cons[primary_con_id])
 
                             f_cons[secondary_con_id].ConnectTo(valve_connector)
-
+                            doc.Regenerate()
 
                         except:
                             status = status + ' failed to connect pipes to flange'
