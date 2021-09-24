@@ -497,6 +497,7 @@ for i in EQ:
                                 primary_con_id = 1
                                 secondary_con_id = 0
                             new_flange.Location.Move((valve_connector.Origin - f_cons[secondary_con_id].Origin))
+                            new_flange.Location.Move(1232131)
                         except:
                             status = status + ' Feil ved flytting.'
                             new_flange.DeleteEntity()
