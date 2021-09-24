@@ -268,7 +268,7 @@ def changecontype(con):
         return false
 
 def CheckValveConnectors(valve_family):
-    transaction.Commit()
+
     famdoc = doc.EditFamily(valve_family)
     fam_connections = FilteredElementCollector(famdoc).WherePasses(con_filter).WhereElementIsNotElementType().ToElements()
     for a in fam_connections:
@@ -288,8 +288,6 @@ def CheckValveConnectors(valve_family):
         except:
             debug4.append('mech equipment?')
     famdoc.Close(False)
-    transaction = Transaction(doc)
-    transaction.Start("Continue main script")
 
 def AddFlange(pipe, valve_connector, gasket):
     pointlist = valve_connector.Origin
@@ -481,7 +479,10 @@ for i in EQ:
                         valve_family = valve_element_type.Family
                         valve_family_name = valve_family.Name
                         if valve_family.Name not in checked_valve_families:
+                            transaction.Commit()
                             CheckValveConnectors(valve_family)
+                            transaction = Transaction(doc)
+                            transaction.Start("Continue main script")
 
                             checked_valve_families.append(valve_family_name)
 
