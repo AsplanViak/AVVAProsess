@@ -554,7 +554,7 @@ for i in EQ:
                             if 1:
                                 vector = valve_connector.CoordinateSystem.BasisY
                                 line = Autodesk.Revit.DB.Line.CreateBound(valve_connector.Origin, valve_connector.Origin + vector)
-                                line = UnwrapElement(line)
+                                #line = UnwrapElement(line)
                                 flipped = new_flange.Location.Rotate(line,math.pi)
                             #except:
                                 status = status + ' failed to flip'
