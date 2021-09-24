@@ -215,9 +215,10 @@ def CheckValveConnectors(valve_family):
                         #feil ved forsøk på å endre con type
                         pass
                     famdoc.LoadFamily(doc, FamOpt1())
-                except:  # you might want to import traceback for a more detailed error report
+                except:
+                    print('Feil med endring av connector-type i family')
         except:
-            print('Feil med endring av connector-type i family')
+            print('Feil med sjekk av connector-type i family')
     famdoc.Close(False)
 
 def AddFlange(pipe, valve_connector, gasket):
