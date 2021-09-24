@@ -47,19 +47,6 @@ from System.Collections.Generic import List
 
 from Autodesk.Revit.DB import Plumbing
 
-#klargjør til rapportering til skjerm
-output_report = []
-output_report_errors = []
-
-#lag liste over alle piping systems
-pipingSystem = DB.FilteredElementCollector(doc).OfClass(Plumbing.PipingSystemType).ToElements()
-
-list_piping_system = []
-list_piping_system_id = []
-for i in pipingSystem:
-    list_piping_system.append(i)
-    list_piping_system_id.append(i.Id)
-
 def measure(startpoint, point):
     return startpoint.DistanceTo(point)
 
@@ -256,11 +243,26 @@ def AddFlange(pipe, valve_connector, gasket):
 
     return new_flange
 
+
+#klargjør til rapportering til skjerm
+output_report = []
+output_report_errors = []
+
+#lag liste over alle piping systems
+pipingSystem = DB.FilteredElementCollector(doc).OfClass(Plumbing.PipingSystemType).ToElements()
+
+list_piping_system = []
+list_piping_system_id = []
+for i in pipingSystem:
+    list_piping_system.append(i)
+    list_piping_system_id.append(i.Id)
+
+
 ###########################################################
 ## start algorithm for finding missing flanges
 ###########################################################
 
-# COMPANY SPESIFIC CODE FOR FLANGE TYPES TO BE SELECTED
+#FLANGE TYPES TO BE SELECTED
 PA1 = DB.FilteredElementCollector(doc).OfCategory(DB.BuiltInCategory.OST_PipeAccessory).WhereElementIsElementType()
 
 flange_family_type = [0, 0, 0, 0]
@@ -380,7 +382,7 @@ for i in EQ:
                     continue
 
                 if cat_name == 'Pipe fittings':
-                    #print 'family = i.Symbol.FamilyName'
+                    print 'family = i.Symbol.FamilyName'
                     status = ' Årsak: Utstyr er koblet direkte mot ' + refs.Symbol.FamilyName
                     duct_piping_system_type = refs.get_Parameter(DB.BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
                     output_report_errors.append(report(duct_piping_system_type, pipe_connector, status))
