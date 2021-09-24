@@ -302,19 +302,6 @@ typed_list = List[DB.BuiltInCategory](cat_list)
 filter = DB.ElementMulticategoryFilter(typed_list)
 EQ = DB.FilteredElementCollector(doc).WherePasses(filter).WhereElementIsNotElementType().ToElements()
 
-'''
-pipe = []
-pipe_connector = []
-pipe_endpoints = []
-pipe_endpoint_id = []
-valve_connector = []
-opposite_valve_connector = []
-valve_location = []
-gasket = []
-valve = []
-valve_number_of_connectors = []
-'''
-
 # list containing all family names where connectors has been checked and potentially modified
 checked_valve_families = []
 
@@ -392,6 +379,9 @@ for i in EQ:
                 except:
                     continue
 
+                print refs.Category.Name
+
+
                 if cat_name == 'Pipes':
                     pipe = refs
                     duct_piping_system_type = pipe.get_Parameter(
@@ -400,12 +390,10 @@ for i in EQ:
                     # checking if pipe is longer than 20mm. don't want to add flanges on very short pipes which should not be there, stuck between valves.
                     # LINE BELOW IS ONLY FOR PROJECTS USING MM AS UNIT
                     if pipe.Location.Curve.GetEndPoint(0).DistanceTo(pipe.Location.Curve.GetEndPoint(1)) < 20 / 304.8:
-                        status = ' For kort rørstrekk til å få plass til flens.'
+                        status = ' Årsak: For kort rørstrekk til å få plass til flens.'
                         output_report_errors.append(report(duct_piping_system_type, pipe_connector, status))
-                        print 'for kort rør'
                         continue
                     else:
-                        print 'langt nok rør'
                         # Preparing lists with corresponding indexes:
                         ##pipe.append(refs) ##moved
                         # pipe_endpoints.append([refs.Location.Curve.GetEndPoint(0), refs.Location.Curve.GetEndPoint(1)])
