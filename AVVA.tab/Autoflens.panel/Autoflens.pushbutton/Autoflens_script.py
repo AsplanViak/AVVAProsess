@@ -137,8 +137,7 @@ tempfamtype = None
 xAxis = XYZ(1, 0, 0)
 
 def placeFitting(duct, point, familytype, lineDirection):
-    transaction = Transaction(doc)
-    transaction.Start("Place fitting")
+
 
     toggle = False
     isVertical = False
@@ -180,6 +179,9 @@ def placeFitting(duct, point, familytype, lineDirection):
     ## THIS LINE IS DEPENDENT ON UNITS AND PROJECT SETTINGS. LINE BELOW IS FOR PROEJCT USING MM AS UNIT, AND THERE IS NOT ADDED FLANGES FOR DN<45 MM
     if radius < 45 / 304.8 / 2:
         return 0
+
+    transaction = Transaction(doc)
+    transaction.Start("Place fitting")
 
     newfam = doc.Create.NewFamilyInstance(point, familytype, level, Structure.StructuralType.NonStructural)
     doc.Regenerate()
@@ -537,24 +539,24 @@ for i in EQ:
 
 
                         if need_to_flip:
+
+                            transaction = Transaction(doc)
+                            transaction.start('Flip flange')
                             try:
-                                transaction = Transaction(doc)
-                                transaction.start('Flip flange')
                                 vector = valve_connector.CoordinateSystem.BasisY
                                 line = Autodesk.Revit.DB.Line.CreateBound(valve_connector.Origin, valve_connector.Origin + vector)
                                 line = UnwrapElement(line)
                                 flipped = new_flange.Location.Rotate(line,math.pi)
-                                transaction.Commit()
                             except:
                                 status = status + ' failed to flip'
+                            transaction.Commit()
 
                         ###################################
                         # Move flange
                         ###################################
+                        transaction = Transaction(doc)
+                        transaction.start('Move flange')
                         try:
-                            transaction = Transaction(doc)
-                            transaction.start('Move flange')
-
                             if f_cons[0].GetMEPConnectorInfo().IsPrimary:
                                 # debug2.append('primary')
                                 primary_con_id = 0
@@ -563,22 +565,19 @@ for i in EQ:
                                 primary_con_id = 1
                                 secondary_con_id = 0
                                 # debug2.append('secondary')
-
                             new_flange.Location.Move((valve_connector.Origin - f_cons[secondary_con_id].Origin))
-
-                            transaction.Commit()
                         except:
                             status = status + ' failed to move'
+                        transaction.Commit()
 
                         ########################
                         # Modify pipe endpoints
                         ########################
 
+                        transaction = Transaction(doc)
+                        transaction.start('Modify pipe endpoints')
                         try:
-                            transaction = Transaction(doc)
-                            transaction.start('Modify pipe endpoints')
-
-                            # modify pipe endpoints
+                        # modify pipe endpoints
                             if pipe_endpoint_id == 0:
                                 new_pipeline = Autodesk.Revit.DB.Line.CreateBound(f_cons[primary_con_id].Origin,pipe.Location.Curve.GetEndPoint(1))
                                 pipe.Location.Curve = new_pipeline
@@ -587,10 +586,10 @@ for i in EQ:
                                 new_pipeline = Autodesk.Revit.DB.Line.CreateBound(pipe.Location.Curve.GetEndPoint(0),f_cons[primary_con_id].Origin)
                                 pipe.Location.Curve = new_pipeline
                                 debug2.append('b modify pipe endpoints')
-                            transaction.Commit()
+
                         except:
                             status = stauts + 'failed to modify pipe endpoints'
-
+                        transaction.Commit()
 
 
                         duct_piping_system_type = pipe.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
@@ -602,9 +601,9 @@ for i in EQ:
                         ##########################################
                         # Connect pipes to flange
                         ##########################################
+                        transaction = Transaction(doc)
+                        transaction.start('Connect pipes to flange')
                         try:
-                            transaction = Transaction(doc)
-                            transaction.start('Connect pipes to flange')
 
                             # disconnect
                             valve_connector.DisconnectFrom(pipe_connector)
@@ -615,10 +614,10 @@ for i in EQ:
 
                             f_cons[secondary_con_id].ConnectTo(valve_connector)
 
-                            transaction.Commit()
 
                         except:
                             status = status + ' failed to connect pipes to flange'
+                        transaction.Commit()
 
                         # add to output report
                         # output_report.append(duct_piping_system_type)
