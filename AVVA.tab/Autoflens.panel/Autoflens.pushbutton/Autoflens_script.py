@@ -542,7 +542,7 @@ for i in EQ:
                         if need_to_flip:
 
                             transaction = Transaction(doc)
-                            transaction.start('Flip flange')
+                            transaction.Start('Flip flange')
                             try:
                                 vector = valve_connector.CoordinateSystem.BasisY
                                 line = Autodesk.Revit.DB.Line.CreateBound(valve_connector.Origin, valve_connector.Origin + vector)
@@ -556,7 +556,7 @@ for i in EQ:
                         # Move flange
                         ###################################
                         transaction = Transaction(doc)
-                        transaction.start('Move flange')
+                        transaction.Start('Move flange')
                         try:
                             if f_cons[0].GetMEPConnectorInfo().IsPrimary:
                                 # debug2.append('primary')
@@ -576,7 +576,7 @@ for i in EQ:
                         ########################
 
                         transaction = Transaction(doc)
-                        transaction.start('Modify pipe endpoints')
+                        transaction.Start('Modify pipe endpoints')
                         try:
                         # modify pipe endpoints
                             if pipe_endpoint_id == 0:
@@ -603,7 +603,7 @@ for i in EQ:
                         # Connect pipes to flange
                         ##########################################
                         transaction = Transaction(doc)
-                        transaction.start('Connect pipes to flange')
+                        transaction.Start('Connect pipes to flange')
                         try:
 
                             # disconnect
