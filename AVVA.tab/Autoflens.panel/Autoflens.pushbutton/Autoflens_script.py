@@ -93,6 +93,20 @@ def GetClosestDirection(faminstance, lineDirection):
 tempfamtype = None
 xAxis = DB.XYZ(1, 0, 0)
 
+def report(duct_piping_system_type, pipe_connector, status):
+    try:
+        report_row = list([str(duct_piping_system_type), 'DN' + str(int(pipe_connector.Radius * 304.8 * 2)), status])
+    except:
+        try:
+            report_row = list(['udefinert system', 'DN' + str(int(pipe_connector.Radius * 304.8 * 2)), status]))
+        except:
+            try:
+                output_report_errors.append(
+                    list([str(duct_piping_system_type), 'udefinert DN', status]))
+            except:
+                output_report_errors.append(list(['udefinert system', 'udefinert DN', status]))
+    return report_row
+
 def placeFitting(duct, point, familytype, lineDirection):
     toggle = False
     isVertical = False
@@ -499,8 +513,9 @@ for i in EQ:
                             new_flange.Location.Move((valve_connector.Origin - f_cons[secondary_con_id].Origin))
                             new_flange.Location.Move(1232131)
                         except:
-                            status = status + ' Feil ved flytting.'
+                            status = status + ' Feil ved flytting av flens.'
                             doc.Delete(new_flange.Id)
+                            output_report_errors.append(report(duct_piping_system_type, pipe_connector, status))
                             continue
 
                         ########################
@@ -554,7 +569,8 @@ for i in EQ:
                         # add to output report
 
                         if status == '':
-                            try:
+                            output_report.append(report(duct_piping_system_type,pipe_connector, status))
+                            '''try:
                                 output_report.append(
                                     list([str(duct_piping_system_type),
                                           'DN' + str(int(pipe_connector.Radius * 304.8 * 2))]))
@@ -567,22 +583,11 @@ for i in EQ:
                                         output_report.append(list([str(duct_piping_system_type), 'udefinert DN']))
                                     except:
                                         output_report.append(list(['udefinert system', 'udefinert DN']))
+                                        '''
                         else:
-                            try:
-                                output_report_errors.append(
-                                    list([str(duct_piping_system_type),
-                                          'DN' + str(int(pipe_connector.Radius * 304.8 * 2)), status]))
-                            except:
-                                try:
-                                    output_report_errors.append(
-                                        list(['udefinert system', 'DN' + str(int(pipe_connector.Radius * 304.8 * 2)),
-                                              status]))
-                                except:
-                                    try:
-                                        output_report_errors.append(
-                                            list([str(duct_piping_system_type), 'udefinert DN', status]))
-                                    except:
-                                        output_report_errors.append(list(['udefinert system', 'udefinert DN', status]))
+                            output_report_errors.append(report(duct_piping_system_type,pipe_connector, status))
+
+
 
 if not len(output_report) and not len(output_report_errors):
     report_tekst = 'Ingen flenser ble lagt til. Det fantes ingen koblinger mellom rør og utstyr som mangler flens. \r\n'
