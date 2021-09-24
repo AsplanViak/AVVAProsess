@@ -574,8 +574,7 @@ for i in EQ:
 
 
                         doc.Regenerate()
-                        #try:
-                        if 1:
+                        try:
                             # modify pipe endpoints
                             if pipe_endpoint_id == 0:
                                 new_pipeline = DB.Line.CreateBound(f_cons[primary_con_id].Origin,
@@ -589,7 +588,7 @@ for i in EQ:
                                 pipe.Location.Curve = new_pipeline
                                 debug2.append('b modify pipe endpoints')
 
-                        #except:
+                        except:
                             status = status + 'failed to modify pipe endpoints'
 
                         doc.Regenerate()
