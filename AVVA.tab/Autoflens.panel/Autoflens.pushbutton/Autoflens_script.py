@@ -192,6 +192,7 @@ class FamOpt1:
 
 # function for å endre type connector
 def changecontype(con):
+    # 20 is the integer-id for Domestic Cold Water
     if (con.get_Parameter(DB.BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM).Set(20)):
         return True
     else:
@@ -208,10 +209,11 @@ def CheckValveConnectors(valve_family):
                 #treff på global
                 try:  # this might fail if the parameter exists or for some other reason
                     if (changecontype(a)):
+                        # success
                         pass
                     else:
                         #feil ved forsøk på å endre con type
-                        # 20 is the integer-id for Domestic Cold Water
+                        pass
                     famdoc.LoadFamily(doc, FamOpt1())
                 except:  # you might want to import traceback for a more detailed error report
         except:
