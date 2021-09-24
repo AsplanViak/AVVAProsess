@@ -402,9 +402,10 @@ for i in EQ:
                     if pipe.Location.Curve.GetEndPoint(0).DistanceTo(pipe.Location.Curve.GetEndPoint(1)) < 20 / 304.8:
                         status = ' For kort rørstrekk til å få plass til flens.'
                         output_report_errors.append(report(duct_piping_system_type, pipe_connector, status))
+                        print 'for kort rør'
                         continue
                     else:
-
+                        print 'langt nok rør'
                         # Preparing lists with corresponding indexes:
                         ##pipe.append(refs) ##moved
                         # pipe_endpoints.append([refs.Location.Curve.GetEndPoint(0), refs.Location.Curve.GetEndPoint(1)])
