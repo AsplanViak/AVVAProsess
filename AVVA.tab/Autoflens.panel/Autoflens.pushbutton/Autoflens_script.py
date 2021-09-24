@@ -49,8 +49,8 @@ clr.AddReference("RevitNodes")
 # import Revit
 
 # prøv å fjerne disse, og se om fungerer.
-clr.ImportExtensions(Revit.Elements)
-clr.ImportExtensions(Revit.GeometryConversion)
+#clr.ImportExtensions(Revit.Elements)
+#clr.ImportExtensions(Revit.GeometryConversion)
 
 # clr.AddReference("RevitAPI")
 
