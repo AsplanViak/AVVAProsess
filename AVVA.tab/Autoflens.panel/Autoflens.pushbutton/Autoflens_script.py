@@ -381,10 +381,10 @@ for i in EQ:
                 except:
                     continue
 
-                print cat_name
+
                 if cat_name == 'Pipe Fittings':
                     print 'family = '+ refs.Symbol.FamilyName
-                    status = ' Årsak: Utstyr er koblet direkte mot ' + refs.Symbol.FamilyName
+                    status = ' Årsak: Utstyr er koblet direkte mot rørdel "' + refs.Symbol.FamilyName + '"'
                     duct_piping_system_type = refs.get_Parameter(DB.BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
                     output_report_errors.append(report(duct_piping_system_type, pipe_connector, status))
                     continue
