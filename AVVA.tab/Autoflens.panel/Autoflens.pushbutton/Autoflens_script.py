@@ -499,6 +499,8 @@ for i in EQ:
                             new_flange.Location.Move((valve_connector.Origin - f_cons[secondary_con_id].Origin))
                         except:
                             status = status + ' Feil ved flytting.'
+                            new_flange.DeleteEntity()
+                            continue
 
                         ########################
                         # Modify pipe endpoints
@@ -526,9 +528,9 @@ for i in EQ:
                         duct_piping_system_type = pipe.get_Parameter(
                             DB.BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
 
-                        for k, sys in enumerate(list_piping_system_id):
-                            if sys == duct_piping_system_type:
-                                rorsystem = list_piping_system[k]
+                        #for k, sys in enumerate(list_piping_system_id):
+                        #    if sys == duct_piping_system_type:
+                        #        rorsystem = list_piping_system[k]
 
                         ##########################################
                         # Connect pipes to flange
