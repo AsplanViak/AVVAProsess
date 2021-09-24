@@ -424,6 +424,10 @@ for i in EQ:
                             pipe_endpoint_id = 0
                         else:
                             pipe_endpoint_id = 1
+
+                        duct_piping_system_type = pipe.get_Parameter(
+                            DB.BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
+
                         # pakning eller ikke
                         if 'innspent' in i.Symbol.FamilyName or 'kyvespjeldsventil' in i.Symbol.FamilyName:
                             gasket = False
@@ -539,13 +543,6 @@ for i in EQ:
                             status = status + ' Feil ved justering av rør.'
 
                         doc.Regenerate()
-
-                        duct_piping_system_type = pipe.get_Parameter(
-                            DB.BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
-
-                        #for k, sys in enumerate(list_piping_system_id):
-                        #    if sys == duct_piping_system_type:
-                        #        rorsystem = list_piping_system[k]
 
                         ##########################################
                         # Connect pipes to flange
