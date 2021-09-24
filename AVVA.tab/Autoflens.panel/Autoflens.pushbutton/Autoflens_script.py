@@ -382,7 +382,7 @@ for i in EQ:
 
             for y in j.AllRefs:
                 if y.Owner.Id != j.Owner.Id and y.ConnectorType != DB.ConnectorType.Logical:
-                    pipecon = y
+                    pipe_connector = y
 
             # check if connected to straight pipe
             if refs is not None:
@@ -393,17 +393,23 @@ for i in EQ:
                     continue
 
                 if cat_name == 'Pipes':
+                    pipe = refs
+                    duct_piping_system_type = pipe.get_Parameter(
+                        DB.BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
+
                     # checking if pipe is longer than 20mm. don't want to add flanges on very short pipes which should not be there, stuck between valves.
                     # LINE BELOW IS ONLY FOR PROJECTS USING MM AS UNIT
-                    if refs.Location.Curve.GetEndPoint(0).DistanceTo(refs.Location.Curve.GetEndPoint(1)) > 20 / 304.8:
+                    if pipe.Location.Curve.GetEndPoint(0).DistanceTo(pipe.Location.Curve.GetEndPoint(1)) < 20 / 304.8:
+                        status = ' For kort rørstrekk til å få plass til flens.'
+                        output_report_errors.append(report(duct_piping_system_type, pipe_connector, status))
+                        continue
+                    else:
 
                         # Preparing lists with corresponding indexes:
-                        ##pipe.append(refs)
-                        pipe = refs
+                        ##pipe.append(refs) ##moved
                         # pipe_endpoints.append([refs.Location.Curve.GetEndPoint(0), refs.Location.Curve.GetEndPoint(1)])
                         pipe_endpoints = [refs.Location.Curve.GetEndPoint(0), refs.Location.Curve.GetEndPoint(1)]
-                        # pipe_connector.append(pipecon)
-                        pipe_connector = pipecon
+                        # pipe_connector.append(pipeconnector) ##OBS like navn.
                         # valve_connector.append(j)
                         valve_connector = j
                         ##problem with this line for equipment with only 1, or 3 or more connections
@@ -425,9 +431,6 @@ for i in EQ:
                         else:
                             pipe_endpoint_id = 1
 
-                        duct_piping_system_type = pipe.get_Parameter(
-                            DB.BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
-
                         # pakning eller ikke
                         if 'innspent' in i.Symbol.FamilyName or 'kyvespjeldsventil' in i.Symbol.FamilyName:
                             gasket = False
@@ -441,8 +444,6 @@ for i in EQ:
                         # check if flange was created. If not, probably due to too small DN
                         if new_flange == 0:
                             continue
-                        else:
-                            status = ""
 
                         doc.Regenerate()
 
@@ -496,7 +497,10 @@ for i in EQ:
                                                            valve_connector.Origin + vector)
                                 flipped = new_flange.Location.Rotate(line, math.pi)
                             except:
-                                status = status + ' Feil ved flipping.'
+                                status = ' Årsak: Feil ved flipping av flens.'
+                                doc.Delete(new_flange.Id)
+                                output_report_errors.append(report(duct_piping_system_type, pipe_connector, status))
+                                continue
 
                         doc.Regenerate()
 
@@ -514,15 +518,15 @@ for i in EQ:
                                 primary_con_id = 1
                                 secondary_con_id = 0
                             new_flange.Location.Move((valve_connector.Origin - f_cons[secondary_con_id].Origin))
-                            new_flange.Location.Move(1232131)
+
                         except:
-                            status = status + ' Feil ved flytting av flens.'
+                            status = ' Årsak: Feil ved flytting av flens.'
                             doc.Delete(new_flange.Id)
                             output_report_errors.append(report(duct_piping_system_type, pipe_connector, status))
                             continue
 
                         ########################
-                        # Modify pipe endpoints
+                        # Modify pipe endpoints and connect to flange
                         ########################
 
                         doc.Regenerate()
@@ -538,56 +542,33 @@ for i in EQ:
                                                                    f_cons[primary_con_id].Origin)
                                 pipe.Location.Curve = new_pipeline
                                 #b modify pipe endpoints
+                            doc.Regenerate()
 
-                        except:
-                            status = status + ' Feil ved justering av rør.'
-
-                        doc.Regenerate()
-
-                        ##########################################
-                        # Connect pipes to flange
-                        ##########################################
-
-                        try:
                             # disconnect
                             valve_connector.DisconnectFrom(pipe_connector)
-                            #doc.Regenerate()
+                            # doc.Regenerate()
 
                             # make new connections
                             pipe_connector.ConnectTo(f_cons[primary_con_id])
-
                             f_cons[secondary_con_id].ConnectTo(valve_connector)
                             doc.Regenerate()
 
                         except:
-                            status = status + ' Feil ved sammenkobling'
+                            status = ' Feil ved justering/tilkobling av rør.'
+                            doc.Delete(new_flange.Id)
+                            output_report_errors.append(report(duct_piping_system_type, pipe_connector, status))
+                            continue
 
                         # add to output report
-
-                        if status == '':
-                            output_report.append(report(duct_piping_system_type,pipe_connector, status))
-                            '''try:
-                                output_report.append(
-                                    list([str(duct_piping_system_type),
-                                          'DN' + str(int(pipe_connector.Radius * 304.8 * 2))]))
-                            except:
-                                try:
-                                    output_report.append(
-                                        list(['udefinert system', 'DN' + str(int(pipe_connector.Radius * 304.8 * 2))]))
-                                except:
-                                    try:
-                                        output_report.append(list([str(duct_piping_system_type), 'udefinert DN']))
-                                    except:
-                                        output_report.append(list(['udefinert system', 'udefinert DN']))
-                                        '''
-                        else:
-                            output_report_errors.append(report(duct_piping_system_type,pipe_connector, status))
+                        output_report.append(report(duct_piping_system_type,pipe_connector, status))
 
 
+report_tekst = ''
 
 if not len(output_report) and not len(output_report_errors):
     report_tekst = 'Ingen flenser ble lagt til. Det fantes ingen koblinger mellom rør og utstyr som mangler flens. \r\n'
-else:
+
+if len(output_report):
     report_compressed = []
     for i in output_report:
         funnet = 0
@@ -598,7 +579,7 @@ else:
         if funnet == 0:
             report_compressed.append(list([i, 1]))
 
-    report_tekst = 'Følgende flenser ble lagt til: \r\n \r\n'
+    report_tekst = report_tekst + 'Følgende flenser ble lagt til: \r\n \r\n'
     for j in report_compressed:
         report_tekst = report_tekst + ' - ' + j[0][0] + ' ' + str(j[0][1]) + ': ' + str(j[1]) + ' stk \r\n'
 
@@ -613,7 +594,7 @@ if len(output_report_errors):
         if funnet == 0:
             report_errors_compressed.append(list([i, 1]))
 
-    report_tekst = report_tekst + '\r\nFølgende flenser ble IKKE lagt til eller er feilplassert: \r\n \r\n'
+    report_tekst = report_tekst + '\r\nFølgende flenser ble IKKE lagt til: \r\n \r\n'
     for j in report_errors_compressed:
         report_tekst = report_tekst + ' - ' + j[0][0] + ' ' + str(j[0][1]) + ': ' + str(j[1]) + ' stk ' + str(
             j[0][2]) + '\r\n'
