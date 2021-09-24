@@ -98,13 +98,12 @@ def report(duct_piping_system_type, pipe_connector, status):
         report_row = list([str(duct_piping_system_type), 'DN' + str(int(pipe_connector.Radius * 304.8 * 2)), status])
     except:
         try:
-            report_row = list(['udefinert system', 'DN' + str(int(pipe_connector.Radius * 304.8 * 2)), status]))
+            report_row = list(['udefinert system', 'DN' + str(int(pipe_connector.Radius * 304.8 * 2)), status])
         except:
             try:
-                output_report_errors.append(
-                    list([str(duct_piping_system_type), 'udefinert DN', status]))
+                report_row = list([str(duct_piping_system_type), 'udefinert DN', status])
             except:
-                output_report_errors.append(list(['udefinert system', 'udefinert DN', status]))
+                report_row =  list(['udefinert system', 'udefinert DN', status])
     return report_row
 
 def placeFitting(duct, point, familytype, lineDirection):
