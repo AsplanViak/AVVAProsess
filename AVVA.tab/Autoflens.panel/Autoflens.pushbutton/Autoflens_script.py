@@ -139,7 +139,7 @@ def placeFitting(duct, point, familytype, lineDirection):
     round = False
     connectors = duct.ConnectorManager.Connectors
     for c in connectors:
-        if c.DB.ConnectorType != DB.ConnectorType.End:
+        if c.ConnectorType != DB.ConnectorType.End:
             continue
         shape = c.Shape
         if shape == DB.ConnectorProfileType.Round:
