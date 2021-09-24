@@ -547,16 +547,16 @@ for i in EQ:
 
 
                         if need_to_flip:
-                            doc.Regenerate()
+
                             #transaction = Transaction(doc)
                             #transaction.Start('Flip flange')
-                            try:
-
+                            #try:
+                            if 1:
                                 vector = valve_connector.CoordinateSystem.BasisY
                                 line = Autodesk.Revit.DB.Line.CreateBound(valve_connector.Origin, valve_connector.Origin + vector)
                                 line = UnwrapElement(line)
                                 flipped = new_flange.Location.Rotate(line,math.pi)
-                            except:
+                            #except:
                                 status = status + ' failed to flip'
                             #transaction.Commit()
                         doc.Regenerate()
