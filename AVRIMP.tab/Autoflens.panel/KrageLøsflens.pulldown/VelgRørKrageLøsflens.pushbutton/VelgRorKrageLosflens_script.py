@@ -333,6 +333,7 @@ if bool(picked):
     for i in EQ:
         kategori = i.Category.Name
         print(kategori)
+        print(i.Category.Id)
         # Filter out flanges and other parts where type-name i "Standard"
         if i.Name != 'Standard':
             # Filter out equipment without connectors
