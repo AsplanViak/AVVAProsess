@@ -44,9 +44,12 @@ uidoc = HOST_APP.uidoc
 
 
 
+
 clr.AddReference("RevitNodes")
 
 from Autodesk.Revit import UI, DB
+from Autodesk.Revit.UI.Selection import ObjectType
+
 from System.Collections.Generic import List
 
 from Autodesk.Revit.DB import Plumbing
