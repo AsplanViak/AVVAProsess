@@ -331,7 +331,8 @@ if bool(picked):
     checked_valve_families = []
 
     for i in EQ:
-        print(i.Category.ToString)
+        kategori = i.Category.ToString()
+        print(kategori)
         # Filter out flanges and other parts where type-name i "Standard"
         if i.Name != 'Standard':
             # Filter out equipment without connectors
