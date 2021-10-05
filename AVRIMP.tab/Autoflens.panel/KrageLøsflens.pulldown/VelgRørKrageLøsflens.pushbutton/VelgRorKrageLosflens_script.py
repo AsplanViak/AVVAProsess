@@ -312,9 +312,10 @@ EQ = DB.FilteredElementCollector(doc).WherePasses(filter).WhereElementIsNotEleme
 
 # make selection in UI for selecting pipe accessories and mech eq ++
 #sel1 = uidoc.Selection
-ot1 = uidoc.Selection.ObjectType.Element
-EQ = sel1.PickObjects(ot1, "Velg objekter")
 
+#ot1 = uidoc.Selection.ObjectType.Element
+#EQ = sel1.PickObjects(ot1, "Velg objekter")
+EQ = uidoc.Selection.PickObjects(ObjectType.Element)
 
 # list containing all family names where connectors has been checked and potentially modified
 checked_valve_families = []
