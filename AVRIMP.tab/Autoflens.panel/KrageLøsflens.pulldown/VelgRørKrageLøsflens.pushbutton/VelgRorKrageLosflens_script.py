@@ -314,11 +314,12 @@ EQ = DB.FilteredElementCollector(doc).WherePasses(filter).WhereElementIsNotEleme
 """
 
 # make selection in UI for selecting pipe accessories and mech eq ++
-#sel1 = uidoc.Selection
+try:
+    picked = uidoc.Selection.PickObjects(ObjectType.Element)
+except:
+    exit()
 
-#ot1 = uidoc.Selection.ObjectType.Element
-#EQ = sel1.PickObjects(ot1, "Velg objekter")
-picked = uidoc.Selection.PickObjects(ObjectType.Element)
+
 EQ = []
 for k in picked:
     #EQ.append(doc.GetElement(k.ElementId).ToDSType(True))
