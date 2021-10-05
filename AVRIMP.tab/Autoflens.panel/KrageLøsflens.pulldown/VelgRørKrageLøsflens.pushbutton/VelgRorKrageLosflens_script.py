@@ -210,11 +210,13 @@ def CheckValveConnectors(valve_family):
     fam_connections = DB.FilteredElementCollector(famdoc).WherePasses(
         con_filter).WhereElementIsNotElementType().ToElements()
     for a in fam_connections:
-        try:
+        #try:
+        if (1):
             if a.get_Parameter(
                     DB.BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM).AsValueString() == 'Global':
                 #treff på global
-                try:  # this might fail if the parameter exists or for some other reason
+                #try:  # this might fail if the parameter exists or for some other reason
+                if(1):
                     if (changecontype(a)):
                         # success
                         pass
@@ -222,10 +224,10 @@ def CheckValveConnectors(valve_family):
                         #feil ved forsøk på å endre con type
                         pass
                     famdoc.LoadFamily(doc, FamOpt1())
-                except:
-                    print('Feil med endring av connector-type i family')
-        except:
-            print('Feil med sjekk av connector-type i family')
+                #except:
+                #    print('Feil med endring av connector-type i family')
+        #except:
+        #    print('Feil med sjekk av connector-type i family')
     famdoc.Close(False)
 
 def AddFlange(pipe, valve_connector, gasket):
@@ -587,7 +589,7 @@ if bool(picked):
         report_tekst = ''
 
         if not len(output_report) and not len(output_report_errors):
-            report_tekst = 'Ingen flenser ble lagt til. Det fantes ingen koblinger mellom rør og utstyr som mangler flens. \r\n\r\n Det er ventiler og utstyr som må velges når denne funksjonen kjøres, ikke rette rørlengder\r\n'
+            report_tekst = 'Ingen flenser ble lagt til. Det fantes ingen koblinger mellom rør og utstyr som mangler flens. \r\n\r\n Det er ventiler og utstyr som må velges når denne funksjonen kjøres, ikke rette rørlengder.\r\n'
 
 
         if len(output_report):
