@@ -331,9 +331,7 @@ if bool(picked):
     checked_valve_families = []
 
     for i in EQ:
-        #kategori = i.Category.Name
-        #print(kategori)
-        print(i.Category.Id)
+        #Checking if pipe accessory (-2008055) or mech equipment (-2001140)
         if(i.Category.Id == (-2008055)) or (i.Category.Id == (-2001140)):
             # Filter out flanges and other parts where type-name i "Standard"
             if i.Name != 'Standard':
