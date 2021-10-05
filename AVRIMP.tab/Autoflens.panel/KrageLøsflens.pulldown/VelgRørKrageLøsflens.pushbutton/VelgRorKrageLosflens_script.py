@@ -308,12 +308,12 @@ con_typed_list = List[DB.BuiltInCategory](con_cat_list)
 con_filter = DB.ElementMulticategoryFilter(con_typed_list)
 
 # collect all mechanical equipment and pipe accessories in project
-"""
+
 cat_list = [DB.BuiltInCategory.OST_PipeAccessory, DB.BuiltInCategory.OST_MechanicalEquipment]
 typed_list = List[DB.BuiltInCategory](cat_list)
 filter = DB.ElementMulticategoryFilter(typed_list)
 EQ = DB.FilteredElementCollector(doc).WherePasses(filter).WhereElementIsNotElementType().ToElements()
-"""
+
 
 # make selection in UI for selecting pipe accessories and mech eq ++
 picked  =[]
@@ -322,7 +322,7 @@ try:
 except:
     pass
 
-EQ = []
+EQ_picked = []
 
 if bool(picked):
     for k in picked:
@@ -333,39 +333,42 @@ if bool(picked):
     checked_valve_families = []
 
     for i in EQ:
-        #Checking if pipe accessory (-2008055) or mech equipment (-2001140)
-        if(i.Category.Id == (-2008055)) or (i.Category.Id == (-2001140)):
-            # Filter out flanges and other parts where type-name i "Standard"
-            if i.Name != 'Standard':
-                # Filter out equipment without connectors
-                # Find connectors
+        # Filter out flanges and other parts where type-name i "Standard"
+        if i.Name != 'Standard':
+            # Filter out equipment without connectors
+            # Find connectors
+            try:
+                connectors = i.MEPModel.ConnectorManager.Connectors
+            except:
                 try:
-                    connectors = i.MEPModel.ConnectorManager.Connectors
+                    connectors = i.ConnectorManager.Connectors
                 except:
-                    try:
-                        connectors = i.ConnectorManager.Connectors
-                    except:
-                        connectors = []
-                # modify connectorset to be subscriptable
-                cons = []
-                for kk in connectors:
-                    cons.append(kk)
-                if len(cons) == 0:
-                    continue
+                    connectors = []
+            # modify connectorset to be subscriptable
+            cons = []
+            for kk in connectors:
+                cons.append(kk)
+            if len(cons) == 0:
+                continue
 
-                # Checking the connector-types of the family
-                valve_type_id = i.GetTypeId()
-                valve_element_type = doc.GetElement(valve_type_id)
-                valve_family = valve_element_type.Family
-                valve_family_name = valve_family.Name
-                if valve_family.Name not in checked_valve_families:
-                    CheckValveConnectors(valve_family)
-                    checked_valve_families.append(valve_family_name)
+            # Checking the connector-types of the family
+            valve_type_id = i.GetTypeId()
+            valve_element_type = doc.GetElement(valve_type_id)
+            valve_family = valve_element_type.Family
+            valve_family_name = valve_family.Name
+            if valve_family.Name not in checked_valve_families:
+                CheckValveConnectors(valve_family)
+                checked_valve_families.append(valve_family_name)
 
-        transaction = DB.Transaction(doc)
-        transaction.Start("Autoflens")
+    transaction = DB.Transaction(doc)
+    transaction.Start("Autoflens")
 
-        for i in EQ:
+    for i in EQ_picked:
+        # Checking if pipe accessory (-2008055) or mech equipment (-2001140)
+        if (i.Category.Id == (-2008055)) or (i.Category.Id == (-2001140)):
+            print("passed category filter")
+            print(i.Category.Name)
+
             # Filter out flanges and other parts where type-name i "Standard"
             if i.Name != 'Standard':
                 # find connectors to valve
@@ -586,44 +589,44 @@ if bool(picked):
                                 output_report.append(report(duct_piping_system_type,pipe_connector, ''))
 
 
-        report_tekst = ''
+    report_tekst = ''
 
-        if not len(output_report) and not len(output_report_errors):
-            report_tekst = 'Ingen flenser ble lagt til. Det fantes ingen koblinger mellom rør og utstyr som mangler flens. \r\n\r\n Det er ventiler og utstyr som må velges når denne funksjonen kjøres, ikke rette rørlengder.\r\n'
+    if not len(output_report) and not len(output_report_errors):
+        report_tekst = 'Ingen flenser ble lagt til. Det fantes ingen koblinger mellom rør og utstyr som mangler flens. \r\n\r\n Det er ventiler og utstyr som må velges når denne funksjonen kjøres, ikke rette rørlengder.\r\n'
 
 
-        if len(output_report):
-            report_compressed = []
-            for i in output_report:
-                funnet = 0
-                for a in report_compressed:
-                    if i == a[0]:
-                        a[1] = a[1] + 1
-                        funnet = 1
-                if funnet == 0:
-                    report_compressed.append(list([i, 1]))
+    if len(output_report):
+        report_compressed = []
+        for i in output_report:
+            funnet = 0
+            for a in report_compressed:
+                if i == a[0]:
+                    a[1] = a[1] + 1
+                    funnet = 1
+            if funnet == 0:
+                report_compressed.append(list([i, 1]))
 
-            report_tekst = report_tekst + 'Følgende flenser ble lagt til: \r\n \r\n'
-            for j in report_compressed:
-                report_tekst = report_tekst + ' - ' + j[0][0] + ' ' + str(j[0][1]) + ': ' + str(j[1]) + ' stk \r\n'
+        report_tekst = report_tekst + 'Følgende flenser ble lagt til: \r\n \r\n'
+        for j in report_compressed:
+            report_tekst = report_tekst + ' - ' + j[0][0] + ' ' + str(j[0][1]) + ': ' + str(j[1]) + ' stk \r\n'
 
-        if len(output_report_errors):
-            report_errors_compressed = []
-            for i in output_report_errors:
-                funnet = 0
-                for a in report_errors_compressed:
-                    if i == a[0]:
-                        a[1] = a[1] + 1
-                        funnet = 1
-                if funnet == 0:
-                    report_errors_compressed.append(list([i, 1]))
+    if len(output_report_errors):
+        report_errors_compressed = []
+        for i in output_report_errors:
+            funnet = 0
+            for a in report_errors_compressed:
+                if i == a[0]:
+                    a[1] = a[1] + 1
+                    funnet = 1
+            if funnet == 0:
+                report_errors_compressed.append(list([i, 1]))
 
-            report_tekst = report_tekst + '\r\nFølgende flenser ble IKKE lagt til: \r\n \r\n'
-            for j in report_errors_compressed:
-                report_tekst = report_tekst + ' - ' + j[0][0] + ' ' + str(j[0][1]) + ': ' + str(j[1]) + ' stk ' + str(
-                    j[0][2]) + '\r\n'
+        report_tekst = report_tekst + '\r\nFølgende flenser ble IKKE lagt til: \r\n \r\n'
+        for j in report_errors_compressed:
+            report_tekst = report_tekst + ' - ' + j[0][0] + ' ' + str(j[0][1]) + ': ' + str(j[1]) + ' stk ' + str(
+                j[0][2]) + '\r\n'
 
-        transaction.Commit()
+    transaction.Commit()
 
     button = UI.TaskDialogCommonButtons.None
     result = UI.TaskDialogResult.Ok
