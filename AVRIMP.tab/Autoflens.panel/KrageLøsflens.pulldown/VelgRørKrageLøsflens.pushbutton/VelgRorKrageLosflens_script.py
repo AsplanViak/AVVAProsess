@@ -321,7 +321,7 @@ except:
 
 EQ = []
 
-if len(picked>0):
+if bool(picked):
     for k in picked:
         #EQ.append(doc.GetElement(k.ElementId).ToDSType(True))
         EQ.append(doc.GetElement(k.ElementId))
