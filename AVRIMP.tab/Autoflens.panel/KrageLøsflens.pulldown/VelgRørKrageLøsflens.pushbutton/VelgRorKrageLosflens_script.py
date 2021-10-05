@@ -39,6 +39,10 @@ import clr
 
 from pyrevit import HOST_APP
 doc = HOST_APP.doc
+uidoc = HOST_APP.uidoc
+#uidoc=DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
+
+
 
 clr.AddReference("RevitNodes")
 
@@ -299,10 +303,18 @@ con_typed_list = List[DB.BuiltInCategory](con_cat_list)
 con_filter = DB.ElementMulticategoryFilter(con_typed_list)
 
 # collect all mechanical equipment and pipe accessories in project
+"""
 cat_list = [DB.BuiltInCategory.OST_PipeAccessory, DB.BuiltInCategory.OST_MechanicalEquipment]
 typed_list = List[DB.BuiltInCategory](cat_list)
 filter = DB.ElementMulticategoryFilter(typed_list)
 EQ = DB.FilteredElementCollector(doc).WherePasses(filter).WhereElementIsNotElementType().ToElements()
+"""
+
+# make selection in UI for selecting pipe accessories and mech eq ++
+sel1 = uidoc.Selection
+ot1 = Selection.ObjectType.Element
+EQ = sel1.PickObjects(ot1, "Velg objekter")
+
 
 # list containing all family names where connectors has been checked and potentially modified
 checked_valve_families = []
