@@ -311,8 +311,8 @@ EQ = DB.FilteredElementCollector(doc).WherePasses(filter).WhereElementIsNotEleme
 """
 
 # make selection in UI for selecting pipe accessories and mech eq ++
-sel1 = uidoc.Selection
-ot1 = Selection.ObjectType.Element
+#sel1 = uidoc.Selection
+ot1 = uidoc.Selection.ObjectType.Element
 EQ = sel1.PickObjects(ot1, "Velg objekter")
 
 
