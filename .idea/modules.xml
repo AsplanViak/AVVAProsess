@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/AVVAProsess.iml" filepath="$PROJECT_DIR$/.idea/AVVAProsess.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../../../../AVTools/GitKloning/.idea/GitKloning.iml" filepath="$PROJECT_DIR$/../../../../../AVTools/GitKloning/.idea/GitKloning.iml" />
     </modules>
   </component>
 </project>
