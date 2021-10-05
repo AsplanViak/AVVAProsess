@@ -331,7 +331,7 @@ if bool(picked):
     checked_valve_families = []
 
     for i in EQ:
-        kategori = i.Category.ToString()
+        kategori = i.Category.AsValueString()
         print(kategori)
         # Filter out flanges and other parts where type-name i "Standard"
         if i.Name != 'Standard':
