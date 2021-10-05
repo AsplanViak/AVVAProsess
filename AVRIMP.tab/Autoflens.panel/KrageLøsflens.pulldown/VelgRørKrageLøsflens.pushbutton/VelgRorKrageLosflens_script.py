@@ -589,7 +589,8 @@ if bool(picked):
         report_tekst = ''
 
         if not len(output_report) and not len(output_report_errors):
-            report_tekst = 'Ingen flenser ble lagt til. Det fantes ingen koblinger mellom rør og utstyr som mangler flens. \r\n'
+            report_tekst = 'Ingen flenser ble lagt til. Det fantes ingen koblinger mellom rør og utstyr som mangler flens. \r\n\r\n Det er ventiler og utstyr som må velges når denne funksjonen kjøres, ikke rette rørlengder\r\n'
+
 
         if len(output_report):
             report_compressed = []
