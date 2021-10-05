@@ -322,12 +322,10 @@ try:
 except:
     pass
 
-EQ_picked = []
-
 if bool(picked):
+    EQ_picked = []
     for k in picked:
-        #EQ.append(doc.GetElement(k.ElementId).ToDSType(True))
-        EQ.append(doc.GetElement(k.ElementId))
+        EQ_picked.append(doc.GetElement(k.ElementId))
 
     # list containing all family names where connectors has been checked and potentially modified
     checked_valve_families = []
