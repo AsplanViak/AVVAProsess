@@ -317,8 +317,7 @@ EQ = DB.FilteredElementCollector(doc).WherePasses(filter).WhereElementIsNotEleme
 try:
     picked = uidoc.Selection.PickObjects(ObjectType.Element)
 except:
-    pass()
-
+    pass
 
 EQ = []
 
