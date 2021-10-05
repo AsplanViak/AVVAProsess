@@ -321,7 +321,8 @@ EQ = DB.FilteredElementCollector(doc).WherePasses(filter).WhereElementIsNotEleme
 picked = uidoc.Selection.PickObjects(ObjectType.Element)
 EQ = []
 for k in picked:
-    EQ.append(doc.GetElement(k.ElementId).ToDSType(True))
+    #EQ.append(doc.GetElement(k.ElementId).ToDSType(True))
+    EQ.append(doc.GetElement(k.ElementId))
 
 # list containing all family names where connectors has been checked and potentially modified
 checked_valve_families = []
