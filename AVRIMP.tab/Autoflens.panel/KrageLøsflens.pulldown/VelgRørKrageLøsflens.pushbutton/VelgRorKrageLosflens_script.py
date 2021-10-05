@@ -314,6 +314,7 @@ EQ = DB.FilteredElementCollector(doc).WherePasses(filter).WhereElementIsNotEleme
 """
 
 # make selection in UI for selecting pipe accessories and mech eq ++
+picked  =[]
 try:
     picked = uidoc.Selection.PickObjects(ObjectType.Element)
 except:
