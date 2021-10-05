@@ -318,10 +318,12 @@ EQ = DB.FilteredElementCollector(doc).WherePasses(filter).WhereElementIsNotEleme
 
 #ot1 = uidoc.Selection.ObjectType.Element
 #EQ = sel1.PickObjects(ot1, "Velg objekter")
-EQ = uidoc.Selection.PickObjects(ObjectType.Element)
+picked = uidoc.Selection.PickObjects(ObjectType.Element)
 
 # list containing all family names where connectors has been checked and potentially modified
 checked_valve_families = []
+
+EQ = doc.GetElement(picked.ElementId).ToDSType(True)
 
 for i in EQ:
     # Filter out flanges and other parts where type-name i "Standard"
