@@ -368,8 +368,7 @@ if bool(picked):
     # list containing all family names where connectors has been checked and potentially modified
     checked_valve_families = []
 
-    transaction = DB.Transaction(doc)
-    transaction.Start("Modifisering av connectorer før autoflens")
+
 
     for ij in EQ_picked:
         #if (ij.Category.Id == (-2008055)) or (ij.Category.Id == (-2001140)):
@@ -401,7 +400,7 @@ if bool(picked):
                     CheckValveConnectors(valve_family)
                     checked_valve_families.append(valve_family_name)
 
-    transaction.Commit()
+
 
     transaction = DB.Transaction(doc)
     transaction.Start("Autoflens")
