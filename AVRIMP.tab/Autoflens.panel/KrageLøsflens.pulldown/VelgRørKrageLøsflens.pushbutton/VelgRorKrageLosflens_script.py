@@ -54,6 +54,8 @@ from System.Collections.Generic import List
 
 from Autodesk.Revit.DB import Plumbing
 
+
+
 def measure(startpoint, point):
     return startpoint.DistanceTo(point)
 
@@ -205,7 +207,13 @@ def changecontype(con):
     else:
         return False
 
+"""
 LoadFamilyDocOpt = LoadFamily.__new__.Overloads[Document,IFamilyLoadOptions]
+family = clr.Reference[Family]()
+# family is now an Object reference (not set to an instance of an object!)
+success = doc.LoadFamily(path, family)  # explicitly choose the overload
+# family is now a Revit Family object and can be used as you wish
+"""
 
 def CheckValveConnectors(valve_family):
     famdoc = doc.EditFamily(valve_family)
@@ -230,7 +238,8 @@ def CheckValveConnectors(valve_family):
                     print('Feil med endring av connector-type i family')
         except:
             print('Feil med sjekk av connector-type i family')
-    famdoc.LoadFamilyDocOpt(Document = doc, IFamilyLoadOptions = FamOpt1())
+    #famdoc.LoadFamilyDocOpt(Document = doc, IFamilyLoadOptions = FamOpt1())
+    famdoc.LoadFamily.Overloads.Functions[3](Document=doc, IFamilyLoadOptions=FamOpt1())
     famdoc.Close(False)
 
 def AddFlange(pipe, valve_connector, gasket):
@@ -268,7 +277,6 @@ list_piping_system_id = []
 for i in pipingSystem:
     list_piping_system.append(i)
     list_piping_system_id.append(i.Id)
-
 
 ###########################################################
 ## start algorithm for finding missing flanges
