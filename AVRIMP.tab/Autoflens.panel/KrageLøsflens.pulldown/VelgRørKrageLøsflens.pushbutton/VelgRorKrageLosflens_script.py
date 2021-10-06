@@ -231,10 +231,12 @@ def CheckValveConnectors(valve_family):
                     if (changecontype(a)):
                         # success
                         changed = True
-                        pass
+                        print('Global changed')
+                        #pass
                     else:
+                        print('Global, not success')
                         #feil ved forsøk på å endre con type
-                        pass
+                        #pass
                 except:
                     print('Feil med endring av connector-type i family')
             else:
