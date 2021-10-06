@@ -332,7 +332,7 @@ if bool(picked):
 
     for ij in EQ_picked:
         print('ij')
-        if (i.Category.Id == (-2008055)) or (i.Category.Id == (-2001140)):
+        if (ij.Category.Id == (-2008055)) or (ij.Category.Id == (-2001140)):
             print("passed category filter connector test")
             print(ij.Category.Name)
             # Filter out flanges and other parts where type-name i "Standard"
@@ -368,6 +368,7 @@ if bool(picked):
 
     for i in EQ_picked:
         print('i')
+        print(i.Category.Id)
         # Checking if pipe accessory (-2008055) or mech equipment (-2001140)
         if (i.Category.Id == (-2008055)) or (i.Category.Id == (-2001140)):
             print("passed category filter")
