@@ -365,8 +365,9 @@ if bool(picked):
     transaction = DB.Transaction(doc)
     transaction.Start("Autoflens")
 
+
     for i in EQ_picked:
-        print(i)
+        print('i')
         # Checking if pipe accessory (-2008055) or mech equipment (-2001140)
         if (i.Category.Id == (-2008055)) or (i.Category.Id == (-2001140)):
             print("passed category filter")
