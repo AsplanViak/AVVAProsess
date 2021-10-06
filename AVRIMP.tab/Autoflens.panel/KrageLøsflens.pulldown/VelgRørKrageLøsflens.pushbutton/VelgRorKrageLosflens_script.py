@@ -248,7 +248,7 @@ def CheckValveConnectors(valve_family):
     #famdoc.LoadFamilyDocOpt(Document = doc, IFamilyLoadOptions = FamOpt1())
     print('changed :' + str(changed))
     if changed:
-        famdoc.LoadFamily.Overloads.Functions[2](Document=doc, IFamilyLoadOptions=FamOpt1())
+        famdoc.LoadFamily.Overloads.Functions[3](Document=doc, IFamilyLoadOptions=FamOpt1())
 
     famdoc.Close(False)
 
@@ -368,6 +368,9 @@ if bool(picked):
     # list containing all family names where connectors has been checked and potentially modified
     checked_valve_families = []
 
+    transaction = DB.Transaction(doc)
+    transaction.Start("Modifisering av connectorer før autoflens")
+
     for ij in EQ_picked:
         #if (ij.Category.Id == (-2008055)) or (ij.Category.Id == (-2001140)):
         if (ij.Category.Name == 'Pipe Accessories') or (ij.Category.Name == 'Mechanical Equipment'):
@@ -397,6 +400,8 @@ if bool(picked):
                 if valve_family.Name not in checked_valve_families:
                     CheckValveConnectors(valve_family)
                     checked_valve_families.append(valve_family_name)
+
+    transaction.Commit()
 
     transaction = DB.Transaction(doc)
     transaction.Start("Autoflens")
