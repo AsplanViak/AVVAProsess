@@ -200,14 +200,6 @@ class FamOpt1(IFamilyLoadOptions):
     def OnSharedFamilyFound(self, sharedFamily, familyInUse, source, overwriteParameterValues):
         return True
 
-"""    
-class FamOpt1:
-    def __init__(self): pass
-
-    def OnFamilyFound(self, familyInUse, overwriteParameterValues): return True
-
-    def OnSharedFamilyFound(self, familyInUse, source, overwriteParameterValues): return True
-"""
 
 # function for å endre type connector
 def changecontype(con):
@@ -273,7 +265,6 @@ def AddFlange(pipe, valve_connector, gasket):
     new_flange = placeFitting(pipe, pointlist, familytype, lineDirection)
 
     return new_flange
-
 
 #klargjør til rapportering til skjerm
 output_report = []
