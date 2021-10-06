@@ -192,12 +192,22 @@ def SortedPoints(fittingspoints, ductStartPoint):
     return sortedpoints
 
 # class for overwriting loaded families in the project
+
+class FamOpt1(IFamilyLoadOptions):
+	def OnFamilyFound(self, familyInUse, overwriteParameterValues):
+		overwriteParameterValues = True
+		return True
+
+    def OnSharedFamilyFound(self, sharedFamily, familyInUse, source, overwriteParameterValues):
+        return True
+"""    
 class FamOpt1:
     def __init__(self): pass
 
     def OnFamilyFound(self, familyInUse, overwriteParameterValues): return True
 
     def OnSharedFamilyFound(self, familyInUse, source, overwriteParameterValues): return True
+"""
 
 # function for å endre type connector
 def changecontype(con):
