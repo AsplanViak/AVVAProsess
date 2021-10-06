@@ -239,7 +239,7 @@ def CheckValveConnectors(valve_family):
         except:
             print('Feil med sjekk av connector-type i family')
     #famdoc.LoadFamilyDocOpt(Document = doc, IFamilyLoadOptions = FamOpt1())
-    famdoc.LoadFamily.Overloads.Functions[3](Document=doc, IFamilyLoadOptions=FamOpt1())
+    famdoc.LoadFamily.Overloads.Functions[4](Document=doc, IFamilyLoadOptions=FamOpt1())
     famdoc.Close(False)
 
 def AddFlange(pipe, valve_connector, gasket):
