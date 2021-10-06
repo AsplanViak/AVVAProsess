@@ -223,10 +223,8 @@ def CheckValveConnectors(valve_family):
                     else:
                         #feil ved forsøk på å endre con type
                         pass
-    famdoc.LoadFamily(doc, FamOpt1())
-                  
-
-                #except:
+    famdoc.LoadFamily(Document = doc, IFamilyLoadOptions = FamOpt1())
+                                  #except:
                 #    print('Feil med endring av connector-type i family')
         #except:
         #    print('Feil med sjekk av connector-type i family')
@@ -310,15 +308,15 @@ con_typed_list = List[DB.BuiltInCategory](con_cat_list)
 con_filter = DB.ElementMulticategoryFilter(con_typed_list)
 
 # collect all mechanical equipment and pipe accessories in project
-
+"""
 cat_list = [DB.BuiltInCategory.OST_PipeAccessory, DB.BuiltInCategory.OST_MechanicalEquipment]
 typed_list = List[DB.BuiltInCategory](cat_list)
 filter = DB.ElementMulticategoryFilter(typed_list)
 EQ = DB.FilteredElementCollector(doc).WherePasses(filter).WhereElementIsNotElementType().ToElements()
-
+"""
 
 # make selection in UI for selecting pipe accessories and mech eq ++
-picked  =[]
+picked = []
 try:
     picked = uidoc.Selection.PickObjects(ObjectType.Element)
 except:
@@ -332,33 +330,36 @@ if bool(picked):
     # list containing all family names where connectors has been checked and potentially modified
     checked_valve_families = []
 
-    for i in EQ:
-        # Filter out flanges and other parts where type-name i "Standard"
-        if i.Name != 'Standard':
-            # Filter out equipment without connectors
-            # Find connectors
-            try:
-                connectors = i.MEPModel.ConnectorManager.Connectors
-            except:
+    for i in EQ_picked:
+        if (i.Category.Id == (-2008055)) or (i.Category.Id == (-2001140)):
+            print("passed category filter connector test")
+            print(i.Category.Name)
+            # Filter out flanges and other parts where type-name i "Standard"
+            if i.Name != 'Standard':
+                # Filter out equipment without connectors
+                # Find connectors
                 try:
-                    connectors = i.ConnectorManager.Connectors
+                    connectors = i.MEPModel.ConnectorManager.Connectors
                 except:
-                    connectors = []
-            # modify connectorset to be subscriptable
-            cons = []
-            for kk in connectors:
-                cons.append(kk)
-            if len(cons) == 0:
-                continue
+                    try:
+                        connectors = i.ConnectorManager.Connectors
+                    except:
+                        connectors = []
+                # modify connectorset to be subscriptable
+                cons = []
+                for kk in connectors:
+                    cons.append(kk)
+                if len(cons) == 0:
+                    continue
 
-            # Checking the connector-types of the family
-            valve_type_id = i.GetTypeId()
-            valve_element_type = doc.GetElement(valve_type_id)
-            valve_family = valve_element_type.Family
-            valve_family_name = valve_family.Name
-            if valve_family.Name not in checked_valve_families:
-                CheckValveConnectors(valve_family)
-                checked_valve_families.append(valve_family_name)
+                # Checking the connector-types of the family
+                valve_type_id = i.GetTypeId()
+                valve_element_type = doc.GetElement(valve_type_id)
+                valve_family = valve_element_type.Family
+                valve_family_name = valve_family.Name
+                if valve_family.Name not in checked_valve_families:
+                    CheckValveConnectors(valve_family)
+                    checked_valve_families.append(valve_family_name)
 
     transaction = DB.Transaction(doc)
     transaction.Start("Autoflens")
