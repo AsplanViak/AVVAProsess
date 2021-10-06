@@ -217,25 +217,14 @@ def changecontype(con):
     else:
         return False
 
-"""
-LoadFamilyDocOpt = LoadFamily.__new__.Overloads[Document,IFamilyLoadOptions]
-family = clr.Reference[Family]()
-# family is now an Object reference (not set to an instance of an object!)
-success = doc.LoadFamily(path, family)  # explicitly choose the overload
-# family is now a Revit Family object and can be used as you wish
-"""
-
 def CheckValveConnectors(valve_family):
-    print(valve_family.Name)
+
     famdoc = doc.EditFamily(valve_family)
     fam_connections = DB.FilteredElementCollector(famdoc).WherePasses(
         con_filter).WhereElementIsNotElementType().ToElements()
-    print(len(fam_connections))
     changed = False
     for a in fam_connections:
         try:
-            print(a.get_Parameter(
-                    DB.BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM).AsValueString())
             if a.get_Parameter(
                     DB.BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM).AsValueString() == 'Global':
                 #treff på global
@@ -243,24 +232,24 @@ def CheckValveConnectors(valve_family):
                     if (changecontype(a)):
                         # success
                         changed = True
-                        print('Global changed')
                         #pass
                     else:
-                        print('Global, not success')
                         #feil ved forsøk på å endre con type
-                        #pass
+                        pass
                 except:
-                    print('Feil med endring av connector-type i family')
+                    #print('Feil med endring av connector-type i family')
             else:
-                print('Connector har riktig type')
+                #print('Connector har riktig type')
         except:
-            print('Feil med sjekk av connector-type i family')
+            #print('Feil med sjekk av connector-type i family')
     #famdoc.LoadFamilyDocOpt(Document = doc, IFamilyLoadOptions = FamOpt1())
     print('changed :' + str(changed))
     if changed:
         #famdoc.LoadFamily.Overloads.Functions[3](Document=doc, IFamilyLoadOptions=FamOpt1())
-        famdoc.LoadFamily.Overloads.Functions[3](doc, FamOpt1())
-
+        try:
+            famdoc.LoadFamily.Overloads.Functions[3](doc, FamOpt1())
+        except:
+            print('Feil med innlasting av family med endrede connectors')
     famdoc.Close(False)
 
 def AddFlange(pipe, valve_connector, gasket):
@@ -318,6 +307,7 @@ for i in PA1:
         flange_family_type[1] = i
         n = n + 1
         continue
+    """
     if 'Sveiseflens_med pakning' in i.Family.Name:
         flange_family_type[2] = i
         n = n + 1
@@ -326,7 +316,8 @@ for i in PA1:
         flange_family_type[3] = i
         n = n + 1
         continue
-    if n == 4:
+    """
+    if n == 2:
         break
 
 for typ in flange_family_type:
@@ -362,8 +353,6 @@ if bool(picked):
 
     # list containing all family names where connectors has been checked and potentially modified
     checked_valve_families = []
-
-
 
     for ij in EQ_picked:
         #if (ij.Category.Id == (-2008055)) or (ij.Category.Id == (-2001140)):
@@ -402,7 +391,7 @@ if bool(picked):
 
     for i in EQ_picked:
 
-        # Checking if pipe accessory (-2008055) or mech equipment (-2001140)
+        # Checking if pipe accessory or mech equipment
         #if (i.Category.Id == (-2008055)) or (i.Category.Id == (-2001140)):
         if (i.Category.Name == 'Pipe Accessories') or (i.Category.Name == 'Mechanical Equipment'):
             # Filter out flanges and other parts where type-name i "Standard"
