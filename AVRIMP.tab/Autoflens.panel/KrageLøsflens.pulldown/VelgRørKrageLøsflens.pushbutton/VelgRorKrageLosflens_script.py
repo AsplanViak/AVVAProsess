@@ -52,8 +52,7 @@ from Autodesk.Revit.UI.Selection import ObjectType
 
 from System.Collections.Generic import List
 
-from Autodesk.Revit.DB import Plumbing
-
+from Autodesk.Revit.DB import Plumbing, IFamilyLoadOptions
 
 
 def measure(startpoint, point):
@@ -194,12 +193,13 @@ def SortedPoints(fittingspoints, ductStartPoint):
 # class for overwriting loaded families in the project
 
 class FamOpt1(IFamilyLoadOptions):
-	def OnFamilyFound(self, familyInUse, overwriteParameterValues):
-		overwriteParameterValues = True
-		return True
+    def OnFamilyFound(self, familyInUse, overwriteParameterValues):
+        overwriteParameterValues = True
+        return True
 
     def OnSharedFamilyFound(self, sharedFamily, familyInUse, source, overwriteParameterValues):
         return True
+
 """    
 class FamOpt1:
     def __init__(self): pass
@@ -328,22 +328,6 @@ for i in PA1:
         continue
     if n == 4:
         break
-
-"""for j in PA1:
-    if 'Krage-Løsflens_uten pakning' in j.Family.Name:
-        flange_family_type[1] = j
-        break
-
-for k in PA1:
-    if 'Sveiseflens_uten pakning' in k.Family.Name:
-        flange_family_type[2] = k
-        break
-
-for l in PA1:
-    if 'Sveiseflens_uten pakning' in l.Family.Name:
-        flange_family_type[3] = l
-        break
-"""
 
 for typ in flange_family_type:
     if typ != 0:
