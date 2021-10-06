@@ -45,7 +45,7 @@ clr.AddReference("RevitNodes")
 from Autodesk.Revit import UI, DB
 from System.Collections.Generic import List
 
-from Autodesk.Revit.DB import Plumbing
+from Autodesk.Revit.DB import Plumbing, IFamilyLoadOptions
 
 def measure(startpoint, point):
     return startpoint.DistanceTo(point)
@@ -183,12 +183,14 @@ def SortedPoints(fittingspoints, ductStartPoint):
     return sortedpoints
 
 # class for overwriting loaded families in the project
-class FamOpt1:
-    def __init__(self): pass
+class FamOpt1(IFamilyLoadOptions):
+    def OnFamilyFound(self, familyInUse, overwriteParameterValues):
+        overwriteParameterValues = True
+        return True
 
-    def OnFamilyFound(self, familyInUse, overwriteParameterValues): return True
+    def OnSharedFamilyFound(self, sharedFamily, familyInUse, source, overwriteParameterValues):
+        return True
 
-    def OnSharedFamilyFound(self, familyInUse, source, overwriteParameterValues): return True
 
 # function for å endre type connector
 def changecontype(con):
@@ -266,25 +268,28 @@ for i in pipingSystem:
 PA1 = DB.FilteredElementCollector(doc).OfCategory(DB.BuiltInCategory.OST_PipeAccessory).WhereElementIsElementType()
 
 flange_family_type = [0, 0, 0, 0]
+n = 0
 
 for i in PA1:
     if 'Krage-Løsflens_med pakning' in i.Family.Name:
         flange_family_type[0] = i
-        break
-
-for j in PA1:
-    if 'Krage-Løsflens_uten pakning' in j.Family.Name:
-        flange_family_type[1] = j
-        break
-
-for k in PA1:
-    if 'Sveiseflens_uten pakning' in k.Family.Name:
-        flange_family_type[2] = k
-        break
-
-for l in PA1:
-    if 'Sveiseflens_uten pakning' in l.Family.Name:
-        flange_family_type[3] = l
+        n = n + 1
+        continue
+    if 'Krage-Løsflens_uten pakning' in i.Family.Name:
+        flange_family_type[1] = i
+        n = n + 1
+        continue
+    """
+    if 'Sveiseflens_med pakning' in i.Family.Name:
+        flange_family_type[2] = i
+        n = n + 1
+        continue
+    if 'Sveiseflens_uten pakning' in i.Family.Name:
+        flange_family_type[3] = i
+        n = n + 1
+        continue
+    """
+    if n == 2:
         break
 
 for typ in flange_family_type:

@@ -237,7 +237,7 @@ def CheckValveConnectors(valve_family):
         except:
             pass
             #print('Feil med sjekk av connector-type i family')
-    print('changed :' + str(changed))
+    #print('changed :' + str(changed))
     if changed:
         #famdoc.LoadFamily.Overloads.Functions[3](Document=doc, IFamilyLoadOptions=FamOpt1())
         try:
