@@ -216,6 +216,7 @@ success = doc.LoadFamily(path, family)  # explicitly choose the overload
 """
 
 def CheckValveConnectors(valve_family):
+    print(valve_family.Name)
     famdoc = doc.EditFamily(valve_family)
     fam_connections = DB.FilteredElementCollector(famdoc).WherePasses(
         con_filter).WhereElementIsNotElementType().ToElements()
