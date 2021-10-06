@@ -369,8 +369,10 @@ if bool(picked):
     for i in EQ_picked:
         print('i')
         print(i.Category.Id)
+        print(i.Category.Name)
         # Checking if pipe accessory (-2008055) or mech equipment (-2001140)
-        if (i.Category.Id == (-2008055)) or (i.Category.Id == (-2001140)):
+        "if (i.Category.Id == (-2008055)) or (i.Category.Id == (-2001140)):
+        if (i.Category.Name == 'Pipe Accessories') or (i.Category.Nam == 'Mechanical Equipment'):
             print("passed category filter")
             print(i.Category.Name)
 
