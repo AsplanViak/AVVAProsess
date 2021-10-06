@@ -211,24 +211,24 @@ def CheckValveConnectors(valve_family):
         con_filter).WhereElementIsNotElementType().ToElements()
     print(len(fam_connections))
     for a in fam_connections:
-        #try:
-        if (1):
+        try:
+        #if (1):
             if a.get_Parameter(
                     DB.BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM).AsValueString() == 'Global':
                 #treff på global
-                #try:  # this might fail if the parameter exists or for some other reason
-                if(1):
+                try:  # this might fail if the parameter exists or for some other reason
+                #if(1):
                     if (changecontype(a)):
                         # success
                         pass
                     else:
                         #feil ved forsøk på å endre con type
                         pass
+                except:
+                    print('Feil med endring av connector-type i family')
+        except:
+            print('Feil med sjekk av connector-type i family')
     famdoc.LoadFamily(Document = doc, IFamilyLoadOptions = FamOpt1())
-                                  #except:
-                #    print('Feil med endring av connector-type i family')
-        #except:
-        #    print('Feil med sjekk av connector-type i family')
     famdoc.Close(False)
 
 def AddFlange(pipe, valve_connector, gasket):
