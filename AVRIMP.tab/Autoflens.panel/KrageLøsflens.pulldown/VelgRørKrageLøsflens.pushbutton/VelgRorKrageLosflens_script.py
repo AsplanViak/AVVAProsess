@@ -330,19 +330,20 @@ if bool(picked):
     # list containing all family names where connectors has been checked and potentially modified
     checked_valve_families = []
 
-    for i in EQ_picked:
+    for ij in EQ_picked:
+        print('ij')
         if (i.Category.Id == (-2008055)) or (i.Category.Id == (-2001140)):
             print("passed category filter connector test")
-            print(i.Category.Name)
+            print(ij.Category.Name)
             # Filter out flanges and other parts where type-name i "Standard"
-            if i.Name != 'Standard':
+            if ij.Name != 'Standard':
                 # Filter out equipment without connectors
                 # Find connectors
                 try:
-                    connectors = i.MEPModel.ConnectorManager.Connectors
+                    connectors = ij.MEPModel.ConnectorManager.Connectors
                 except:
                     try:
-                        connectors = i.ConnectorManager.Connectors
+                        connectors = ij.ConnectorManager.Connectors
                     except:
                         connectors = []
                 # modify connectorset to be subscriptable
@@ -353,7 +354,7 @@ if bool(picked):
                     continue
 
                 # Checking the connector-types of the family
-                valve_type_id = i.GetTypeId()
+                valve_type_id = ij.GetTypeId()
                 valve_element_type = doc.GetElement(valve_type_id)
                 valve_family = valve_element_type.Family
                 valve_family_name = valve_family.Name
@@ -365,6 +366,7 @@ if bool(picked):
     transaction.Start("Autoflens")
 
     for i in EQ_picked:
+        print(i)
         # Checking if pipe accessory (-2008055) or mech equipment (-2001140)
         if (i.Category.Id == (-2008055)) or (i.Category.Id == (-2001140)):
             print("passed category filter")
