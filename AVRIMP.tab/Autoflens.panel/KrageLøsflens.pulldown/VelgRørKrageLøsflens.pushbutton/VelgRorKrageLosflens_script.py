@@ -222,8 +222,8 @@ def CheckValveConnectors(valve_family):
     print(len(fam_connections))
     changed = False
     for a in fam_connections:
-        try:
-        #if (1):
+        #try:
+        if (1):
             if a.get_Parameter(
                     DB.BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM).AsValueString() == 'Global':
                 #treff på global
@@ -238,12 +238,12 @@ def CheckValveConnectors(valve_family):
                         pass
                 except:
                     print('Feil med endring av connector-type i family')
-        except:
-            print('Feil med sjekk av connector-type i family')
+        #except:
+        #    print('Feil med sjekk av connector-type i family')
     #famdoc.LoadFamilyDocOpt(Document = doc, IFamilyLoadOptions = FamOpt1())
     if changed:
         famdoc.LoadFamily.Overloads.Functions[6](Document=doc, IFamilyLoadOptions=FamOpt1())
-        
+
     famdoc.Close(False)
 
 def AddFlange(pipe, valve_connector, gasket):
@@ -363,11 +363,8 @@ if bool(picked):
     checked_valve_families = []
 
     for ij in EQ_picked:
-        print('ij')
         #if (ij.Category.Id == (-2008055)) or (ij.Category.Id == (-2001140)):
         if (ij.Category.Name == 'Pipe Accessories') or (ij.Category.Name == 'Mechanical Equipment'):
-            print("passed category filter connector test")
-            print(ij.Category.Name)
             # Filter out flanges and other parts where type-name i "Standard"
             if ij.Name != 'Standard':
                 # Filter out equipment without connectors
@@ -399,15 +396,10 @@ if bool(picked):
     transaction.Start("Autoflens")
 
     for i in EQ_picked:
-        print('i')
-        print(i.Category.Id)
-        print(i.Category.Name)
+
         # Checking if pipe accessory (-2008055) or mech equipment (-2001140)
         #if (i.Category.Id == (-2008055)) or (i.Category.Id == (-2001140)):
         if (i.Category.Name == 'Pipe Accessories') or (i.Category.Name == 'Mechanical Equipment'):
-            print("passed category filter")
-            print(i.Category.Name)
-
             # Filter out flanges and other parts where type-name i "Standard"
             if i.Name != 'Standard':
                 # find connectors to valve
