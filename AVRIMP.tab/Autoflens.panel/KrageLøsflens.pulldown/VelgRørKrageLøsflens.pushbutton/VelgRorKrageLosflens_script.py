@@ -224,6 +224,8 @@ def CheckValveConnectors(valve_family):
     changed = False
     for a in fam_connections:
         try:
+            print(a.get_Parameter(
+                    DB.BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM).AsValueString())
             if a.get_Parameter(
                     DB.BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM).AsValueString() == 'Global':
                 #treff på global
