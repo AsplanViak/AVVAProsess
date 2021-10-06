@@ -229,12 +229,14 @@ def CheckValveConnectors(valve_family):
                         #feil ved forsøk på å endre con type
                         pass
                 except:
+                    pass
                     #print('Feil med endring av connector-type i family')
             else:
+                pass
                 #print('Connector har riktig type')
         except:
+            pass
             #print('Feil med sjekk av connector-type i family')
-    #famdoc.LoadFamilyDocOpt(Document = doc, IFamilyLoadOptions = FamOpt1())
     print('changed :' + str(changed))
     if changed:
         #famdoc.LoadFamily.Overloads.Functions[3](Document=doc, IFamilyLoadOptions=FamOpt1())
