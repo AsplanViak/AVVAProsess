@@ -242,7 +242,7 @@ def CheckValveConnectors(valve_family):
     #famdoc.LoadFamilyDocOpt(Document = doc, IFamilyLoadOptions = FamOpt1())
     print('changed :' + str(changed))
     if changed:
-        famdoc.LoadFamily.Overloads.Functions[3](Document=doc, IFamilyLoadOptions=FamOpt1())
+        famdoc.LoadFamily.Overloads.Functions[6](Document=doc, IFamilyLoadOptions=FamOpt1())
 
     famdoc.Close(False)
 
