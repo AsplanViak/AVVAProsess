@@ -223,13 +223,11 @@ def CheckValveConnectors(valve_family):
     print(len(fam_connections))
     changed = False
     for a in fam_connections:
-        #try:
-        if (1):
+        try:
             if a.get_Parameter(
                     DB.BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM).AsValueString() == 'Global':
                 #treff på global
                 try:  # this might fail if the parameter exists or for some other reason
-                #if(1):
                     if (changecontype(a)):
                         # success
                         changed = True
@@ -239,11 +237,12 @@ def CheckValveConnectors(valve_family):
                         pass
                 except:
                     print('Feil med endring av connector-type i family')
-        #except:
-        #    print('Feil med sjekk av connector-type i family')
+        except:
+            print('Feil med sjekk av connector-type i family')
     #famdoc.LoadFamilyDocOpt(Document = doc, IFamilyLoadOptions = FamOpt1())
+    print('changed :' + str(changed))
     if changed:
-        famdoc.LoadFamily.Overloads.Functions[6](Document=doc, IFamilyLoadOptions=FamOpt1())
+        famdoc.LoadFamily.Overloads.Functions[3](Document=doc, IFamilyLoadOptions=FamOpt1())
 
     famdoc.Close(False)
 
