@@ -220,6 +220,7 @@ def CheckValveConnectors(valve_family):
     fam_connections = DB.FilteredElementCollector(famdoc).WherePasses(
         con_filter).WhereElementIsNotElementType().ToElements()
     print(len(fam_connections))
+    changed = False
     for a in fam_connections:
         try:
         #if (1):
@@ -230,6 +231,7 @@ def CheckValveConnectors(valve_family):
                 #if(1):
                     if (changecontype(a)):
                         # success
+                        changed = True
                         pass
                     else:
                         #feil ved forsøk på å endre con type
@@ -239,7 +241,9 @@ def CheckValveConnectors(valve_family):
         except:
             print('Feil med sjekk av connector-type i family')
     #famdoc.LoadFamilyDocOpt(Document = doc, IFamilyLoadOptions = FamOpt1())
-    famdoc.LoadFamily.Overloads.Functions[6](Document=doc, IFamilyLoadOptions=FamOpt1())
+    if changed:
+        famdoc.LoadFamily.Overloads.Functions[6](Document=doc, IFamilyLoadOptions=FamOpt1())
+        
     famdoc.Close(False)
 
 def AddFlange(pipe, valve_connector, gasket):
