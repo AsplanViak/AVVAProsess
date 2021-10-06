@@ -205,6 +205,8 @@ def changecontype(con):
     else:
         return False
 
+LoadFamilyDocOpt = LoadFamily.__new__.Overloads[Document,IFamilyLoadOptions]
+
 def CheckValveConnectors(valve_family):
     famdoc = doc.EditFamily(valve_family)
     fam_connections = DB.FilteredElementCollector(famdoc).WherePasses(
@@ -228,7 +230,7 @@ def CheckValveConnectors(valve_family):
                     print('Feil med endring av connector-type i family')
         except:
             print('Feil med sjekk av connector-type i family')
-    famdoc.LoadFamily(Document = doc, IFamilyLoadOptions = FamOpt1())
+    famdoc.LoadFamilyDocOpt(Document = doc, IFamilyLoadOptions = FamOpt1())
     famdoc.Close(False)
 
 def AddFlange(pipe, valve_connector, gasket):
@@ -276,13 +278,29 @@ for i in pipingSystem:
 PA1 = DB.FilteredElementCollector(doc).OfCategory(DB.BuiltInCategory.OST_PipeAccessory).WhereElementIsElementType()
 
 flange_family_type = [0, 0, 0, 0]
+n = 0
 
 for i in PA1:
     if 'Krage-Løsflens_med pakning' in i.Family.Name:
         flange_family_type[0] = i
+        n = n + 1
+        continue
+    if 'Krage-Løsflens_uten pakning' in i.Family.Name:
+        flange_family_type[1] = i
+        n = n + 1
+        continue
+    if 'Sveiseflens_med pakning' in i.Family.Name:
+        flange_family_type[2] = i
+        n = n + 1
+        continue
+    if 'Sveiseflens_uten pakning' in i.Family.Name:
+        flange_family_type[3] = i
+        n = n + 1
+        continue
+    if n == 4:
         break
 
-for j in PA1:
+"""for j in PA1:
     if 'Krage-Løsflens_uten pakning' in j.Family.Name:
         flange_family_type[1] = j
         break
@@ -296,6 +314,7 @@ for l in PA1:
     if 'Sveiseflens_uten pakning' in l.Family.Name:
         flange_family_type[3] = l
         break
+"""
 
 for typ in flange_family_type:
     if typ != 0:
