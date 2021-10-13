@@ -277,40 +277,6 @@ for i in pipingSystem:
 ## start algorithm for finding missing flanges
 ###########################################################
 
-#FLANGE TYPES TO BE SELECTED
-PA1 = DB.FilteredElementCollector(doc).OfCategory(DB.BuiltInCategory.OST_PipeAccessory).WhereElementIsElementType()
-
-flange_family_type = [0, 0, 0, 0]
-n = 0
-
-for i in PA1:
-    """
-    if 'Krage-Løsflens_med pakning' in i.Family.Name:
-        flange_family_type[0] = i
-        n = n + 1
-        continue
-    if 'Krage-Løsflens_uten pakning' in i.Family.Name:
-        flange_family_type[1] = i
-        n = n + 1
-        continue
-    """
-    if 'Sveiseflens_med pakning' in i.Family.Name:
-        flange_family_type[2] = i
-        n = n + 1
-        continue
-    if 'Sveiseflens_uten pakning' in i.Family.Name:
-        flange_family_type[3] = i
-        n = n + 1
-        continue
-
-    if n == 2:
-        break
-
-for typ in flange_family_type:
-    if typ != 0:
-        if typ.IsActive == False:
-            typ.Activate()
-            doc.Regenerate()
 
 # prepare connection filter for later collector within family editor
 con_cat_list = [DB.BuiltInCategory.OST_ConnectorElem]
@@ -356,6 +322,41 @@ for i in EQ:
 
 transaction = DB.Transaction(doc)
 transaction.Start("Autoflens")
+
+#ACTIVATE FLANGE TYPES TO BE USED
+PA1 = DB.FilteredElementCollector(doc).OfCategory(DB.BuiltInCategory.OST_PipeAccessory).WhereElementIsElementType()
+
+flange_family_type = [0, 0, 0, 0]
+n = 0
+
+for i in PA1:
+    """
+    if 'Krage-Løsflens_med pakning' in i.Family.Name:
+        flange_family_type[0] = i
+        n = n + 1
+        continue
+    if 'Krage-Løsflens_uten pakning' in i.Family.Name:
+        flange_family_type[1] = i
+        n = n + 1
+        continue
+    """
+    if 'Sveiseflens_med pakning' in i.Family.Name:
+        flange_family_type[2] = i
+        n = n + 1
+        continue
+    if 'Sveiseflens_uten pakning' in i.Family.Name:
+        flange_family_type[3] = i
+        n = n + 1
+        continue
+
+    if n == 2:
+        break
+
+for typ in flange_family_type:
+    if typ != 0:
+        if typ.IsActive == False:
+            typ.Activate()
+            doc.Regenerate()
 
 for i in EQ:
     # Filter out flanges and other parts where type-name i "Standard"
