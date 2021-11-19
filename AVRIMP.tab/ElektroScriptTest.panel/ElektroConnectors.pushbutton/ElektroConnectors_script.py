@@ -112,8 +112,8 @@ famDoc = app.OpenDocumentFile(path)
 famDoc.LoadFamily(doc,FamOpt1())
 famDoc.Close(False)
 
-transaction = DB.Transaction(doc)
-transaction.Start("Autoflens")
+#transaction = DB.Transaction(doc)
+#transaction.Start("Connectors")
 
 #collectorI.OfCategory(BuiltInCategory.OST_RvtLinks).OfClass(typeof(RevitLinkInstance)).ToElements();
 rvtLinks = DB.FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_RvtLinks).OfClass(typeof(RevitLinkInstance)).ToElements()
@@ -123,7 +123,7 @@ for link in rvtLinks:
 
    #if (eI is RevitLinkInstance)
 
-transaction.Commit()
+#transaction.Commit()
 
 
 print('done')
