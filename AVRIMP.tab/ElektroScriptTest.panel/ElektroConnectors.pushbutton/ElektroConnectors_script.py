@@ -138,9 +138,9 @@ try:
 	result = FilteredElementCollector().WherePasses(filter).WhereElementIsNotElementType().ToElements()
     print('success')
 except:
-	# if error accurs anywhere in the process catch it
-	import traceback
-	errorReport = traceback.format_exc()
+    # if error accurs anywhere in the process catch it
+    # import traceback
+    errorReport = traceback.format_exc()
 
 print(len(result))
 
