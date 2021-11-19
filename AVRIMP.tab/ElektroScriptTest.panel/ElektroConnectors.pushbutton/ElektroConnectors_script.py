@@ -100,19 +100,19 @@ class FamOpt1(IFamilyLoadOptions):
 # Last inn connector element
 path = 'S:\Felles\_AVstandard\Revit\Dynamo\Connector_Tekniske_Fag.rfa'
 #famDoc = app.OpenDocumentFile(path)
-famDoc = UIdoc.OpenDocumentFile(path)
+famDoc = uidoc.OpenDocumentFile(path)
 famDoc.LoadFamily(doc,FamOpt1())
 famDoc.Close(False)
 transaction.Commit()
 
 
 #collectorI.OfCategory(BuiltInCategory.OST_RvtLinks).OfClass(typeof(RevitLinkInstance)).ToElements();
-#rvtLinks = DB.FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_RvtLinks).OfClass(typeof(RevitLinkInstance)).ToElements()
+rvtLinks = DB.FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_RvtLinks).OfClass(typeof(RevitLinkInstance)).ToElements()
 
-#for link in rvtLinks:
-#    print(link.RVT_LINK_INSTANCE_NAME)
+for link in rvtLinks:
+    print(link.RVT_LINK_INSTANCE_NAME)
 
-    #if (eI is RevitLinkInstance)
+   #if (eI is RevitLinkInstance)
 
 print('done')
 #button = UI.TaskDialogCommonButtons.None
