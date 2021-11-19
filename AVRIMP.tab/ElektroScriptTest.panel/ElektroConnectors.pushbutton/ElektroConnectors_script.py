@@ -121,11 +121,16 @@ rvtLinks = DB.FilteredElementCollector(doc).OfClass(DB.RevitLinkInstance).ToElem
 
 #collector = Autodesk.Revit.DB.FilteredElementCollector(doc)
 #linkInstances = collector.OfClass(Autodesk.Revit.DB.RevitLinkInstance)
-
+max = 0
 for link in rvtLinks:
     #print(link.RVT_LINK_INSTANCE_NAME)
     print(link.Name)
-   #if (eI is RevitLinkInstance)
+    if link.Name.count('RIMP') > max:
+        max = link.Name.count('RIMP')
+        RIMP_link = link
+
+print(RIMP_link.Name)
+#if (eI is RevitLinkInstance)
 
 #transaction.Commit()
 
