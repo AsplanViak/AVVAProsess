@@ -105,12 +105,14 @@ class FamOpt1(IFamilyLoadOptions):
     def OnSharedFamilyFound(self, sharedFamily, familyInUse, source, overwriteParameterValues):
         return True
 
+transaction = DB.Transaction(doc)
+transaction.Start("Autoflens")
+
 # Last inn connector element
 path = 'S:\Felles\_AVstandard\Revit\Dynamo\Connector_Tekniske_Fag.rfa'
 famDoc = app.OpenDocumentFile(path)
 famDoc.LoadFamily(doc,FamOpt1())
 famDoc.Close(False)
-transaction.Commit()
 
 
 #collectorI.OfCategory(BuiltInCategory.OST_RvtLinks).OfClass(typeof(RevitLinkInstance)).ToElements();
@@ -120,6 +122,9 @@ for link in rvtLinks:
     print(link.RVT_LINK_INSTANCE_NAME)
 
    #if (eI is RevitLinkInstance)
+
+transaction.Commit()
+
 
 print('done')
 #button = UI.TaskDialogCommonButtons.None
