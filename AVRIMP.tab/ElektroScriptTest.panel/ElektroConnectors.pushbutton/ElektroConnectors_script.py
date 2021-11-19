@@ -123,8 +123,8 @@ rvtLinks = DB.FilteredElementCollector(doc).OfClass(DB.RevitLinkInstance).ToElem
 #linkInstances = collector.OfClass(Autodesk.Revit.DB.RevitLinkInstance)
 
 for link in rvtLinks:
-    print(link.RVT_LINK_INSTANCE_NAME)
-    #print(link.name)
+    #print(link.RVT_LINK_INSTANCE_NAME)
+    print(link.Name)
    #if (eI is RevitLinkInstance)
 
 #transaction.Commit()
