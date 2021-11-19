@@ -112,25 +112,39 @@ famDoc = app.OpenDocumentFile(path)
 famDoc.LoadFamily(doc,FamOpt1())
 famDoc.Close(False)
 
-#transaction = DB.Transaction(doc)
-#transaction.Start("Connectors")
-
-
-#rvtLinks = DB.FilteredElementCollector(doc).OfCategory(DB.BuiltInCategory.OST_RvtLinks).OfClass(typeof(RevitLinkInstance)).ToElements()
+# Finn RIMP link
 rvtLinks = DB.FilteredElementCollector(doc).OfClass(DB.RevitLinkInstance).ToElements()
-
-#collector = Autodesk.Revit.DB.FilteredElementCollector(doc)
-#linkInstances = collector.OfClass(Autodesk.Revit.DB.RevitLinkInstance)
 max = 0
 for link in rvtLinks:
-    #print(link.RVT_LINK_INSTANCE_NAME)
-    print(link.Name)
+    #print(link.Name)
     if link.Name.count('RIMP') > max:
         max = link.Name.count('RIMP')
         RIMP_link = link
 
+#link.GetLinkDocument()
+#link.GetLinkDocument().PathName
+
 print(RIMP_link.Name)
-#if (eI is RevitLinkInstance)
+
+
+# Finn Pipe Accessories i link
+PA_cat = GetCategory(doc, OST_PipeAccessory)
+
+try:
+	errorReport = None
+	filter = ElementCategoryFilter(System.Enum.ToObject(BuiltInCategory, PA_cat.Id))
+	result = FilteredElementCollector(RIMP_link.GetLinkDocument()).WherePasses(filter).WhereElementIsNotElementType().ToElements()
+    print('success')
+except:
+	# if error accurs anywhere in the process catch it
+	import traceback
+	errorReport = traceback.format_exc()
+
+print(len(result))
+
+
+#transaction = DB.Transaction(doc)
+#transaction.Start("Connectors")
 
 #transaction.Commit()
 
