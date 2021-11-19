@@ -40,8 +40,15 @@ import clr
 from pyrevit import HOST_APP
 doc = HOST_APP.doc
 uidoc = HOST_APP.uidoc
-app = uidoc.Application
+app = HOST_APP.app
+#app = uidoc.Application
 #uidoc=DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
+
+#doc = DocumentManager.Instance.CurrentDBDocument
+#uiapp = DocumentManager.Instance.CurrentUIApplication
+#uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
+#app = uiapp.Application
+
 
 clr.AddReference("RevitNodes")
 
@@ -101,7 +108,6 @@ class FamOpt1(IFamilyLoadOptions):
 # Last inn connector element
 path = 'S:\Felles\_AVstandard\Revit\Dynamo\Connector_Tekniske_Fag.rfa'
 famDoc = app.OpenDocumentFile(path)
-#famDoc = uidoc.OpenDocumentFile(path)
 famDoc.LoadFamily(doc,FamOpt1())
 famDoc.Close(False)
 transaction.Commit()
