@@ -120,11 +120,13 @@ for link in rvtLinks:
     if link.Name.count('RIMP') > max:
         max = link.Name.count('RIMP')
         RIMP_link = link
+        RIMP_link_doc= link.GetLinkDocument()
 
 #link.GetLinkDocument()
 #link.GetLinkDocument().PathName
 
 print(RIMP_link.Name)
+print(RIMP_link_doc.PathName)
 
 
 # Finn Pipe Accessories i link
@@ -133,7 +135,7 @@ PA_cat = GetCategory(doc, OST_PipeAccessory)
 try:
 	errorReport = None
 	filter = ElementCategoryFilter(System.Enum.ToObject(BuiltInCategory, PA_cat.Id))
-	result = FilteredElementCollector(RIMP_link.GetLinkDocument()).WherePasses(filter).WhereElementIsNotElementType().ToElements()
+	result = FilteredElementCollector().WherePasses(filter).WhereElementIsNotElementType().ToElements()
     print('success')
 except:
 	# if error accurs anywhere in the process catch it
@@ -142,6 +144,7 @@ except:
 
 print(len(result))
 
+#pipingSystem = DB.FilteredElementCollector(doc).OfClass(Plumbing.PipingSystemType).ToElements()
 
 #transaction = DB.Transaction(doc)
 #transaction.Start("Connectors")
