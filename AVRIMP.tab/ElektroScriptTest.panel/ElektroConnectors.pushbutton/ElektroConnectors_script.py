@@ -115,12 +115,16 @@ famDoc.Close(False)
 #transaction = DB.Transaction(doc)
 #transaction.Start("Connectors")
 
-#collectorI.OfCategory(BuiltInCategory.OST_RvtLinks).OfClass(typeof(RevitLinkInstance)).ToElements();
-rvtLinks = DB.FilteredElementCollector(doc).OfCategory(DB.BuiltInCategory.OST_RvtLinks).OfClass(typeof(RevitLinkInstance)).ToElements()
+
+#rvtLinks = DB.FilteredElementCollector(doc).OfCategory(DB.BuiltInCategory.OST_RvtLinks).OfClass(typeof(RevitLinkInstance)).ToElements()
+rvtLinks = DB.FilteredElementCollector(doc).OfClass(DB.RevitLinkInstance).ToElements()
+
+#collector = Autodesk.Revit.DB.FilteredElementCollector(doc)
+#linkInstances = collector.OfClass(Autodesk.Revit.DB.RevitLinkInstance)
 
 for link in rvtLinks:
-    print(link.RVT_LINK_INSTANCE_NAME)
-
+    #print(link.RVT_LINK_INSTANCE_NAME)
+    print(link.name)
    #if (eI is RevitLinkInstance)
 
 #transaction.Commit()
