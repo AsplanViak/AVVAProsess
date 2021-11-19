@@ -121,7 +121,7 @@ for link in rvtLinks:
     if link.Name.count('RIMP') > max:
         max = link.Name.count('RIMP')
         RIMP_link = link
-        RIMP_link_doc= link.GetLinkDocument()
+        RIMP_link_doc= link.DB.GetLinkDocument()
 
 #link.GetLinkDocument()
 #link.GetLinkDocument().PathName
