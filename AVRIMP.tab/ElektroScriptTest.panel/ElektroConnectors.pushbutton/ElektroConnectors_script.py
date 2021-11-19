@@ -136,7 +136,6 @@ try:
 	errorReport = None
 	filter = ElementCategoryFilter(System.Enum.ToObject(BuiltInCategory, PA_cat.Id))
 	result = FilteredElementCollector().WherePasses(filter).WhereElementIsNotElementType().ToElements()
-    print('success')
 except:
     # if error accurs anywhere in the process catch it
     # import traceback
