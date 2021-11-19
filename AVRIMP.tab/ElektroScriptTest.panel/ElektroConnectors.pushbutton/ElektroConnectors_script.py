@@ -53,6 +53,9 @@ app = HOST_APP.app
 clr.AddReference("RevitNodes")
 
 from Autodesk.Revit import UI, DB
+
+from Autodesk.Revit.DB import *
+
 from System.Collections.Generic import List
 
 from Autodesk.Revit.DB import Plumbing, IFamilyLoadOptions
@@ -121,7 +124,7 @@ for link in rvtLinks:
     if link.Name.count('RIMP') > max:
         max = link.Name.count('RIMP')
         RIMP_link = link
-        RIMP_link_doc= link.DB.GetLinkDocument()
+        RIMP_link_doc= link.GetLinkDocument()
 
 #link.GetLinkDocument()
 #link.GetLinkDocument().PathName
