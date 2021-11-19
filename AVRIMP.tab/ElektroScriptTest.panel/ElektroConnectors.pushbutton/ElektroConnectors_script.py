@@ -113,7 +113,8 @@ famDoc.LoadFamily(doc,FamOpt1())
 famDoc.Close(False)
 
 # Finn RIMP link
-rvtLinks = DB.FilteredElementCollector(doc).OfClass(DB.RevitLinkInstance).ToElements()
+#rvtLinks = DB.FilteredElementCollector(doc).OfClass(DB.RevitLinkInstance).ToElements()
+rvtLinks = DB.FilteredElementCollector(doc).OfClass(DB.RevitLinkInstance)
 max = 0
 for link in rvtLinks:
     #print(link.Name)
