@@ -137,18 +137,11 @@ print(RIMP_link.Name)
 RvtLT = doc.GetElement(RIMP_link.GetTypeId())
 print(RvtLT.IsLoaded(doc, RIMP_link.Id))
 # Finn Pipe Accessories i link
-PA_cat = DB.GetCategory(doc, OST_PipeAccessory)
 
-try:
-	errorReport = None
-	filter = ElementCategoryFilter(System.Enum.ToObject(BuiltInCategory, PA_cat.Id))
-	result = FilteredElementCollector().WherePasses(filter).WhereElementIsNotElementType().ToElements()
-except:
-    # if error accurs anywhere in the process catch it
-    # import traceback
-    errorReport = traceback.format_exc()
+PA1 = DB.FilteredElementCollector(doc).OfCategory(DB.BuiltInCategory.OST_PipeAccessory).WhereElementIsElementType()
 
-print(len(result))
+
+print(len(PA1))
 
 #pipingSystem = DB.FilteredElementCollector(doc).OfClass(Plumbing.PipingSystemType).ToElements()
 
