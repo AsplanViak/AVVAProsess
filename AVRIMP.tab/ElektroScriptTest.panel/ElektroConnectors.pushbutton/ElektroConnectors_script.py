@@ -136,13 +136,15 @@ print(RIMP_link.Id)
 
 #RvtLT = doc.GetElement(RIMP_link.GetTypeId())
 RvtLT = doc.GetElement(RIMP_link.GetTypeId())
-print(RvtLT.IsLoaded(doc, RIMP_link.Id))
+print(RvtLT.IsLoaded(RIMP_link_doc, RIMP_link.Id))
 # Finn Pipe Accessories i link
 
 PA1 = DB.FilteredElementCollector(RIMP_link_doc).OfCategory(DB.BuiltInCategory.OST_PipeAccessory).WhereElementIsElementType()
+n = 0
+for i in PA1:
+    n = n + 1
 
-
-print(len(PA1))
+print(n)
 
 #pipingSystem = DB.FilteredElementCollector(doc).OfClass(Plumbing.PipingSystemType).ToElements()
 
