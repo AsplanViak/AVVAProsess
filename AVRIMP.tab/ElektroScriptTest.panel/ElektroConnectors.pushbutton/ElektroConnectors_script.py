@@ -135,7 +135,7 @@ print(RIMP_link.Name)
 
 #RvtLT = doc.GetElement(RIMP_link.GetTypeId())
 RvtLT = doc.GetElement(RIMP_link.GetTypeId())
-print(RvtLT.IsLoaded(RIMP_link_doc, RIMP_link.Id))
+print(RvtLT.IsLoaded(doc, RIMP_link.Id))
 # Finn Pipe Accessories i link
 PA_cat = GetCategory(doc, OST_PipeAccessory)
 
