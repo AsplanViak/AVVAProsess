@@ -137,7 +137,7 @@ print(RIMP_link.Name)
 RvtLT = doc.GetElement(RIMP_link.GetTypeId())
 print(RvtLT.IsLoaded(doc, RIMP_link.Id))
 # Finn Pipe Accessories i link
-PA_cat = GetCategory(doc, OST_PipeAccessory)
+PA_cat = DB.GetCategory(doc, OST_PipeAccessory)
 
 try:
 	errorReport = None
