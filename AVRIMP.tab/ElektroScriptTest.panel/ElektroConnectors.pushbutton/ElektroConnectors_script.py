@@ -132,13 +132,14 @@ for link in rvtLinks:
 print(RIMP_link.Name)
 #print(RIMP_link_doc.PathName)
 #print(RIMP_link_doc.Name)
+print(RIMP_link.Id)
 
 #RvtLT = doc.GetElement(RIMP_link.GetTypeId())
 RvtLT = doc.GetElement(RIMP_link.GetTypeId())
 print(RvtLT.IsLoaded(doc, RIMP_link.Id))
 # Finn Pipe Accessories i link
 
-PA1 = DB.FilteredElementCollector(doc).OfCategory(DB.BuiltInCategory.OST_PipeAccessory).WhereElementIsElementType()
+PA1 = DB.FilteredElementCollector(RIMP_link_doc).OfCategory(DB.BuiltInCategory.OST_PipeAccessory).WhereElementIsElementType()
 
 
 print(len(PA1))
