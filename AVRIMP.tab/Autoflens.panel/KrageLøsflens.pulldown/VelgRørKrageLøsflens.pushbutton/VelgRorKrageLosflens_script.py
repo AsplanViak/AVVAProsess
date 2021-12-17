@@ -512,7 +512,7 @@ if bool(picked):
                                 flange_a_con_position = f_cons[0].Origin
                                 flange_b_con_position = f_cons[1].Origin
 
-                                if valve_number_of_connectors == 2:
+                                if valve_number_of_connectors == 20:
                                     if debug_mode == 1:
                                         print('using method for valve with 2 connectors')
                                     # fungerer best for ventiler etc med 2 stk connectors
