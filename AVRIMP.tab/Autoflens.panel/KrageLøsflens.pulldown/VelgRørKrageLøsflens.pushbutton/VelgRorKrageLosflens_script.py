@@ -42,9 +42,6 @@ doc = HOST_APP.doc
 uidoc = HOST_APP.uidoc
 #uidoc=DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
 
-
-
-
 clr.AddReference("RevitNodes")
 
 from Autodesk.Revit import UI, DB
@@ -53,6 +50,9 @@ from Autodesk.Revit.UI.Selection import ObjectType
 from System.Collections.Generic import List
 
 from Autodesk.Revit.DB import Plumbing, IFamilyLoadOptions
+
+
+debug_mode = 1
 
 
 def measure(startpoint, point):
@@ -535,6 +535,9 @@ if bool(picked):
                                         need_to_flip = f_cons[1].GetMEPConnectorInfo().IsPrimary
 
                                 #Flip
+                                if debug_mode == 1:
+                                    print('need_to_flip: ' + need_to_flip)
+
                                 if need_to_flip:
                                     try:
                                         vector = valve_connector.CoordinateSystem.BasisY
@@ -543,6 +546,8 @@ if bool(picked):
                                         flipped = new_flange.Location.Rotate(line, math.pi)
                                     except:
                                         status = ' Årsak: Feil ved flipping av flens.'
+                                        if debug_mode == 1:
+                                            print(status)
                                         doc.Delete(new_flange.Id)
                                         output_report_errors.append(report(duct_piping_system_type, pipe_connector, status))
                                         continue
@@ -566,6 +571,8 @@ if bool(picked):
 
                                 except:
                                     status = ' Årsak: Feil ved flytting av flens.'
+                                    if debug_mode == 1:
+                                        print(status)
                                     doc.Delete(new_flange.Id)
                                     output_report_errors.append(report(duct_piping_system_type, pipe_connector, status))
                                     continue
