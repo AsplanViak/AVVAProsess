@@ -536,7 +536,7 @@ if bool(picked):
 
                                 #Flip
                                 if debug_mode == 1:
-                                    print('need_to_flip: ' + need_to_flip)
+                                    print('need_to_flip: ' + str(need_to_flip))
 
                                 if need_to_flip:
                                     try:
