@@ -513,13 +513,22 @@ if bool(picked):
                                 flange_b_con_position = f_cons[1].Origin
 
                                 if valve_number_of_connectors == 2:
+                                    if debug_mode == 1:
+                                        print('using method for valve with 2 connectors')
                                     # fungerer best for ventiler etc med 2 stk connectors
                                     flange_a_dist = flange_a_con_position.DistanceTo(opposite_valve_connector.Origin)
                                     flange_b_dist = flange_b_con_position.DistanceTo(opposite_valve_connector.Origin)
+                                    if debug_mode == 1:
+                                        print('flange_a_dist : ' + str(flange_a_dist))
+                                        print('flange_b_dist : ' + str(flange_b_dist))
                                     if flange_a_dist < flange_b_dist:
                                         need_to_flip = f_cons[0].GetMEPConnectorInfo().IsPrimary
+                                        if debug_mode == 1:
+                                            print('flange_a_dist < flange_b_dist')
                                     else:
                                         need_to_flip = f_cons[1].GetMEPConnectorInfo().IsPrimary
+                                        if debug_mode == 1:
+                                            print('else')
                                 else:
                                     # fungerer for ventiler etc med 1 eller mer enn 2 connectors. Bruker bounding box location
                                     try:
