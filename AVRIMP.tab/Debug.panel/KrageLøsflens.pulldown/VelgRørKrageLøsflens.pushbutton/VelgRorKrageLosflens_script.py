@@ -603,6 +603,13 @@ if bool(picked):
                                 ########################
 
                                 doc.Regenerate()
+
+
+                                ### continue nr 3
+                                print('continue nr 3')
+                                continue
+
+
                                 try:
                                     # modify pipe endpoints
                                     if pipe_endpoint_id == 0:
