@@ -138,7 +138,7 @@ def placeFitting(duct, point, familytype, valve, lineDirection):
 
     point = DB.XYZ(point.X,point.Y,point.Z+level.Elevation)
     #point = DB.XYZ(point.X, point.Y, point.Z)
-    if debug == 1:
+    if debug_mode == 1:
         print('point.X: ' + str(point.X))
         print('point.Y: ' + str(point.Y))
         print('point.Z: ' + str(point.Z))
