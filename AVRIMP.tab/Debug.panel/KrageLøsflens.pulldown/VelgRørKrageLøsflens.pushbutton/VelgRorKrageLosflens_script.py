@@ -493,8 +493,8 @@ if bool(picked):
                                 doc.Regenerate()
 
 
-                                ###
-                                continue
+                                ### continue nr 1
+                                #continue
 
 
 
@@ -568,6 +568,10 @@ if bool(picked):
                                         continue
 
                                 doc.Regenerate()
+
+                                ### continue nr 2
+                                continue
+
 
                                 ###################################
                                 # Move flange
