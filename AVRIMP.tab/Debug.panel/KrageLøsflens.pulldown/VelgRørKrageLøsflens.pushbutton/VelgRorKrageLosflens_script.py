@@ -537,12 +537,18 @@ if bool(picked):
                                         if debug_mode == 1:
                                             print('else')
                                 else:
+                                    if debug_mode == 1:
+                                        print('using method for valve with 1, or 3 or more, connectors')
                                     # fungerer for ventiler etc med 1 eller mer enn 2 connectors. Bruker bounding box location
                                     try:
                                         bb = valve.get_BoundingBox(None)
                                         if not bb is None:
                                             centre = bb.Min + (bb.Max - bb.Min) / 2
+                                            if debug_mode == 1:
+                                                print('centre: ' + str(centre))
                                     except:
+                                        if debug_mode == 1:
+                                            print('pass at try bounding box')
                                         pass
                                     if flange_a_con_position.DistanceTo(centre) < flange_b_con_position.DistanceTo(centre):
                                         # flange side a is facing the valve
