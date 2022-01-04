@@ -142,9 +142,9 @@ def placeFitting(duct, point, familytype, valve, lineDirection):
         print('point.X: ' + str(point.X))
         print('point.Y: ' + str(point.Y))
         print('point.Z: ' + str(point.Z))
-        print('level.Elevation: ' + str(level.Elevation))
+        print('level.Elevation: ' - str(level.Elevation))
 
-    ## THIS LINE IS DEPENDENT ON UNITS AND PROJECT SETTINGS. LINE BELOW IS FOR PROEJCT USING MM AS UNIT, AND THERE IS NOT ADDED FLANGES FOR DN<45 MM
+    ## THIS LINE IS DEPENDENT ON UNITS AND PROJECT SETTINGS. LINE BELOW IS FOR PROJECT USING MM AS UNIT, AND THERE IS NOT ADDED FLANGES FOR DN<45 MM
     if radius < 45 / 304.8 / 2:
         return 0
 
