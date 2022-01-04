@@ -101,7 +101,7 @@ def report(duct_piping_system_type, pipe_connector, status):
                 report_row =  list(['udefinert system', 'udefinert DN', status])
     return report_row
 
-def placeFitting(duct, point, familytype, lineDirection):
+def placeFitting(duct, point, familytype, valve, lineDirection):
     toggle = False
     isVertical = False
 
@@ -112,7 +112,8 @@ def placeFitting(duct, point, familytype, lineDirection):
     elif tempfamtype != familytype:
         toggle = True
         tempfamtype = familytype
-    level = duct.ReferenceLevel
+    #level = duct.ReferenceLevel
+    level = valve.ReferenceLevel
 
     width = 4
     height = 4
@@ -135,8 +136,13 @@ def placeFitting(duct, point, familytype, lineDirection):
             height = c.Height
             break
 
-    # point = XYZ(point.X,point.Y,point.Z-level.Elevation)
-    point = DB.XYZ(point.X, point.Y, point.Z)
+    point = DB.XYZ(point.X,point.Y,point.Z+level.Elevation)
+    #point = DB.XYZ(point.X, point.Y, point.Z)
+    if debug == 1:
+        print('point.X: ' + str(point.X))
+        print('point.Y: ' + str(point.Y))
+        print('point.Z: ' + str(point.Z))
+        print('level.Elevation: ' + str(level.Elevation))
 
     ## THIS LINE IS DEPENDENT ON UNITS AND PROJECT SETTINGS. LINE BELOW IS FOR PROEJCT USING MM AS UNIT, AND THERE IS NOT ADDED FLANGES FOR DN<45 MM
     if radius < 45 / 304.8 / 2:
@@ -387,7 +393,7 @@ if bool(picked):
 
         # Checking if pipe accessory or mech equipment
         #if (i.Category.Id == (-2008055)) or (i.Category.Id == (-2001140)):
-        if (i.Category.Name == 'Pipe Accessories') or (i.Category.Name == 'Mechanical Equipment'):
+        if (i.Category.Name == 'Pipe Accessories') or (i.Category.Name == 'Mechanical Equipment') or (i.Category.Name == 'Generic Model'):
             # Filter out flanges and other parts where type-name i "Standard"
             if i.Name != 'Standard':
                 # find connectors to valve
@@ -485,7 +491,7 @@ if bool(picked):
                                 #####################
                                 # add flange
                                 ####################
-                                new_flange = AddFlange(pipe, valve_connector, gasket)
+                                new_flange = AddFlange(pipe, valve_connector, gasket, valve)
                                 # check if flange was created. If not, probably due to too small DN
                                 if new_flange == 0:
                                     continue
@@ -582,8 +588,8 @@ if bool(picked):
                                 doc.Regenerate()
 
                                 ### continue nr 2
-                                print('continue nr 2')
-                                continue
+                                #print('continue nr 2')
+                                #continue
 
 
                                 ###################################
