@@ -252,7 +252,7 @@ def CheckValveConnectors(valve_family):
             print('Feil med innlasting av family med endrede connectors')
     famdoc.Close(False)
 
-def AddFlange(pipe, valve_connector, gasket):
+def AddFlange(pipe, valve_connector, gasket, valve):
     pointlist = valve_connector.Origin
 
     # Krage-løsflens
@@ -270,7 +270,7 @@ def AddFlange(pipe, valve_connector, gasket):
     # create duct location line
     ductline = pipe.Location.Curve
     lineDirection = ductline.Direction
-    new_flange = placeFitting(pipe, pointlist, familytype, lineDirection)
+    new_flange = placeFitting(pipe, pointlist, familytype, valve, lineDirection)
 
     return new_flange
 
