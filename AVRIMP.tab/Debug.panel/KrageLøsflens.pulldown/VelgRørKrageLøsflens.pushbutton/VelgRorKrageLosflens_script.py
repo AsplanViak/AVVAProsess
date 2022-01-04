@@ -582,8 +582,8 @@ if bool(picked):
                                 doc.Regenerate()
 
                                 ### continue nr 2
-                                #print('continue nr 2')
-                                #continue
+                                print('continue nr 2')
+                                continue
 
 
                                 ###################################
