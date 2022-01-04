@@ -112,8 +112,8 @@ def placeFitting(duct, point, familytype, valve, lineDirection):
     elif tempfamtype != familytype:
         toggle = True
         tempfamtype = familytype
-    #level = duct.ReferenceLevel
-    level = valve.ReferenceLevel
+    level = duct.ReferenceLevel
+    #level = valve.ReferenceLevel
 
     width = 4
     height = 4
