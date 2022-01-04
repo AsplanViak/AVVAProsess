@@ -136,13 +136,13 @@ def placeFitting(duct, point, familytype, valve, lineDirection):
             height = c.Height
             break
 
-    point = DB.XYZ(point.X,point.Y,point.Z+level.Elevation)
+    point = DB.XYZ(point.X,point.Y,point.Z-level.Elevation)
     #point = DB.XYZ(point.X, point.Y, point.Z)
     if debug_mode == 1:
         print('point.X: ' + str(point.X))
         print('point.Y: ' + str(point.Y))
         print('point.Z: ' + str(point.Z))
-        print('level.Elevation: ' - str(level.Elevation))
+        print('level.Elevation: ' + str(level.Elevation))
 
     ## THIS LINE IS DEPENDENT ON UNITS AND PROJECT SETTINGS. LINE BELOW IS FOR PROJECT USING MM AS UNIT, AND THERE IS NOT ADDED FLANGES FOR DN<45 MM
     if radius < 45 / 304.8 / 2:
