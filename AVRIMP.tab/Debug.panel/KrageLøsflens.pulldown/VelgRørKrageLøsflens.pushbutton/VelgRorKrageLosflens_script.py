@@ -551,10 +551,10 @@ if bool(picked):
                                             print('pass at try bounding box')
                                         pass
                                     if debug_mode == 1:
-                                        print('flange_a_con_position: '+ str(flange_a_con_position))
+                                        print('flange_a_con_position: ' + str(flange_a_con_position))
                                         print('flange_b_con_position: ' + str(flange_b_con_position))
-                                        print('flange_a_con_position.DistanceTo(centre): ' str(flange_a_con_position.DistanceTo(centre))
-                                        print('flange_b_con_position.DistanceTo(centre): ' str(flange_b_con_position.DistanceTo(centre))
+                                        print('flange_a_con_position.DistanceTo(centre): ' + str(flange_a_con_position.DistanceTo(centre)))
+                                        print('flange_b_con_position.DistanceTo(centre): ' + str(flange_b_con_position.DistanceTo(centre)))
                                     if flange_a_con_position.DistanceTo(centre) < flange_b_con_position.DistanceTo(centre):
                                         # flange side a is facing the valve
                                         need_to_flip = f_cons[0].GetMEPConnectorInfo().IsPrimary
