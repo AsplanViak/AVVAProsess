@@ -384,8 +384,8 @@ if bool(picked):
 
 
 
-    transaction = DB.Transaction(doc)
-    transaction.Start("Autoflens")
+    #transaction = DB.Transaction(doc)
+    #transaction.Start("Autoflens")
 
     # ACTIVATE FLANGE TYPES TO BE USED
     PA1 = DB.FilteredElementCollector(doc).OfCategory(DB.BuiltInCategory.OST_PipeAccessory).WhereElementIsElementType()
@@ -419,6 +419,8 @@ if bool(picked):
 
         if n == 2:
             break
+    transaction = DB.Transaction(doc)
+    transaction.Start("Autoflens")
 
     for typ in flange_family_type:
         if typ != 0:
