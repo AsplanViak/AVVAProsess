@@ -199,9 +199,12 @@ class FamOpt1(IFamilyLoadOptions):
 
 
 # function for å endre type connector
-def changecontype(con):
+def changecontype(con, typeid):
     # 20 is the integer-id for Domestic Cold Water
-    if (con.get_Parameter(DB.BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM).Set(20)):
+    #Hydronic supply: 7
+    #Fitting: 28
+    #
+    if (con.get_Parameter(DB.BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM).Set(typeid)):
         return True
     else:
         return False
@@ -218,7 +221,7 @@ def CheckValveConnectors(valve_family):
                     DB.BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM).AsValueString() == 'Global':
                 #treff på global
                 try:  # this might fail if the parameter exists or for some other reason
-                    if (changecontype(a)):
+                    if (changecontype(a, 20)):
                         # success
                         changed = True
                         #pass
@@ -241,6 +244,43 @@ def CheckValveConnectors(valve_family):
             famdoc.LoadFamily.Overloads.Functions[3](doc, FamOpt1())
         except:
             print('Feil med innlasting av family med endrede connectors')
+    famdoc.Close(False)
+
+def CheckFlangeConnectors(flange_family):
+
+    famdoc = doc.EditFamily(flange_family)
+    fam_connections = DB.FilteredElementCollector(famdoc).WherePasses(
+        con_filter).WhereElementIsNotElementType().ToElements()
+    changed = False
+    for a in fam_connections:
+        try:
+            if a.get_Parameter(
+                    DB.BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM).AsValueString() != 'Fitting':
+
+                try:  # this might fail if the parameter exists or for some other reason
+                    if (changecontype(a, 28)):
+                        # success
+                        changed = True
+                        #pass
+                    else:
+                        #feil ved forsøk på å endre con type
+                        pass
+                except:
+                    pass
+                    #print('Feil med endring av connector-type i family')
+            else:
+                pass
+                #print('Connector har riktig type')
+        except:
+            pass
+            #print('Feil med sjekk av connector-type i family')
+    #print('changed :' + str(changed))
+    if changed:
+        #famdoc.LoadFamily.Overloads.Functions[3](Document=doc, IFamilyLoadOptions=FamOpt1())
+        try:
+            famdoc.LoadFamily.Overloads.Functions[3](doc, FamOpt1())
+        except:
+            print('Feil med innlasting av flens med endrede connectors')
     famdoc.Close(False)
 
 def AddFlange(pipe, valve_connector, gasket):
@@ -367,9 +407,13 @@ if bool(picked):
         if 'Sveiseflens_med pakning' in i.Family.Name:
             flange_family_type[2] = i
             n = n + 1
+            ##sjekk connector type flens her
+            CheckFlangeConnectors(i.Family)
             continue
         if 'Sveiseflens_uten pakning' in i.Family.Name:
             flange_family_type[3] = i
+            ##sjekk connector type flens her
+            CheckFlangeConnectors(i.Family)
             n = n + 1
             continue
 
@@ -381,6 +425,9 @@ if bool(picked):
             if typ.IsActive == False:
                 typ.Activate()
                 doc.Regenerate()
+        #flange_type_id = typ.GetTypeId()
+        #flange_element_type = doc.GetElement(flange_type_id)
+        #flange_family = flange_element_type.Family
 
     for i in EQ_picked:
 
