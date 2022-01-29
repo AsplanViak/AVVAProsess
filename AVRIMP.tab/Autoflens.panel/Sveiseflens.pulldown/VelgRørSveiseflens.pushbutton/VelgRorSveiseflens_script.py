@@ -264,6 +264,7 @@ def AddFlange(pipe, valve_connector, gasket):
     else:
         # Sveiseflens
         if gasket:
+            print('gasket sveise')
             familytype = flange_family_type[2]
         else:
             familytype = flange_family_type[3]
