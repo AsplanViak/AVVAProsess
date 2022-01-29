@@ -266,7 +266,7 @@ def AddFlange(pipe, valve_connector, gasket):
         else:
             familytype = flange_family_type[3]
 
-    if is_integer(familytype):
+    if isinstance(familytype, int):
         #Flens har ikke blitt assigned. Mest sannsynlig for aktuell flens mangler i aktuell revit-fil.
         return 0
 
