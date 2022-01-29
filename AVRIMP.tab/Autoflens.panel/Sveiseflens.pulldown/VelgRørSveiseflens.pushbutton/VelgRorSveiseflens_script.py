@@ -344,7 +344,7 @@ for i in EQ:
         valve_family = valve_element_type.Family
         valve_family_name = valve_family.Name
         if valve_family.Name not in checked_valve_families:
-            CheckValveConnectors(valve_family)
+            CheckConnectors(valve_family, 20)
             checked_valve_families.append(valve_family_name)
 
 #transaction = DB.Transaction(doc)
