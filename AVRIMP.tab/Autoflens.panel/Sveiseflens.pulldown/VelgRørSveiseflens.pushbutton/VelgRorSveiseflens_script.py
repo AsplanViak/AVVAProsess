@@ -253,7 +253,7 @@ def AddFlange(pipe, valve_connector, gasket):
     pointlist = valve_connector.Origin
 
 
-    if flensetype = 'kragelosflens':
+    if flensetype == 'kragelosflens':
         # Krage-løsflens
         if gasket:
             familytype = flange_family_type[0]
@@ -357,7 +357,7 @@ flange_family_type = [0, 0, 0, 0]
 n = 0
 
 for i in PA1:
-    if flensetype = 'kragelosflens':
+    if flensetype == 'kragelosflens':
         if 'Krage-Løsflens_med pakning' in i.Family.Name:
             flange_family_type[0] = i
             #sjekk connector type flens her
