@@ -218,7 +218,7 @@ def CheckValveConnectors(valve_family):
     for a in fam_connections:
         try:
             if a.get_Parameter(
-                    DB.BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM).AsValueString() == 'Global':
+                    DB.BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM) != 20:
                 #treff på global
                 try:  # this might fail if the parameter exists or for some other reason
                     if (changecontype(a, 20)):
