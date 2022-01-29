@@ -252,9 +252,6 @@ def CheckConnectors(family, typeid):
 def AddFlange(pipe, valve_connector, gasket):
     pointlist = valve_connector.Origin
 
-    print(flensetype)
-    print(gasket)
-
     if flensetype == 'kragelosflens':
         # Krage-løsflens
         if gasket:
@@ -269,10 +266,17 @@ def AddFlange(pipe, valve_connector, gasket):
         else:
             familytype = flange_family_type[3]
 
+    if is_integer(familytype):
+        #Flens har ikke blitt assigned. Mest sannsynlig for aktuell flens mangler i aktuell revit-fil.
+        return 0
+
     # create duct location line
     ductline = pipe.Location.Curve
     lineDirection = ductline.Direction
-    new_flange = placeFitting(pipe, pointlist, familytype, lineDirection)
+    try:
+        new_flange = placeFitting(pipe, pointlist, familytype, lineDirection)
+    except:
+        new_flange = 1
 
     return new_flange
 
@@ -507,6 +511,9 @@ for i in EQ:
                         new_flange = AddFlange(pipe, valve_connector, gasket)
                         # check if flange was created. If not, probably due to too small DN
                         if new_flange == 0:
+                            output_report.append(report(duct_piping_system_type, pipe_connector, 'Aktuell flens er ikke lastet inn i prosjektet'))
+                            continue
+                        elif new_flange == 1:
                             continue
 
                         doc.Regenerate()
