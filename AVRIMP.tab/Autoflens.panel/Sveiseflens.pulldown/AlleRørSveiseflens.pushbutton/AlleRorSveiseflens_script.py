@@ -16,7 +16,7 @@ Fungerende autocomplete i pycharm.
 """
 
 # Start MÅ ha
-__title__ = 'Hele røropplegget'  # Denne overstyrer navnet på scriptfilen
+__title__ = 'Velg ventiler/utstyr'  # Denne overstyrer navnet på scriptfilen
 __author__ = 'Asplan Viak'  # Dette kommer opp som navnet på utvikler av knappen
 __doc__ = "Klikk for å legge til flenser i prosjektet."  # Dette blir hjelp teksten som kommer opp når man holder musepekeren over knappen.
 # End MÅ ha
@@ -33,19 +33,27 @@ __beta__ = False  # Knapp deaktivert hos brukere som ikke har spesifikt aktivert
 # Finn flere variabler her:
 # https://pyrevit.readthedocs.io/en/latest/articles/scriptanatomy.html
 
+modus = 'alle'   #'alle' eller 'valgte'
+flensetype = 'sveiseflens' #'kragelosflens eller 'sveiseflens'
+
 import math
 
 import clr
 
 from pyrevit import HOST_APP
 doc = HOST_APP.doc
+uidoc = HOST_APP.uidoc
+#uidoc=DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
 
 clr.AddReference("RevitNodes")
 
 from Autodesk.Revit import UI, DB
+from Autodesk.Revit.UI.Selection import ObjectType
+
 from System.Collections.Generic import List
 
 from Autodesk.Revit.DB import Plumbing, IFamilyLoadOptions
+
 
 def measure(startpoint, point):
     return startpoint.DistanceTo(point)
@@ -183,6 +191,7 @@ def SortedPoints(fittingspoints, ductStartPoint):
     return sortedpoints
 
 # class for overwriting loaded families in the project
+
 class FamOpt1(IFamilyLoadOptions):
     def OnFamilyFound(self, familyInUse, overwriteParameterValues):
         overwriteParameterValues = True
@@ -193,25 +202,29 @@ class FamOpt1(IFamilyLoadOptions):
 
 
 # function for å endre type connector
-def changecontype(con):
+def changecontype(con, typeid):
     # 20 is the integer-id for Domestic Cold Water
-    if (con.get_Parameter(DB.BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM).Set(20)):
+    #Hydronic supply: 7
+    #Fitting: 28
+    #
+    if (con.get_Parameter(DB.BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM).Set(typeid)):
         return True
     else:
         return False
 
-def CheckValveConnectors(valve_family):
-    famdoc = doc.EditFamily(valve_family)
+def CheckConnectors(family, typeid):
+    #typeid 20 = Domestic cold water. typeid 28 = Fitting
+    famdoc = doc.EditFamily(family)
     fam_connections = DB.FilteredElementCollector(famdoc).WherePasses(
         con_filter).WhereElementIsNotElementType().ToElements()
     changed = False
     for a in fam_connections:
         try:
             if a.get_Parameter(
-                    DB.BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM).AsValueString() == 'Global':
-                #treff på global
+                    DB.BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM) != typeid:
+
                 try:  # this might fail if the parameter exists or for some other reason
-                    if (changecontype(a)):
+                    if (changecontype(a, typeid)):
                         # success
                         changed = True
                         #pass
@@ -239,25 +252,32 @@ def CheckValveConnectors(valve_family):
 def AddFlange(pipe, valve_connector, gasket):
     pointlist = valve_connector.Origin
 
-    # Krage-løsflens
-    """if gasket:
-        familytype = flange_family_type[0]
+    if flensetype == 'kragelosflens':
+        # Krage-løsflens
+        if gasket:
+            familytype = flange_family_type[0]
+        else:
+            familytype = flange_family_type[1]
     else:
-        familytype = flange_family_type[1]
-    """
-    # Sveiseflens
-    if gasket:
-        familytype = flange_family_type[2]
-    else:
-        familytype = flange_family_type[3]
+        # Sveiseflens
+        if gasket:
+            familytype = flange_family_type[2]
+        else:
+            familytype = flange_family_type[3]
+
+    if isinstance(familytype, int):
+        #Flens har ikke blitt assigned. Mest sannsynlig for aktuell flens mangler i aktuell revit-fil.
+        return 0
 
     # create duct location line
     ductline = pipe.Location.Curve
     lineDirection = ductline.Direction
-    new_flange = placeFitting(pipe, pointlist, familytype, lineDirection)
+    try:
+        new_flange = placeFitting(pipe, pointlist, familytype, lineDirection)
+    except:
+        new_flange = 1
 
     return new_flange
-
 
 #klargjør til rapportering til skjerm
 output_report = []
@@ -272,7 +292,6 @@ for i in pipingSystem:
     list_piping_system.append(i)
     list_piping_system_id.append(i.Id)
 
-
 ###########################################################
 ## start algorithm for finding missing flanges
 ###########################################################
@@ -284,10 +303,24 @@ con_typed_list = List[DB.BuiltInCategory](con_cat_list)
 con_filter = DB.ElementMulticategoryFilter(con_typed_list)
 
 # collect all mechanical equipment and pipe accessories in project
-cat_list = [DB.BuiltInCategory.OST_PipeAccessory, DB.BuiltInCategory.OST_MechanicalEquipment]
-typed_list = List[DB.BuiltInCategory](cat_list)
-filter = DB.ElementMulticategoryFilter(typed_list)
-EQ = DB.FilteredElementCollector(doc).WherePasses(filter).WhereElementIsNotElementType().ToElements()
+if modus == 'alle':
+    cat_list = [DB.BuiltInCategory.OST_PipeAccessory, DB.BuiltInCategory.OST_MechanicalEquipment]
+    typed_list = List[DB.BuiltInCategory](cat_list)
+    filter = DB.ElementMulticategoryFilter(typed_list)
+    EQ = DB.FilteredElementCollector(doc).WherePasses(filter).WhereElementIsNotElementType().ToElements()
+else:
+    # make selection in UI for selecting pipe accessories and mech eq ++
+    cat_list = ['Pipe Accessories', 'Mechanical Equipment']
+    picked = []
+    try:
+        picked = uidoc.Selection.PickObjects(ObjectType.Element)
+    except:
+        pass
+    EQ = []
+    for k in picked:
+        el = doc.GetElement(k.ElementId)
+        if el.Category.Name in cat_list:
+            EQ.append(el)
 
 # list containing all family names where connectors has been checked and potentially modified
 checked_valve_families = []
@@ -317,46 +350,64 @@ for i in EQ:
         valve_family = valve_element_type.Family
         valve_family_name = valve_family.Name
         if valve_family.Name not in checked_valve_families:
-            CheckValveConnectors(valve_family)
+            CheckConnectors(valve_family, 20)
             checked_valve_families.append(valve_family_name)
 
-transaction = DB.Transaction(doc)
-transaction.Start("Autoflens")
+#transaction = DB.Transaction(doc)
+#transaction.Start("Autoflens")
 
-#ACTIVATE FLANGE TYPES TO BE USED
+# ACTIVATE FLANGE TYPES TO BE USED
 PA1 = DB.FilteredElementCollector(doc).OfCategory(DB.BuiltInCategory.OST_PipeAccessory).WhereElementIsElementType()
 
 flange_family_type = [0, 0, 0, 0]
 n = 0
 
 for i in PA1:
-    """
-    if 'Krage-Løsflens_med pakning' in i.Family.Name:
-        flange_family_type[0] = i
-        n = n + 1
-        continue
-    if 'Krage-Løsflens_uten pakning' in i.Family.Name:
-        flange_family_type[1] = i
-        n = n + 1
-        continue
-    """
-    if 'Sveiseflens_med pakning' in i.Family.Name:
-        flange_family_type[2] = i
-        n = n + 1
-        continue
-    if 'Sveiseflens_uten pakning' in i.Family.Name:
-        flange_family_type[3] = i
-        n = n + 1
-        continue
+    if flensetype == 'kragelosflens':
+
+        if 'Krage-Løsflens_med pakning' in i.Family.Name:
+            print('hit1')
+            flange_family_type[0] = i
+            #sjekk connector type flens her
+            CheckConnectors(i.Family, 28)
+            n = n + 1
+            continue
+        if 'Krage-Løsflens_uten pakning' in i.Family.Name:
+            print('hit1')
+            flange_family_type[1] = i
+            #sjekk connector type flens her
+            CheckConnectors(i.Family, 28)
+            n = n + 1
+            continue
+    else:
+
+        if 'Sveiseflens_med pakning' in i.Family.Name:
+            print('hit2')
+            flange_family_type[2] = i
+            n = n + 1
+            #sjekk connector type flens her
+            CheckConnectors(i.Family, 28)
+            continue
+        if 'Sveiseflens_uten pakning' in i.Family.Name:
+            print('hit3')
+            flange_family_type[3] = i
+            #sjekk connector type flens her
+            CheckConnectors(i.Family, 28)
+            n = n + 1
+            continue
 
     if n == 2:
         break
+
+transaction = DB.Transaction(doc)
+transaction.Start("Autoflens")
 
 for typ in flange_family_type:
     if typ != 0:
         if typ.IsActive == False:
             typ.Activate()
             doc.Regenerate()
+
 
 for i in EQ:
     # Filter out flanges and other parts where type-name i "Standard"
@@ -459,6 +510,9 @@ for i in EQ:
                         new_flange = AddFlange(pipe, valve_connector, gasket)
                         # check if flange was created. If not, probably due to too small DN
                         if new_flange == 0:
+                            output_report_errors.append(report(duct_piping_system_type, pipe_connector, 'Aktuell flens er ikke lastet inn i prosjektet'))
+                            continue
+                        elif new_flange == 1:
                             continue
 
                         doc.Regenerate()
