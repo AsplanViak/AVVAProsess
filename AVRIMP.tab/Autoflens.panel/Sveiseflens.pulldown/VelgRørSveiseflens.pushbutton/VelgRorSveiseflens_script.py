@@ -313,7 +313,7 @@ else:
     EQ = []
     for k in picked:
         el = doc.GetElement(k.ElementId)
-        if el.Category.name in cat_list:
+        if el.Category.Name in cat_list:
             EQ.append(el)
 
 # list containing all family names where connectors has been checked and potentially modified
