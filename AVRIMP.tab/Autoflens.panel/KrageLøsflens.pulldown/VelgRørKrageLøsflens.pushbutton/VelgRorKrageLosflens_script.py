@@ -304,13 +304,14 @@ con_filter = DB.ElementMulticategoryFilter(con_typed_list)
 
 # collect all mechanical equipment and pipe accessories in project
 if modus == 'alle':
-    cat_list = [DB.BuiltInCategory.OST_PipeAccessory, DB.BuiltInCategory.OST_MechanicalEquipment]
+    cat_list = [DB.BuiltInCategory.OST_PipeAccessory, DB.BuiltInCategory.OST_MechanicalEquipment,
+                DB.BuiltInCategory.OST_GenericModel]
     typed_list = List[DB.BuiltInCategory](cat_list)
     filter = DB.ElementMulticategoryFilter(typed_list)
     EQ = DB.FilteredElementCollector(doc).WherePasses(filter).WhereElementIsNotElementType().ToElements()
 else:
     # make selection in UI for selecting pipe accessories and mech eq ++
-    cat_list = ['Pipe Accessories', 'Mechanical Equipment']
+    cat_list = ['Pipe Accessories', 'Mechanical Equipment', 'Generic Model']
     picked = []
     try:
         picked = uidoc.Selection.PickObjects(ObjectType.Element)
