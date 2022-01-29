@@ -510,7 +510,7 @@ for i in EQ:
                         new_flange = AddFlange(pipe, valve_connector, gasket)
                         # check if flange was created. If not, probably due to too small DN
                         if new_flange == 0:
-                            output_report.append(report(duct_piping_system_type, pipe_connector, 'Aktuell flens er ikke lastet inn i prosjektet'))
+                            output_report_errors.append(report(duct_piping_system_type, pipe_connector, 'Aktuell flens er ikke lastet inn i prosjektet'))
                             continue
                         elif new_flange == 1:
                             continue
