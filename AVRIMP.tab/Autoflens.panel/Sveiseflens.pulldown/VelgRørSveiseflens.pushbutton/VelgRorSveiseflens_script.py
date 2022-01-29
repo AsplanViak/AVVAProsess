@@ -246,7 +246,7 @@ def CheckConnectors(family, typeid):
         try:
             famdoc.LoadFamily.Overloads.Functions[3](doc, FamOpt1())
         except:
-            #print('Feil med innlasting av family med endrede connectors')
+            print('Feil med innlasting av family med endrede connectors')
     famdoc.Close(False)
 
 def AddFlange(pipe, valve_connector, gasket):
