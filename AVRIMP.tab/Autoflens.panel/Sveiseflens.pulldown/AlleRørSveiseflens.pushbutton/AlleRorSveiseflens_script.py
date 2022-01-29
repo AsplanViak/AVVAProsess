@@ -16,7 +16,7 @@ Fungerende autocomplete i pycharm.
 """
 
 # Start MÅ ha
-__title__ = 'Velg ventiler/utstyr'  # Denne overstyrer navnet på scriptfilen
+__title__ = 'Hele røropplegget'  # Denne overstyrer navnet på scriptfilen
 __author__ = 'Asplan Viak'  # Dette kommer opp som navnet på utvikler av knappen
 __doc__ = "Klikk for å legge til flenser i prosjektet."  # Dette blir hjelp teksten som kommer opp når man holder musepekeren over knappen.
 # End MÅ ha
@@ -366,14 +366,14 @@ for i in PA1:
     if flensetype == 'kragelosflens':
 
         if 'Krage-Løsflens_med pakning' in i.Family.Name:
-            print('hit1')
+
             flange_family_type[0] = i
             #sjekk connector type flens her
             CheckConnectors(i.Family, 28)
             n = n + 1
             continue
         if 'Krage-Løsflens_uten pakning' in i.Family.Name:
-            print('hit1')
+
             flange_family_type[1] = i
             #sjekk connector type flens her
             CheckConnectors(i.Family, 28)
@@ -382,14 +382,14 @@ for i in PA1:
     else:
 
         if 'Sveiseflens_med pakning' in i.Family.Name:
-            print('hit2')
+
             flange_family_type[2] = i
             n = n + 1
             #sjekk connector type flens her
             CheckConnectors(i.Family, 28)
             continue
         if 'Sveiseflens_uten pakning' in i.Family.Name:
-            print('hit3')
+
             flange_family_type[3] = i
             #sjekk connector type flens her
             CheckConnectors(i.Family, 28)
