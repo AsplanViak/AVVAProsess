@@ -33,6 +33,9 @@ __beta__ = False  # Knapp deaktivert hos brukere som ikke har spesifikt aktivert
 # Finn flere variabler her:
 # https://pyrevit.readthedocs.io/en/latest/articles/scriptanatomy.html
 
+modus = 'alle'   #'alle' eller 'valgte'
+flensetype = 'kragelosflens' #'kragelosflens eller 'sveise'
+
 import math
 
 import clr
