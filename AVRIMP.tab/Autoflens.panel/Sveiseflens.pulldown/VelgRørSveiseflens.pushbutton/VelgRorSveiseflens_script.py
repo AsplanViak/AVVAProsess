@@ -246,7 +246,7 @@ def CheckConnectors(family, typeid):
         try:
             famdoc.LoadFamily.Overloads.Functions[3](doc, FamOpt1())
         except:
-            print('Feil med innlasting av family med endrede connectors')
+            #print('Feil med innlasting av family med endrede connectors')
     famdoc.Close(False)
 
 def AddFlange(pipe, valve_connector, gasket):
@@ -261,7 +261,6 @@ def AddFlange(pipe, valve_connector, gasket):
     else:
         # Sveiseflens
         if gasket:
-            print('gasket sveise')
             familytype = flange_family_type[2]
         else:
             familytype = flange_family_type[3]
@@ -365,7 +364,7 @@ n = 0
 
 for i in PA1:
     if flensetype == 'kragelosflens':
-        print('krage')
+
         if 'Krage-Løsflens_med pakning' in i.Family.Name:
             print('hit1')
             flange_family_type[0] = i
@@ -381,7 +380,7 @@ for i in PA1:
             n = n + 1
             continue
     else:
-        print('sveis')
+
         if 'Sveiseflens_med pakning' in i.Family.Name:
             print('hit2')
             flange_family_type[2] = i
