@@ -78,8 +78,8 @@ import datetime
 #sys.path.append("C:\Program Files (x86)\IronPython 2.7\Lib")
 
 xl = Excel.ApplicationClass()
-xl.Visible = False
-xl.DisplayAlerts = False
+xl.Visible = True
+xl.DisplayAlerts = True
 
 def SaveListToExcel(filePath, exportData):
     try:
@@ -350,4 +350,4 @@ filename = mydoc+'\mengdeliste_'+timestamp+'.xlsx'
 
 SaveListToExcel(filename, a2)
 
-xl.DisplayAlerts = True
+#xl.DisplayAlerts = True
