@@ -341,7 +341,7 @@ for i in range(len(a1)):
 #Finne sti til mine dokumenter
 mydoc = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Documents')
 
-x = datetime.now()
+x = datetime.datetime.now()
 timestamp = x.strftime("%Y_%H_%M")
 #timestamp = x.strftime("%Y %H-%M")
 #debug.append(timestamp)
