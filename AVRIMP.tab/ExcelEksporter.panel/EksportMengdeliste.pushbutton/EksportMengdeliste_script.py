@@ -98,8 +98,8 @@ def SaveListToExcel(filePath, exportData):
         xlrange = ws.Range["A1", chr(ord('@')+cols) + str(rows)]
         xlrange.Value2 = a
         wb.SaveAs(filePath)
-        wb.Close(False)
-        wb.Open(filePath)
+        #wb.Open(filePath)
+        #wb.Close(False)
         return True
     except:
         return False
