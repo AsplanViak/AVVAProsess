@@ -78,7 +78,7 @@ import datetime
 #sys.path.append("C:\Program Files (x86)\IronPython 2.7\Lib")
 
 xl = Excel.ApplicationClass()
-xl.Visible = False
+xl.Visible = True
 xl.DisplayAlerts = True
 
 def SaveListToExcel(filePath, exportData):
