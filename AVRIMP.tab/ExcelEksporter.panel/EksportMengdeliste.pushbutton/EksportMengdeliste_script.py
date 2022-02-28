@@ -71,6 +71,8 @@ from System.Collections.Generic import *
 from System import Guid
 from System import Array
 
+import datetime
+
 #import sys
 
 #sys.path.append("C:\Program Files (x86)\IronPython 2.7\Lib")
@@ -339,7 +341,7 @@ for i in range(len(a1)):
 #Finne sti til mine dokumenter
 mydoc = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Documents')
 
-x = datetime.datetime.now()
+x = datetime.now()
 timestamp = x.strftime("%Y_%H_%M")
 #timestamp = x.strftime("%Y %H-%M")
 #debug.append(timestamp)
