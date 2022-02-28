@@ -78,7 +78,7 @@ import datetime
 #sys.path.append("C:\Program Files (x86)\IronPython 2.7\Lib")
 
 xl = Excel.ApplicationClass()
-xl.Visible = True
+xl.Visible = False
 xl.DisplayAlerts = True
 
 def SaveListToExcel(filePath, exportData):
@@ -99,6 +99,7 @@ def SaveListToExcel(filePath, exportData):
         xlrange.Value2 = a
         wb.SaveAs(filePath)
         wb.Close(False)
+        wb.Open(filePath)
         return True
     except:
         return False
@@ -342,7 +343,7 @@ for i in range(len(a1)):
 mydoc = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Documents')
 
 x = datetime.datetime.now()
-timestamp = x.strftime("%Y_%H_%M")
+timestamp = x.strftime("%Y_%m_%d %H_%M")
 #timestamp = x.strftime("%Y %H-%M")
 #debug.append(timestamp)
 
