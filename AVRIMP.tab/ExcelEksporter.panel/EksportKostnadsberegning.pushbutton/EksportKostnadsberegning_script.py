@@ -90,27 +90,27 @@ xl = Excel.ApplicationClass()
 xl.Visible = True
 xl.DisplayAlerts = True
 
-def SaveListToExcel(filePath, exportData, n_entrepriser ):
+def SaveListToExcel(filePath, exportData):
     try:
         wb = xl.Workbooks.Add()
-        for i in range(n_entrepriser):
-            ws = wb.Worksheets[i]
-            #ws.title = 'komp'
-            rows = len(exportData[i])
-            cols = max(len(i) for i in exportData[i])
-            a = Array.CreateInstance(object, rows, cols) #row and column
-            for r in range(rows):
-                for c in range (cols):
-                    try:
-                        a[r,c] = exportData[i][r][c]
-                    except:
-                        a[r,c] = ''
-            xlrange = ws.Range["A1", chr(ord('@')+cols) + str(rows)]
-            xlrange.Value2 = a
+        ws = wb.Worksheets[1]
+        #ws.title = 'komp'
+        rows = len(exportData)
+        cols = max(len(i) for i in exportData)
+        a = Array.CreateInstance(object, rows, cols) #row and column
+        for r in range(rows):
+            for c in range (cols):
+                try:
+                    a[r,c] = exportData[r][c]
+                except:
+                    a[r,c] = ''
+        xlrange = ws.Range["A1", chr(ord('@')+cols) + str(rows)]
+        xlrange.Value2 = a
         wb.SaveAs(filePath)
         return True
     except:
         return False
+
 
 #button = UI.TaskDialogCommonButtons.None
 #result = UI.TaskDialogResult.Ok
@@ -353,13 +353,20 @@ a_entreprise = []   #subdataset entreprise
 #a_entreprise.append([a1[i][0], a1[i][1], a1[i][2], a1[i][3], ''])
 
 entreprise_index = 0
+entrepriser = []
 
 for i in range(len(a1)):
     #Sjekk ny entreprise
     #if i == 0 or a1[i][0] != a1[i - 1][0]:
     if i == 0 or a1[i][4] != a1[i - 1][4]:
+
         #Legg subdataset for entreprise til hoved-dataset
-        a2.append(a_entreprise)
+        if i != 0:
+            a2.append(a_entreprise)
+            entrepriser.append(a1[i][4])
+            entreprise_index = entreprise_index + 1
+
+
         a_entreprise = []
         a_entreprise.append(['Entreprise: ', a1[i][4], '','','',''])
         a_entreprise.append(['','','','','',''])
@@ -367,7 +374,7 @@ for i in range(len(a1)):
         #           'Pris fra prosjekt', 'Kommentar'])
         a_entreprise.append(['Beskrivelse', '', '', '', 'Enhet', 'Mengde'])
 
-        entreprise_index = entreprise_index + 1
+
         #a2.append(['', '', '', '', ''])
         #p = ''
         #for k in range(len(b1)):
@@ -414,8 +421,15 @@ x = datetime.datetime.now()
 timestamp = x.strftime("%Y_%m_%d %H_%M")
 #timestamp = x.strftime("%Y %H-%M")
 #debug.append(timestamp)
-filename = mydoc+'\kostnadsberegning_'+timestamp+'.xlsx'
 
-SaveListToExcel(filename, a2, (entreprise_index + 1))
+
+if entreprise_index == 0:
+    filename = mydoc + '\kostnadsberegning_' + timestamp + '.xlsx'
+    SaveListToExcel(filename, a2[0])
+else :
+    for i in range(entreprise_index):
+        filename = mydoc + '\kostnadsberegning_'+ entrepriser[i] + '_' + timestamp + '.xlsx'
+        SaveListToExcel(filename, a2[i])
+
 
 xl.DisplayAlerts = True
