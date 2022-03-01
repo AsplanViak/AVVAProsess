@@ -97,12 +97,12 @@ def SaveListToExcel(filePath, exportData, n_entrepriser ):
             ws = wb.Worksheets[i]
             #ws.title = 'komp'
             rows = len(exportData[i])
-            cols = max(len(i) for i in exportData)
+            cols = max(len(i) for i in exportData[i])
             a = Array.CreateInstance(object, rows, cols) #row and column
             for r in range(rows):
                 for c in range (cols):
                     try:
-                        a[r,c] = exportData[r][c]
+                        a[r,c] = exportData[i][r][c]
                     except:
                         a[r,c] = ''
             xlrange = ws.Range["A1", chr(ord('@')+cols) + str(rows)]
