@@ -338,11 +338,15 @@ for s in PS:
 
     b1.append(list([ps_name, entreprise]))
 
+print(b1)
 #Legg til entreprise
 for g in range(len(main_list_compressed)):
     for h in range(len(b1)):
         if b1[h][0] == main_list_compressed[g][0]:
+            #main_list_compressed[g][4] = b1[h][1]
             main_list_compressed[g][4] = b1[h][1]
+
+print(main_list_compressed)
 
 # sorter ut fra entreprise
 a1 = sorted(main_list_compressed, key=lambda x: keyn(x[4]))
