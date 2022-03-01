@@ -361,12 +361,11 @@ for i in range(len(a1)):
         #Legg subdataset for entreprise til hoved-dataset
         a2.append(a_entreprise)
         a_entreprise = []
-        a_entreprise.append(['Entreprise: ', a1[i][4], '','','','')
+        a_entreprise.append(['Entreprise: ', a1[i][4], '','','',''])
         a_entreprise.append(['','','','','',''])
         #a_entreprise.append(['Beskrivelse', '', '', '', 'Enhet', 'Mengde', 'enhetspris', 'kostnad', '', 'Entreprise', '',
         #           'Pris fra prosjekt', 'Kommentar'])
-        a_entreprise.append(
-            ['Beskrivelse', '', '', '', 'Enhet', 'Mengde',
+        a_entreprise.append(['Beskrivelse', '', '', '', 'Enhet', 'Mengde'])
 
         entreprise_index = entreprise_index + 1
         #a2.append(['', '', '', '', ''])
@@ -378,7 +377,7 @@ for i in range(len(a1)):
     pr = 0
     # finn rad i prisbank som stemmer
     if (0):
-    for j in range(len(b1)):
+    #for j in range(len(b1)):
         if a1[i][1] == b1[j][0] and a1[i][2] == b1[j][1]:
             # senere: if a1[i][1] == b1[j][0] and a1[i][2] == b1[j][1] and materiale = materiale:
             pr = j
@@ -417,6 +416,6 @@ timestamp = x.strftime("%Y_%m_%d %H_%M")
 #debug.append(timestamp)
 filename = mydoc+'\kostnadsberegning_'+timestamp+'.xlsx'
 
-SaveListToExcel(filename, a2)
+SaveListToExcel(filename, a2, (entreprise_index + 1))
 
 xl.DisplayAlerts = True
