@@ -311,7 +311,7 @@ for m in range(0, len(main_list_compressed)):
 
 
 # legg til kolonne for entreprise
-main_list_compressed = [x + ['x9'] for x in main_list_compressed]
+main_list_compressed = [x + ['Udefinert'] for x in main_list_compressed]
 
 # legg til postnr i denne kolonne
 # if b1:
@@ -356,7 +356,7 @@ a_entreprise = []   #subdataset entreprise
 #a2.append(['System type', 'Komponent', 'Dimensjon', 'Lengde (m) / \n Antall (stk)', 'sort'])
 #a_entreprise.append([a1[i][0], a1[i][1], a1[i][2], a1[i][3], ''])
 
-entreprise_index = 0
+entreprise_index = 1
 entrepriser = []
 
 for i in range(len(a1)):
@@ -430,7 +430,7 @@ timestamp = x.strftime("%Y_%m_%d %H_%M")
 #debug.append(timestamp)
 
 
-if entreprise_index == 0:
+if entreprise_index == 1:
     filename = mydoc + '\kostnadsberegning_' + timestamp + '.xlsx'
     SaveListToExcel(filename, a2[0])
 else :
