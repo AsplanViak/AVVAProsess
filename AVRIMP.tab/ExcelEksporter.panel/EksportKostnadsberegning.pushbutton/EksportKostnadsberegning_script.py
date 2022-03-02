@@ -233,6 +233,8 @@ for i in PI:
     main_list.append(list([systemtype, family, DN, lengde]))
 
 for i in PF:
+    #Resett parameter for å telle deler av bend.
+    n_PF = 1
     # Finn system type
     try:
         # PI_systemtype.append(i.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()).ToDSType(True).Name
@@ -248,11 +250,15 @@ for i in PF:
         if 'Bend ' in family:
             vinkel = i.LookupParameter('Angle').AsDouble() / math.pi * 180
             vinkel = int(vinkel)
-            if vinkel > 85 and vinkel < 92:
-                vinkel = 90
-            if vinkel > 40 and vinkel < 47:
-                vinkel = 45
-            family = family + ' ' + str(vinkel) + '°'
+            #if vinkel > 85 and vinkel < 92:
+            #    vinkel = 90
+            #if vinkel > 40 and vinkel < 47:
+            #    vinkel = 45
+            #family = family + ' ' + str(vinkel) + '°'
+            if vinkel < 45:
+                n_PF = 0.5
+            else:
+                n_PF = 1
 
     except:
         family = 'udefinert familie PF'
@@ -287,35 +293,10 @@ for i in PF:
         except:
             DN = 'udefinert DN PF'
 
-    main_list.append(list([systemtype, family, DN, 1]))
-
-# sortering og komprimmering av list
-
-main_list = sorted(main_list, key=lambda x: (x[0], x[1], x[2]))
-
-main_list_compressed = []
-main_list_compressed.append(main_list[0])  # første rad
-for n in range(1, len(main_list)):
-    if main_list[n][0:3] == main_list[n - 1][0:3]:
-        b = len(main_list_compressed) - 1
-        main_list_compressed[b][3] = main_list_compressed[b][3] + main_list[n][3]
-    else:
-        main_list_compressed.append(main_list[n])
-
-for m in range(0, len(main_list_compressed)):
-    if not isinstance(main_list_compressed[m][3], int):
-        # rund av til en desimal
-        main_list_compressed[m][3] = round(float(main_list_compressed[m][3]), 1)
-
-# names.append(i.Name)	 # returnerer "Standard", "DN150", eller "rustfritt rør"
-
+    main_list.append(list([systemtype, family, DN, n_PF]))
 
 # legg til kolonne for entreprise
-main_list_compressed = [x + ['Udefinert'] for x in main_list_compressed]
-
-# legg til postnr i denne kolonne
-# if b1:
-#	if b1[0] != 'no_table_found':
+main_list = [x + ['Udefinert'] for x in main_list]
 
 PS = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_PipingSystem).WhereElementIsElementType().ToElements()
 b1 = []
@@ -338,18 +319,47 @@ for s in PS:
 
     b1.append(list([ps_name, entreprise]))
 
-#print(b1)
+
 #Legg til entreprise
-for g in range(len(main_list_compressed)):
+for g in range(len(main_list)):
     for h in range(len(b1)):
-        if b1[h][0] == main_list_compressed[g][0]:
+        if b1[h][0] == main_list[g][0]:
             #main_list_compressed[g][4] = b1[h][1]
-            main_list_compressed[g][4] = b1[h][1]
+            main_list[g][4] = b1[h][1]
+            break
+
+#########################
+# Sortering og komprimmering av list.
+###################
+# Sorterer etter entreprise, family, DN.
+main_list = sorted(main_list, key=lambda x: (x[4], x[1], x[2]))
+
+#Sletter systemtype-kolonne og setter entreprisekolonne først
+for item in main_list:
+	item[0], item[1], item[2], item[3] = item[4], item[1], item[2], item[3]
+
+#Komprimerer liste
+main_list_compressed = []
+main_list_compressed.append(main_list[0])  # første rad
+for n in range(1, len(main_list)):
+    if main_list[n][0:3] == main_list[n - 1][0:3]:
+        b = len(main_list_compressed) - 1
+        main_list_compressed[b][3] = main_list_compressed[b][3] + main_list[n][3]
+    else:
+        main_list_compressed.append(main_list[n])
+
+for m in range(0, len(main_list_compressed)):
+    if not isinstance(main_list_compressed[m][3], int):
+        # rund av til en desimal
+        main_list_compressed[m][3] = round(float(main_list_compressed[m][3]), 1)
+
+# names.append(i.Name)	 # returnerer "Standard", "DN150", eller "rustfritt rør"
+
 
 #print(main_list_compressed)
 
-# sorter ut fra entreprise
-a1 = sorted(main_list_compressed, key=lambda x: keyn(x[4]))
+# sorter ut fra entreprise, family,
+#a1 = sorted(main_list_compressed, key=lambda x: keyn(x[4]))
 
 a2 = []             #hoveddataset
 a_entreprise = []   #subdataset entreprise
