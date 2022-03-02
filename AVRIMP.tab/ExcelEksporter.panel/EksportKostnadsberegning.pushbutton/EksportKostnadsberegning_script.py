@@ -338,7 +338,7 @@ for s in PS:
 
     b1.append(list([ps_name, entreprise]))
 
-print(b1)
+#print(b1)
 #Legg til entreprise
 for g in range(len(main_list_compressed)):
     for h in range(len(b1)):
@@ -346,7 +346,7 @@ for g in range(len(main_list_compressed)):
             #main_list_compressed[g][4] = b1[h][1]
             main_list_compressed[g][4] = b1[h][1]
 
-print(main_list_compressed)
+#print(main_list_compressed)
 
 # sorter ut fra entreprise
 a1 = sorted(main_list_compressed, key=lambda x: keyn(x[4]))
@@ -356,7 +356,7 @@ a_entreprise = []   #subdataset entreprise
 #a2.append(['System type', 'Komponent', 'Dimensjon', 'Lengde (m) / \n Antall (stk)', 'sort'])
 #a_entreprise.append([a1[i][0], a1[i][1], a1[i][2], a1[i][3], ''])
 
-entreprise_index = 1
+entreprise_index = 0
 entrepriser = []
 
 for i in range(len(a1)):
@@ -415,8 +415,8 @@ for i in range(len(a1)):
 # Legg subdataset for entreprise til hoved-dataset for siste entreprise
 a2.append(a_entreprise)
 
-print(entrepriser)
-print(entreprise_index)
+#print(entrepriser)
+#print(entreprise_index)
 
 # Assign your output to the OUT variable.
 #OUT = a2
@@ -429,12 +429,14 @@ timestamp = x.strftime("%Y_%m_%d %H_%M")
 #timestamp = x.strftime("%Y %H-%M")
 #debug.append(timestamp)
 
+antall_entrepriser = entreprise_index +1
 
-if entreprise_index == 1:
+
+if antall_entrepriser == 1:
     filename = mydoc + '\kostnadsberegning_' + timestamp + '.xlsx'
     SaveListToExcel(filename, a2[0])
-else :
-    for i in range(entreprise_index):
+else:
+    for i in range(antall_entrepriser):
         filename = mydoc + '\kostnadsberegning_'+ entrepriser[i] + '_' + timestamp + '.xlsx'
         SaveListToExcel(filename, a2[i])
 
