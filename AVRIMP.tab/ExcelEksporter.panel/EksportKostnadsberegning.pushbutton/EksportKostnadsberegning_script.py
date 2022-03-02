@@ -332,7 +332,8 @@ for g in range(len(main_list)):
 # Sortering og komprimmering av list.
 ###################
 # Sorterer etter entreprise, family, DN.
-main_list = sorted(main_list, key=lambda x: (x[4], x[1], x[2]))
+main_list = sorted(main_list, key=lambda x: (x[4], x[1], keyn(x[2])))
+#a1 = sorted(main_list_compressed, key=lambda x: keyn(x[4]))
 
 #Sletter systemtype-kolonne og setter entreprisekolonne først
 for item in main_list:
