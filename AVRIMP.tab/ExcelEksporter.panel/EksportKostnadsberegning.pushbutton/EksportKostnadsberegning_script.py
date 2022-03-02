@@ -357,7 +357,7 @@ a_entreprise = []   #subdataset entreprise
 #a_entreprise.append([a1[i][0], a1[i][1], a1[i][2], a1[i][3], ''])
 
 entreprise_index = 0
-entrepriser = []
+entrepriser = [a1[0][4]]        #Legger til første entreprise i entrepriser-list
 
 for i in range(len(a1)):
     #Sjekk ny entreprise
@@ -414,11 +414,11 @@ for i in range(len(a1)):
 
 # Legg subdataset for entreprise til hoved-dataset for siste entreprise
 a2.append(a_entreprise)
-print(a2)
-print('entrepriser')
-print(entrepriser)
-print('entreprise_index:')
-print(entreprise_index)
+#print(a2)
+#print('entrepriser')
+#print(entrepriser)
+#print('entreprise_index:')
+#print(entreprise_index)
 
 # Assign your output to the OUT variable.
 #OUT = a2
