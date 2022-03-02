@@ -354,12 +354,11 @@ for m in range(0, len(main_list_compressed)):
         main_list_compressed[m][3] = round(float(main_list_compressed[m][3]), 1)
 
 # names.append(i.Name)	 # returnerer "Standard", "DN150", eller "rustfritt rør"
-
-
 #print(main_list_compressed)
 
 # sorter ut fra entreprise, family,
 #a1 = sorted(main_list_compressed, key=lambda x: keyn(x[4]))
+a1 = main_list_compressed
 
 a2 = []             #hoveddataset
 a_entreprise = []   #subdataset entreprise
