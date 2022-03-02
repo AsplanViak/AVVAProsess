@@ -414,9 +414,11 @@ for i in range(len(a1)):
 
 # Legg subdataset for entreprise til hoved-dataset for siste entreprise
 a2.append(a_entreprise)
-
-#print(entrepriser)
-#print(entreprise_index)
+print(a2)
+print('entrepriser')
+print(entrepriser)
+print('entreprise_index:')
+print(entreprise_index)
 
 # Assign your output to the OUT variable.
 #OUT = a2
