@@ -271,9 +271,9 @@ except:
 wb_IO_liste = xl.Workbooks.Open(IO_liste_filplassering)
 #linje under må rettes på senere
 ws_IO_liste = wb_IO_liste.Worksheets[1]
-used = ws_IO_liste.UsedRange
-cols = exclsheet.UsedRange.Columns.Count
-rows = exclsheet.UsedRange.Rows.Count
+#used = ws_IO_liste.UsedRange
+cols = ws_IO_liste.UsedRange.Columns.Count
+rows = ws_IO_liste.UsedRange.Rows.Count
 IO_liste_range = ws_IO_liste.Range["A1", chr(ord('@') + cols) + str(rows)]
 #rad under gir kanskje problemer med array
 IOliste = IO_liste_range.Value2
