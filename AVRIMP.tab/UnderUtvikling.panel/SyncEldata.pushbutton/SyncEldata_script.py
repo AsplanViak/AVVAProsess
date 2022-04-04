@@ -281,7 +281,7 @@ IOliste =[]
 for i in range(1,rows):
     rad = []
     for j in range(1,cols):
-        rad.append(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
+        rad.append(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Value)
     IOliste.append(rad)
 #IO_liste_range = ws_IO_liste.Range["A1", chr(ord('@') + cols) + str(rows)]
 #IO_liste_range = ws_IO_liste.Range["A1", "A" + str(rows)]
@@ -411,6 +411,11 @@ cat_list = [BuiltInCategory.OST_PipeAccessory, BuiltInCategory.OST_MechanicalEqu
 # typed_list = List[BuiltInCategory](cat_list)
 # filter = ElementMulticategoryFilter(typed_list)
 # EQ = FilteredElementCollector(doc).WherePasses(filter).WhereElementIsNotElementType().ToElements()
+
+
+transaction = DB.Transaction(doc)
+transaction.Start("Sync eldata")
+
 
 
 # loop all categories
@@ -580,7 +585,7 @@ for cat in cat_list:
         else:
             presync_skjema_row = [tag]
         # oppdater_eldata(IO_liste_row, k)
-        TransactionManager.Instance.EnsureInTransaction(doc)
+
 
         # loop shared params
         for i, kol in enumerate(p_s_IO_cat_kol):
@@ -815,3 +820,9 @@ for i in range(4):
 # OUT = parameter_kolonne
 xl.DisplayAlerts = True
 xl.Visible = True
+
+transaction.Commit()
+
+button = UI.TaskDialogCommonButtons.None
+result = UI.TaskDialogResult.Ok
+UI.TaskDialog.Show('Sync eldata ferdig', 'report_tekst', button)
