@@ -823,7 +823,7 @@ xl.Visible = True
 
 transaction.Commit()
 
-wb_IO_liste.close()
+#wb_IO_liste.close()
 
 button = UI.TaskDialogCommonButtons.None
 result = UI.TaskDialogResult.Ok
