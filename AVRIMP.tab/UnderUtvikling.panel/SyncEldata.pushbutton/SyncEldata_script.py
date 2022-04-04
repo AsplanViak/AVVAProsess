@@ -85,10 +85,10 @@ from Microsoft.Office.Interop.Excel import XlListObjectSourceType, Worksheet, Ra
 #clr.AddReference("RevitAPI")
 import Autodesk
 
-#from System.Collections.Generic import List
+from System.Collections.Generic import List
 #from System.Collections.Generic import *
-#from System import Guid
-#from System import Array
+from System import Guid
+from System import Array
 
 # Import RevitAPI
 #clr.AddReference("RevitAPI")
