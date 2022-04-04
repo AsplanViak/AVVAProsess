@@ -275,16 +275,21 @@ ws_IO_liste = wb_IO_liste.Worksheets[1]
 #used = ws_IO_liste.UsedRange
 cols = ws_IO_liste.UsedRange.Columns.Count
 rows = ws_IO_liste.UsedRange.Rows.Count
-print('cols: '+ str(cols))
-print('rows: '+ str(rows))
-
+#print('cols: '+ str(cols))
+#print('rows: '+ str(rows))
+IOliste =[]
+for i in range(1,rows):
+    rad = []
+    for j in range(1,cols):
+        rad.append(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
+    IOliste.append(rad)
 #IO_liste_range = ws_IO_liste.Range["A1", chr(ord('@') + cols) + str(rows)]
 #IO_liste_range = ws_IO_liste.Range["A1", "A" + str(rows)]
-IO_liste_range = ws_IO_liste.Range["A1", "A4"]
+#IO_liste_range = ws_IO_liste.Range["A1", "A4"]
 #rad under gir kanskje problemer med array
 #IOliste = IO_liste_range.Value2
 #IOliste = IO_liste_range.Text
-IOliste = IO_liste_range.Value
+#IOliste = IO_liste_range.Value
 
 print('default')
 print(IOliste)
