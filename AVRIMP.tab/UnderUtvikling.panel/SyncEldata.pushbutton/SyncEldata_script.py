@@ -283,7 +283,8 @@ print('rows: '+ str(rows))
 IO_liste_range = ws_IO_liste.Range["A1", "A4"]
 #rad under gir kanskje problemer med array
 #IOliste = IO_liste_range.Value2
-IOliste = IO_liste_range.Text
+#IOliste = IO_liste_range.Text
+IOliste = IO_liste_range.Value
 
 print('default')
 print(IOliste)
