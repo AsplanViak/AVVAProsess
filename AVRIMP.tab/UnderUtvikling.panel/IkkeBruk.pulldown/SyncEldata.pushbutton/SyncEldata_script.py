@@ -291,7 +291,7 @@ for i in range(1,rows):
 #IOliste = IO_liste_range.Text
 #IOliste = IO_liste_range.Value
 
-print('default')
+print('default øæøå')
 print(IOliste)
 print('dearray')
 print(IOliste[0])
