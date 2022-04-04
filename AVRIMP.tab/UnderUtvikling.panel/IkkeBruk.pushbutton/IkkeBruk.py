@@ -49,5 +49,17 @@ app = HOST_APP.app
 #uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
 #app = uiapp.Application
 
+clr.AddReference("RevitNodes")
+
+from Autodesk.Revit import UI, DB
+
+from Autodesk.Revit.DB import *
+
+from System.Collections.Generic import List
+
+from Autodesk.Revit.DB import Plumbing, IFamilyLoadOptions
+
+def measure(startpoint, point):
+    return startpoint.DistanceTo(point)
 
 print(1)
