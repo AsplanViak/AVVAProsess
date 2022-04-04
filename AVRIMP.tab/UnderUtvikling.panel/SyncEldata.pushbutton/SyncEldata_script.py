@@ -655,7 +655,7 @@ for cat in cat_list:
             # Update TAG if GUID sync????
             # Funksjon må legges til her!!
 
-            TransactionManager.Instance.TransactionTaskDone()
+
 
         if cat <> BuiltInCategory.OST_DetailComponents:
             if n_elements == 1:
