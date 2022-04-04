@@ -331,7 +331,7 @@ tag_kol = -1
 print('default')
 print(IOliste)
 print('dearray')
-print(IOliste[0])
+print(IOliste.tolist())
 
 for j, celle in enumerate(IOliste[0]):
     try:
