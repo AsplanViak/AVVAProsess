@@ -276,8 +276,8 @@ ws_IO_liste = wb_IO_liste.Worksheets[1]
 cols = ws_IO_liste.UsedRange.Columns.Count
 rows = ws_IO_liste.UsedRange.Rows.Count
 #IO_liste_range = ws_IO_liste.Range["A1", chr(ord('@') + cols) + str(rows)]
-#IO_liste_range = ws_IO_liste.Range["A1", "A" + str(rows)]
-IO_liste_range = ws_IO_liste.Range["A1"]
+IO_liste_range = ws_IO_liste.Range["A1", "A" + str(rows)]
+#IO_liste_range = ws_IO_liste.Range["A1"]
 #rad under gir kanskje problemer med array
 #IOliste = IO_liste_range.Value2
 IOliste = IO_liste_range.Text
@@ -333,9 +333,9 @@ else:
 # finn kolonne i Io liste med tag/tfm, og finn project parametre
 tag_kol = -1
 print('default')
-print(IOliste)
+print(IOliste[1])
 print('dearray')
-print(IOliste.tolist())
+print(IOliste)
 
 for j, celle in enumerate(IOliste[0]):
     try:
