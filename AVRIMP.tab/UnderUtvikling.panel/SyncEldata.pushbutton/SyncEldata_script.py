@@ -89,6 +89,7 @@ from System.Collections.Generic import List
 #from System.Collections.Generic import *
 from System import Guid
 from System import Array
+from Array import tolist
 
 # Import RevitAPI
 #clr.AddReference("RevitAPI")
