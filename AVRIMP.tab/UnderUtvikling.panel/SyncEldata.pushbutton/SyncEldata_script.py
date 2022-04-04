@@ -328,6 +328,11 @@ else:
 
 # finn kolonne i Io liste med tag/tfm, og finn project parametre
 tag_kol = -1
+print('default')
+print(IOliste)
+print('dearray')
+print(IOliste[0])
+
 for j, celle in enumerate(IOliste[0]):
     try:
         # if celle.lower() == tag_param.lower():
