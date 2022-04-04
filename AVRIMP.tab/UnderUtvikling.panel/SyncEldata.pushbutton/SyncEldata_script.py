@@ -89,7 +89,7 @@ from System.Collections.Generic import List
 #from System.Collections.Generic import *
 from System import Guid
 from System import Array
-from Array import tolist
+
 
 # Import RevitAPI
 #clr.AddReference("RevitAPI")
@@ -275,7 +275,8 @@ ws_IO_liste = wb_IO_liste.Worksheets[1]
 #used = ws_IO_liste.UsedRange
 cols = ws_IO_liste.UsedRange.Columns.Count
 rows = ws_IO_liste.UsedRange.Rows.Count
-IO_liste_range = ws_IO_liste.Range["A1", chr(ord('@') + cols) + str(rows)]
+#IO_liste_range = ws_IO_liste.Range["A1", chr(ord('@') + cols) + str(rows)]
+IO_liste_range = ws_IO_liste.Range["A1", "A" + str(rows)]
 #rad under gir kanskje problemer med array
 IOliste = IO_liste_range.Value2
 
