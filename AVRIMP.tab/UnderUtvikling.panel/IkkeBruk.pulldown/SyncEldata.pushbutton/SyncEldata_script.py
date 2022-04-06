@@ -158,7 +158,7 @@ def DecodeIfString(cellValue):
         #return cellValue.decode(encoding = 'utf-8', errors = 'replace')  #ignore
         print('decoded: ' + cellValue.decode(encoding='utf-8'))
         print('encoded: ' + cellValue.encode(encoding='utf-8'))
-        return cellValue.decode()
+        return cellValue.decode(encoding='utf-8'))
         #return cellValue
     else:
         print('not decoding, no string')
@@ -301,9 +301,10 @@ for i in range(1,rows):
     rad = []
     for j in range(1,cols):
         #rad.append(DecodeIfString(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Value2))
-        #rad.append(DecodeIfString(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text))
-        rad.append(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
-        print(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
+        rad.append(DecodeIfString(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text))
+        #rad.append(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
+        print('Undecoded :' + ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
+        print('Decorded :' + DecodeIfString(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text))
     IOliste.append(rad)
 #IO_liste_range = ws_IO_liste.Range["A1", chr(ord('@') + cols) + str(rows)]
 #IO_liste_range = ws_IO_liste.Range["A1", "A" + str(rows)]
