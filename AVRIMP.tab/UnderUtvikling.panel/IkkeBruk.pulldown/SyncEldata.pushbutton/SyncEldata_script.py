@@ -153,7 +153,7 @@ def SaveListToExcel(filePath, exportData):
 
 def DecodeIfString(cellValue):
     if isinstance(cellValue, str):
-        return cellValue.decode(encoding = 'windows-1252', errors = 'ignore')
+        return cellValue.decode(encoding = 'cp1252', errors = 'ignore')
     else:
         return cellValue
 
@@ -819,7 +819,8 @@ for v in viewscollector:
 
 excel_eksport = [komp_3d, komp_skjema, presync_3d, presync_skjema]
 
-for i in range(4):
+#for i in range(4):
+if 0:
     # def SaveListToExcel(filePath, exportData)
     if SaveListToExcel(excel_filenames[i], excel_eksport[i]):
         debug_summary.append('Fileksport success ' + str(i))
