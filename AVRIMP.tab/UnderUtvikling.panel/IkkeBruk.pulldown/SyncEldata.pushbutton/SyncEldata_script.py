@@ -111,8 +111,9 @@ import datetime
 debug_mode = 1
 
 def DebugPrint(tekst):
-    if debug_mode = 1:
-        print(tekst)        
+    if debug_mode == 1:
+        print(tekst)
+    return 1
 
 def TryGetRoom(room, phase):
     try:
