@@ -287,7 +287,7 @@ IOliste =[]
 for i in range(1,rows):
     rad = []
     for j in range(1,cols):
-        rad.append((ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Value2).decode(encoding='UTF-8',errors='ingore')
+        rad.append((ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Value2).decode(encoding='UTF-8',errors='ingore'))
     IOliste.append(rad)
 #IO_liste_range = ws_IO_liste.Range["A1", chr(ord('@') + cols) + str(rows)]
 #IO_liste_range = ws_IO_liste.Range["A1", "A" + str(rows)]
