@@ -152,6 +152,7 @@ def SaveListToExcel(filePath, exportData):
         return False
 
 def DecodeIfString(cellValue):
+    print('DeCodeIfString launched')
     if isinstance(cellValue, str):
         print('decoding ' + cellValue)
         #return cellValue.decode(encoding = 'utf-8', errors = 'replace')  #ignore
