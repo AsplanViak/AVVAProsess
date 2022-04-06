@@ -275,7 +275,7 @@ except:
 
 #IOliste = IN[0]
 # LES INN IO-LISTE FRA EXCEL
-wb_IO_liste = xl.Workbooks.Open(IO_liste_filplassering, "r", encoding="utf-8")
+wb_IO_liste = xl.Workbooks.Open(IO_liste_filplassering)
 #linje under må rettes på senere
 ws_IO_liste = wb_IO_liste.Worksheets[1]
 #used = ws_IO_liste.UsedRange
@@ -287,7 +287,7 @@ IOliste =[]
 for i in range(1,rows):
     rad = []
     for j in range(1,cols):
-        rad.append(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Value2)
+        rad.append((ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Value2).decode(encoding='UTF-8',errors='ingore')
     IOliste.append(rad)
 #IO_liste_range = ws_IO_liste.Range["A1", chr(ord('@') + cols) + str(rows)]
 #IO_liste_range = ws_IO_liste.Range["A1", "A" + str(rows)]
