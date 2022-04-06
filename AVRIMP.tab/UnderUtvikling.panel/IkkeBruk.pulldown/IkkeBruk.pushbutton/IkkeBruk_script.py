@@ -49,7 +49,20 @@ app = HOST_APP.app
 #uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
 #app = uiapp.Application
 
+
+import clr
+
+clr.AddReferenceByName('Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')
+from Microsoft.Office.Interop import Excel
+
 clr.AddReference("RevitNodes")
+
+
+xl = Excel.ApplicationClass()
+xl.Visible = False
+xl.DisplayAlerts = False
+
+
 
 from Autodesk.Revit import UI, DB
 
@@ -63,3 +76,33 @@ def measure(startpoint, point):
     return startpoint.DistanceTo(point)
 
 print(1)
+a = 'øæå'
+print('øæå')
+print(a)
+print('encoded: '+ a.encode())
+b = a.encode()
+print('redecoded' + b.decode())
+
+
+print('IO liste')
+wb_IO_liste = xl.Workbooks.Open('C:\Test\IO-liste.xlsx')
+#linje under må rettes på senere
+ws_IO_liste = wb_IO_liste.Worksheets[1]
+#used = ws_IO_liste.UsedRange
+cols = ws_IO_liste.UsedRange.Columns.Count
+rows = ws_IO_liste.UsedRange.Rows.Count
+#print('cols: '+ str(cols))
+#print('rows: '+ str(rows))
+IOliste =[]
+for i in range(1,rows):
+    rad = []
+    for j in range(1,cols):
+        #rad.append(DecodeIfString(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Value2))
+        rad.append(DecodeIfString(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text))
+        #rad.append(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
+        print('Undecoded :' + ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
+        print('Decorded :' + DecodeIfString(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text))
+    IOliste.append(rad)
+
+
+
