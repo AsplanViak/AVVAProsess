@@ -303,6 +303,7 @@ for i in range(1,rows):
         #rad.append(DecodeIfString(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Value2))
         #rad.append(DecodeIfString(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text))
         rad.append(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
+        print(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
     IOliste.append(rad)
 #IO_liste_range = ws_IO_liste.Range["A1", chr(ord('@') + cols) + str(rows)]
 #IO_liste_range = ws_IO_liste.Range["A1", "A" + str(rows)]
