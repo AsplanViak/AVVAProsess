@@ -151,6 +151,12 @@ def SaveListToExcel(filePath, exportData):
     except:
         return False
 
+def DecodeIfString(cellValue):
+    if isinstance(cellValue, str):
+        return cellValue.decode(encoding = 'UTF-8', errors = 'ignore')
+    else:
+        return cellValue
+
 
 debug = []
 DebugPrint('debug')
@@ -287,7 +293,7 @@ IOliste =[]
 for i in range(1,rows):
     rad = []
     for j in range(1,cols):
-        rad.append((ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Value2).decode(encoding='UTF-8',errors='ignore'))
+        rad.append(DecodeIfString(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Value2))
     IOliste.append(rad)
 #IO_liste_range = ws_IO_liste.Range["A1", chr(ord('@') + cols) + str(rows)]
 #IO_liste_range = ws_IO_liste.Range["A1", "A" + str(rows)]
