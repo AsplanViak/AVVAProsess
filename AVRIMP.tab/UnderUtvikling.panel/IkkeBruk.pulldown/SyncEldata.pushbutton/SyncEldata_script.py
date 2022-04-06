@@ -153,7 +153,7 @@ def SaveListToExcel(filePath, exportData):
 
 
 debug = []
-debug_print('debug')
+DebugPrint('debug')
 debug_summary = []
 debug_summary.append('debug_summary')
 debug_details = []
@@ -166,20 +166,20 @@ errorReport = []
 for sheet in FilteredElementCollector(doc).OfCategory(
         BuiltInCategory.OST_Sheets).WhereElementIsNotElementType().ToElements():
     if sheet.get_Parameter(DB.BuiltInParameter.SHEET_NAME).AsString() == 'Kobling mot IO-liste':
-        debug_print('Fant riktig ark')
+        DebugPrint('Fant riktig ark')
         IO_liste_filplassering = sheet.LookupParameter('IO-liste_filplassering').AsString()
-        debug_print('IO-liste_filplassering :' + IO_liste_filplassering)
+        DebugPrint('IO-liste_filplassering :' + IO_liste_filplassering)
         Datablader_filplassering = sheet.LookupParameter('Datablader_filplassering').AsString()
-        debug_print('Datablader_filplassering :' + Datablader_filplassering)
+        DebugPrint('Datablader_filplassering :' + Datablader_filplassering)
         tag_param = sheet.LookupParameter('AV_Tag-parameter_sync').AsString()
-        debug_print('tag_param: ' + tag_param)
+        DebugPrint('tag_param: ' + tag_param)
         sync_guid = sheet.LookupParameter('AV_sync_mot_GUID').AsInteger()
-        debug_print('Sync mot GUID: ' + str(sync_guid))
+        DebugPrint('Sync mot GUID: ' + str(sync_guid))
         try:
             AV_room_link_str = sheet.LookupParameter('AV_room_link_str').AsString()
         except:
             AV_room_link_str = 'RIB'
-        debug_print('AV_room_link_str: ' + AV_room_link_str)
+        DebugPrint('AV_room_link_str: ' + AV_room_link_str)
         break
 
 # Filename for excel exports
@@ -199,11 +199,11 @@ else:
 delt_filbane = IO_liste_filplassering.Split('\\')
 s = '\\'
 mappe = s.join(delt_filbane[:-1])
-debug_print('Mappe :' + mappe)
+DebugPrint('Mappe :' + mappe)
 
 x = datetime.datetime.now()
 timestamp = x.strftime("%Y %H-%M")
-debug_print(timestamp)
+DebugPrint(timestamp)
 
 excel_filenames = [mappe + '\Komponenter_' + prosjektnavn + '.xlsx',
                    mappe + '\Komponenter_skjema_' + prosjektnavn + '.xlsx',
@@ -226,22 +226,22 @@ linkInstances = linkCollector.OfClass(Autodesk.Revit.DB.RevitLinkInstance)
 # linkDoc, linkName, linkPath = [], [], []
 linkname_with_rooms = AV_room_link_str
 link_highscore = 0
-debug_print("str(linkname_with_rooms) :" + str(linkname_with_rooms))
+DebugPrint("str(linkname_with_rooms) :" + str(linkname_with_rooms))
 for i in linkInstances:
     link_score = 5
     if str(linkname_with_rooms) == 'null' or str(linkname_with_rooms) == '' or str(linkname_with_rooms) is None:
-        debug_print("undefined linkname_with_rooms")
+        DebugPrint("undefined linkname_with_rooms")
         if 'RIB' in i.Name or 'Bygg' in i.Name:
             link_score += (i.Name.count('RIB') + i.Name.count('Bygg'))
             if 'RIBr' in i.Name:
                 link_score -= 1
             if link_score > link_highscore:
                 link_highscore = link_score
-                debug_print("udef. AV_room_link_str. Fant link med RIB/ARK" + i.Name)
-                debug_print("link_score = " + str(link_score))
+                DebugPrint("udef. AV_room_link_str. Fant link med RIB/ARK" + i.Name)
+                DebugPrint("link_score = " + str(link_score))
                 linkDoc = i.GetLinkDocument()
     elif linkname_with_rooms in i.Name:
-        debug_print("defined linkname_with_rooms string")
+        DebugPrint("defined linkname_with_rooms string")
         link_score += i.Name.count(linkname_with_rooms)
         if 'RIBr' in i.Name:
             link_score -= (i.Name.count('RIBr'))
@@ -249,8 +249,8 @@ for i in linkInstances:
             link_score -= (i.Name.count('LARK'))
         if link_score > link_highscore:
             link_highscore = link_score
-            debug_print("fant link med RIB/ARK: " + i.Name)
-            debug_print("link_score: " + str(link_score))
+            DebugPrint("fant link med RIB/ARK: " + i.Name)
+            DebugPrint("link_score: " + str(link_score))
             linkDoc = i.GetLinkDocument()
 
 cat_list = [BuiltInCategory.OST_Rooms]
@@ -261,7 +261,7 @@ try:
     rooms = FilteredElementCollector(linkDoc).WherePasses(filter).WhereElementIsNotElementType().ToElements()
 
     if len(rooms) == 0:
-        debug_print("Feil: Mangler definesjoner på rom i link. Kan ikke sende info om romplassering til database.")
+        DebugPrint("Feil: Mangler definesjoner på rom i link. Kan ikke sende info om romplassering til database.")
 
 except:
     # if error accurs anywhere in the process catch it
@@ -269,7 +269,7 @@ except:
 
     errorReport.append(traceback.format_exc())
     rooms = []
-    debug_print(
+    DebugPrint(
         "Feil : Kan ikke lese romdata fra link. Kan skyldes at ARK/RIB link ikke er lastet inn, eller er i lukket workset.")
 
 
@@ -309,8 +309,8 @@ if tag_param is None or tag_param == '':
 if sync_guid is None or sync_guid == 0:
     sync_guid = False
 
-debug_print('Tag parameter: ' + str(tag_param))
-debug_print('sync_guid: ' + str(sync_guid))
+DebugPrint('Tag parameter: ' + str(tag_param))
+DebugPrint('sync_guid: ' + str(sync_guid))
 
 parametre_shared_name = ['Entreprise', 'Tekstlinje 1', 'Tekstlinje 2', 'Driftsform', 'AV_MMI', 'BUS-kommunikasjon',
                          'Sikkerhetsbryter', 'Kommentar', 'Fabrikat', 'Modell', 'Merkespenning', 'Merkeeffekt',
@@ -328,8 +328,8 @@ for i, g in enumerate(parametre_guid):
     parametre_guid[i] = Guid(g)
 
 parametre_shared_name_lc = [x.lower() for x in parametre_shared_name]
-# debug_print('parametre_shared_name_lc ')
-# debug_print(parametre_shared_name_lc)
+# DebugPrint('parametre_shared_name_lc ')
+# DebugPrint(parametre_shared_name_lc)
 
 parametre_signalinfo_lc = ['tekst', 'signaltag', 'type', 'signalkilde', 'spenning', 'tilleggstekst']
 parametre_ikke_sync_lc = ['sortering', 'tag', 'guid', ' tfm11fksamlet']
@@ -365,12 +365,12 @@ for j, celle in enumerate(IOliste[0]):
         if celle.lower() not in parametre_shared_name_lc:
             if celle.lower() not in parametre_signalinfo_lc and celle.lower() not in parametre_ikke_sync_lc:
                 parametre_project_name.append(celle)
-                debug_print('project param lagt til: ' + celle.lower())
+                DebugPrint('project param lagt til: ' + celle.lower())
 
-        debug_print('j, celle, try: ' + str(j) + ' ' + celle)
+        DebugPrint('j, celle, try: ' + str(j) + ' ' + celle)
 
     except:
-        debug_print('j, celle, continue: ' + str(j) + ' ' + celle)
+        DebugPrint('j, celle, continue: ' + str(j) + ' ' + celle)
         # Tidligere stod det break her. Tror continue er bedre.
         continue
 
@@ -426,7 +426,7 @@ transaction.Start("Sync eldata")
 
 # loop all categories
 for cat in cat_list:
-    debug_print(cat)
+    DebugPrint(cat)
     debug_summary.append(cat)
 
     # sjekk om tag/tfm parameter finnes, og om den er shared, og om den er definert med samme GUID som den riktige shared parameteren
@@ -454,21 +454,21 @@ for cat in cat_list:
                         tag_cat_status = 1  # status 1 betyr at den finnes som shared parameter, og at definisjonen stemmer overens med offisiel AV standard.
     except:
         # bør legge inn en advarsel her
-        debug_print('failed parameter testing')
+        DebugPrint('failed parameter testing')
         continue
 
-    debug_print('Size p_s_IO_cat_name: ' + str(len(p_s_IO_cat_name)))
-    # debug_print('p_s_IO_cat_name: ')
-    # debug_print(p_s_IO_cat_name)
+    DebugPrint('Size p_s_IO_cat_name: ' + str(len(p_s_IO_cat_name)))
+    # DebugPrint('p_s_IO_cat_name: ')
+    # DebugPrint(p_s_IO_cat_name)
     # sorting params
 
     # Z1 = [x for _,x in sorted(zip(p_s_IO_cat_kol,p_s_IO_cat_name))]
     p_s_IO_cat_name = [x for (y, x) in sorted(zip(p_s_IO_cat_kol, p_s_IO_cat_name), key=lambda pair: pair[0])]
     p_s_IO_cat_guid = [x for (y, x) in sorted(zip(p_s_IO_cat_kol, p_s_IO_cat_guid), key=lambda pair: pair[0])]
     p_s_IO_cat_kol = sorted(p_s_IO_cat_kol)
-    # debug_print(p_s_IO_cat_name)
-    # debug_print(p_s_IO_cat_kol)
-    # debug_print(p_s_IO_cat_guid)
+    # DebugPrint(p_s_IO_cat_name)
+    # DebugPrint(p_s_IO_cat_kol)
+    # DebugPrint(p_s_IO_cat_guid)
 
     # find all shared parameters not defined for category
     p_s_IO_cat_unused_kol = list(set(parametre_shared_IO_liste_kolonne) - set(p_s_IO_cat_kol))
@@ -476,19 +476,19 @@ for cat in cat_list:
     p_s_IO_cat_unused_name = list(set(parametre_shared_IO_liste_name) - set(p_s_IO_cat_name))
     # p_s_IO_cat_unused_name = [item for item in parametre_shared_IO_liste_name if item not in p_s_IO_cat_name]		#gjør samme som linje over
 
-    debug_print('Size p_s_IO_cat_unused_kol : ' + str(len(p_s_IO_cat_unused_kol)))
-    # debug_print(p_s_IO_cat_unused_kol)
-    debug_print('p_s_IO_cat_unused_name : ')
-    debug_print(p_s_IO_cat_unused_name)
+    DebugPrint('Size p_s_IO_cat_unused_kol : ' + str(len(p_s_IO_cat_unused_kol)))
+    # DebugPrint(p_s_IO_cat_unused_kol)
+    DebugPrint('p_s_IO_cat_unused_name : ')
+    DebugPrint(p_s_IO_cat_unused_name)
 
     # merge project params and unused shared params
     p_IO_cat_uandp_kol = p_s_IO_cat_unused_kol + parametre_project_IO_liste_kolonne  # unused and project parameters
     p_IO_cat_uandp_name = p_s_IO_cat_unused_name + parametre_project_IO_liste_name  # unused and project parameters
 
-    debug_print('parametre_project_IO_liste_name')
-    debug_print(parametre_project_IO_liste_name)
+    DebugPrint('parametre_project_IO_liste_name')
+    DebugPrint(parametre_project_IO_liste_name)
 
-    debug_print('Size p_IO_cat_uandp_name: ' + str(len(p_IO_cat_uandp_name)))
+    DebugPrint('Size p_IO_cat_uandp_name: ' + str(len(p_IO_cat_uandp_name)))
 
     # find remaining parameters by name
     for param in FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().FirstElement().Parameters:
@@ -506,10 +506,10 @@ for cat in cat_list:
         if tag_param == 'TFM11FkSamlet':
             tag_cat_status = 2  # Betyr at man bruker denne som tag: SystemVar + '-' + TFM11FkKompGruppe + TFM11FkKompLNR
 
-    debug_print('Size p_r_IO_cat_name: ' + str(len(p_r_IO_cat_name)))
-    debug_print(p_r_IO_cat_name)
+    DebugPrint('Size p_r_IO_cat_name: ' + str(len(p_r_IO_cat_name)))
+    DebugPrint(p_r_IO_cat_name)
 
-    debug_print('tag_cat_status: ' + str(tag_cat_status))
+    DebugPrint('tag_cat_status: ' + str(tag_cat_status))
     if tag_cat_status == (-1):
         # category mangler definert tag-parameter
         # går til neste category
@@ -532,8 +532,8 @@ for cat in cat_list:
                 debug_summary.append('blank tag/tfm (shared)')
                 continue
             tag = k.get_Parameter(tguid).AsString()
-            # debug_print('k.get_Parameter(tguid).AsString() : ' + k.get_Parameter(tguid).AsString())
-            # debug_print('k.LookupParameter(TAG).AsString() : ' + k.LookupParameter('TAG').AsString())
+            # DebugPrint('k.get_Parameter(tguid).AsString() : ' + k.get_Parameter(tguid).AsString())
+            # DebugPrint('k.LookupParameter(TAG).AsString() : ' + k.LookupParameter('TAG').AsString())
         elif tag_cat_status == 0:
             if k.LookupParameter(tag_param).AsString() == 'null' or k.LookupParameter(
                     tag_param).AsString() == '=-' or k.LookupParameter(tag_param).AsString() == '' or k.LookupParameter(
@@ -552,7 +552,7 @@ for cat in cat_list:
             except:
                 debug_summary.append('feil ved sammenslåing/avlesing av parametre som inngår i TFM for skjema')
                 continue
-        debug_print('Tag: ' + tag)
+        DebugPrint('Tag: ' + tag)
         debug_summary.append('Tag: ' + tag)
         n_elements += 1
 
@@ -614,17 +614,17 @@ for cat in cat_list:
                 IOliste_tekst = IOliste[IO_liste_row][kol]
                 if IOliste_tekst is None:
                     IOliste_tekst = ' '
-                debug_print('IOliste_tekst: ' + str(IOliste_tekst))
+                DebugPrint('IOliste_tekst: ' + str(IOliste_tekst))
                 try:
                     res = k.get_Parameter(p_s_IO_cat_guid[i]).Set(IOliste_tekst)
                     if (res):
-                        debug_print('shared parameter ' + p_s_IO_cat_name[i] + ': ok')
+                        DebugPrint('shared parameter ' + p_s_IO_cat_name[i] + ': ok')
                     else:
-                        debug_print('shared parameter ' + p_s_IO_cat_name[i] + ': feil')
+                        DebugPrint('shared parameter ' + p_s_IO_cat_name[i] + ': feil')
                 except Exception, ex:
-                    debug_print('shared parameter ' + p_s_IO_cat_name[i] + ': exception')
-                    debug_print('k.get_Parameter(' + str(p_s_IO_cat_guid[i]) + ').Set(' + str(IOliste_tekst) + ')')
-                    debug_print(ex.message)
+                    DebugPrint('shared parameter ' + p_s_IO_cat_name[i] + ': exception')
+                    DebugPrint('k.get_Parameter(' + str(p_s_IO_cat_guid[i]) + ').Set(' + str(IOliste_tekst) + ')')
+                    DebugPrint(ex.message)
         # loop remaining params
         for i, kol in enumerate(p_r_IO_cat_kol):
             # presync header
@@ -646,17 +646,17 @@ for cat in cat_list:
                 IOliste_tekst = IOliste[IO_liste_row][kol]
                 if IOliste_tekst is None:
                     IOliste_tekst = ' '
-                debug_print('IOliste_tekst: ' + str(IOliste_tekst))
+                DebugPrint('IOliste_tekst: ' + str(IOliste_tekst))
                 try:
                     res = k.LookupParameter(p_r_IO_cat_name[i]).Set(IOliste_tekst)
                     if (res):
-                        debug_print('remaining parameter ' + p_r_IO_cat_name[i] + ': ok')
+                        DebugPrint('remaining parameter ' + p_r_IO_cat_name[i] + ': ok')
                     else:
-                        debug_print('remaining parameter ' + p_r_IO_cat_name[i] + ': feil')
+                        DebugPrint('remaining parameter ' + p_r_IO_cat_name[i] + ': feil')
                 except Exception, ex:
-                    debug_print('remaining parameter ' + p_r_IO_cat_name[i] + ': exception')
-                    debug_print('k.LookupParameter(' + str(p_r_IO_cat_name[i]) + ').Set(' + str(IOliste_tekst) + ')')
-                    debug_print(ex.message)
+                    DebugPrint('remaining parameter ' + p_r_IO_cat_name[i] + ': exception')
+                    DebugPrint('k.LookupParameter(' + str(p_r_IO_cat_name[i]) + ').Set(' + str(IOliste_tekst) + ')')
+                    DebugPrint(ex.message)
 
             # Update TAG if GUID sync????
             # Funksjon må legges til her!!
@@ -741,13 +741,13 @@ for cat in cat_list:
 
             # header: komp_3d.append(['l__element__l', 'Family','FamilyType', 'TAG','Rom','System Type','X','Y','Z', 'Tegning'])
             komp_3d.append([k.Id, family, familytype, tag, rom, systemtype, x, y, z, ''])
-            # debug_print('komp_3d.append() ' + tag + ' , ' + family])
+            # DebugPrint('komp_3d.append() ' + tag + ' , ' + family])
 
         # komp_skjema
         else:
             # Finn family
-            debug_print('skjemaelement')
-            debug_print(tag)
+            DebugPrint('skjemaelement')
+            DebugPrint(tag)
             # Finn family
             try:
                 # family = k.Symbol.FamilyName
@@ -762,7 +762,7 @@ for cat in cat_list:
                 # header : komp_skjema.append(['element_id', 'TAG', 'Family', 'FamilyType', 'Tegning'])
             komp_skjema.append([k.Id, tag, family, familytype, ''])
 
-    debug_print('n_elements: ' + str(n_elements))
+    DebugPrint('n_elements: ' + str(n_elements))
 
 #########################################################################################################################################
 # Loop tegninger
@@ -779,14 +779,14 @@ for v in viewscollector:
     viewelemcollector = DB.FilteredElementCollector(doc, v.Id).ToElementIds()
     vparam = v.get_Parameter(DB.BuiltInParameter.VIEWPORT_SHEET_NUMBER)  # type: DB.Parameter
     # loop komp 3d
-    debug_print('Tegning: ' + vparam.AsString())
+    DebugPrint('Tegning: ' + vparam.AsString())
     for n, e in enumerate(komp_3d):
         if n == 0:
             # må hoppe over tabell headers
             continue
-        # debug_print('Tag : ' + e[2])
+        # DebugPrint('Tag : ' + e[2])
         if e[0] in viewelemcollector:
-            debug_print('Treff ' + vparam.AsString() + ' - ' + e[2])
+            DebugPrint('Treff ' + vparam.AsString() + ' - ' + e[2])
             if komp_3d[n][9] == '':
                 komp_3d[n][9] = vparam.AsString()
             else:
@@ -796,9 +796,9 @@ for v in viewscollector:
         if n == 0:
             # må hoppe over tabell headers
             continue
-        # debug_print('Tag : ' + e[1])
+        # DebugPrint('Tag : ' + e[1])
         if e[0] in viewelemcollector:
-            debug_print('Treff ' + vparam.AsString() + ' - ' + e[1])
+            DebugPrint('Treff ' + vparam.AsString() + ' - ' + e[1])
             if komp_skjema[n][4] == '':
                 komp_skjema[n][4] = vparam.AsString()
             else:
