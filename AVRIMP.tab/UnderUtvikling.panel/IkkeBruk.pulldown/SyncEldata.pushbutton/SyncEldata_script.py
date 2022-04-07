@@ -109,11 +109,19 @@ import datetime
 #sys.path.append(pyt_path)
 
 debug_mode = 1
+summary_mode = 1
 
 def DebugPrint(tekst):
     if debug_mode == 1:
         print(tekst)
     return 1
+
+def SummaryPrint(tekst):
+    if summary_mode == 1:
+        print(tekst)
+    return 1
+
+
 
 def TryGetRoom(room, phase):
     try:
@@ -176,12 +184,6 @@ def DecodeIfString(cellValue):
         return cellValue
 
 
-debug = []
-DebugPrint('debug')
-debug_summary = []
-debug_summary.append('debug_summary')
-debug_details = []
-debug_details.append('debug_details')
 output_message = []
 stat = []
 errorReport = []
@@ -469,7 +471,7 @@ transaction.Start("Sync eldata")
 # loop all categories
 for cat in cat_list:
     DebugPrint(cat)
-    debug_summary.append(cat)
+    SummaryPrint(cat)
 
     # sjekk om tag/tfm parameter finnes, og om den er shared, og om den er definert med samme GUID som den riktige shared parameteren
     tag_cat_status = (-1)
@@ -534,9 +536,9 @@ for cat in cat_list:
 
     # find remaining parameters by name
     for param in FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().FirstElement().Parameters:
-        debug_details.append('param.Definition.Name : ' + param.Definition.Name)
+        SummaryPrint('param.Definition.Name : ' + param.Definition.Name)
         for i, name in enumerate(p_IO_cat_uandp_name):
-            debug_details.append('name in p_IO_cat_uandp_name: ' + name)
+            SummaryPrint('name in p_IO_cat_uandp_name: ' + name)
             if param.Definition.Name == name:
                 p_r_IO_cat_kol.append(p_IO_cat_uandp_kol[i])  # r = remaining
                 p_r_IO_cat_name.append(p_IO_cat_uandp_name[i])
@@ -560,7 +562,7 @@ for cat in cat_list:
     # loop elements in category
     EQ = FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().ToElements()
     n_elements = 0
-    debug_summary.append('tag_cat_status: ' + str(tag_cat_status))
+    
     for k in EQ:
         # Tag reset
         tag = ''
@@ -571,7 +573,7 @@ for cat in cat_list:
                     tguid).AsString() == '=-' or k.get_Parameter(tguid).AsString() == '' or k.get_Parameter(
                 tguid).AsString() is None:
                 # gå til neste element dersom blank tag/tfm
-                debug_summary.append('blank tag/tfm (shared)')
+                SummaryPrint('blank tag/tfm (shared)')
                 continue
             tag = k.get_Parameter(tguid).AsString()
             # DebugPrint('k.get_Parameter(tguid).AsString() : ' + k.get_Parameter(tguid).AsString())
@@ -581,7 +583,7 @@ for cat in cat_list:
                     tag_param).AsString() == '=-' or k.LookupParameter(tag_param).AsString() == '' or k.LookupParameter(
                 tag_param).AsString() is None:
                 # gå til neste element dersom blank tag/tfm
-                debug_summary.append('blank tag/tfm (string)')
+                SummaryPrint('blank tag/tfm (string)')
                 continue
             tag = k.LookupParameter(tag_param).AsString()
         elif tag_cat_status == 2:
@@ -592,10 +594,10 @@ for cat in cat_list:
                 TFM11FkKompGruppe = i.Symbol.LookupParameter('TFM11FkKompGruppe').AsString()
                 tag = r"'" + '=' + SystemVar + '-' + TFM11FkKompGruppe + TFM11FkKompLNR
             except:
-                debug_summary.append('feil ved sammenslåing/avlesing av parametre som inngår i TFM for skjema')
+                SummaryPrint('feil ved sammenslåing/avlesing av parametre som inngår i TFM for skjema')
                 continue
         DebugPrint('Tag: ' + tag)
-        debug_summary.append('Tag: ' + tag)
+        SummaryPrint('Tag: ' + tag)
         n_elements += 1
 
         #############################################################################################################
@@ -622,6 +624,7 @@ for cat in cat_list:
                 if tag == IOliste[b][tag_kol]:
                     IO_liste_row = b
                     break
+        SummaryPrint('IO_liste_row :' + str(IO_liste_row))
 
         # Presync data
         # lag tom header list for denne category (antall parametre kan variere mellom categories)
@@ -859,9 +862,9 @@ excel_eksport = [komp_3d, komp_skjema, presync_3d, presync_skjema]
 if 0:
     # def SaveListToExcel(filePath, exportData)
     if SaveListToExcel(excel_filenames[i], excel_eksport[i]):
-        debug_summary.append('Fileksport success ' + str(i))
+        SummaryPrint('Fileksport success ' + str(i))
     else:
-        debug_summary.append('Fileksport failed ' + str(i))
+        SummaryPrint('Fileksport failed ' + str(i))
         # Lag melding her: 'Kunne ikke eksportere fil ' + excel_filenames[i] + '. Sjekk om fil allerede er åpen, og lukk den, og prøv på ny.'
 
 #OUT = [excel_eksport, excel_filenames, debug, debug_details, debug_summary, errorReport]
