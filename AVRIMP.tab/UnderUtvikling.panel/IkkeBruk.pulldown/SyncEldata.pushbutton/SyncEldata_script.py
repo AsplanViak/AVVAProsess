@@ -156,13 +156,17 @@ def DecodeIfString(cellValue):
     if isinstance(cellValue, str):
         print('decoding ' + cellValue)
         #return cellValue.decode(encoding = 'utf-8', errors = 'replace')  #ignore
-        print type(cellValue)
+        #print type(cellValue)  #str
         #print('decoded: ' + cellValue.decode(encoding='utf-8'))
         #print('encoded: ' + cellValue.encode(encoding='utf-8'))
         #return cellValue.decode(encoding='utf-8')
         #print (unicode(' unicode utf8 ') + unicode(cellValue, "utf-8") )
         #print (unicode(' unicode 1252 ') + unicode(cellValue, "Windows-1252"))
         print('decode 1252 ' + cellValue.decode(encoding='Windows-1252'))
+        c = cellValue.decode(encoding='Windows-1252')
+        testlist = ['a', 'øæå', c]
+        print(testlist)
+
         #print('decode utf8 ' + cellValue.decode(encoding='utf-8'))
 
         return cellValue.decode(encoding='Windows-1252')
@@ -303,7 +307,7 @@ cols = ws_IO_liste.UsedRange.Columns.Count
 rows = ws_IO_liste.UsedRange.Rows.Count
 #print('cols: '+ str(cols))
 #print('rows: '+ str(rows))
-IOliste =[]
+IOliste =['øæå']
 for i in range(1,rows):
     rad = []
     for j in range(1,cols):
