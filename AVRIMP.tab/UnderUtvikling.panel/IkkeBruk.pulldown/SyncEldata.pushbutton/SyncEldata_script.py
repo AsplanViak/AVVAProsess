@@ -597,7 +597,7 @@ for cat in cat_list:
                 SummaryPrint('feil ved sammenslåing/avlesing av parametre som inngår i TFM for skjema')
                 continue
         DebugPrint('Tag: ' + tag)
-        SummaryPrint('Tag: ' + tag)
+
         n_elements += 1
 
         #############################################################################################################
@@ -640,6 +640,7 @@ for cat in cat_list:
 
         # loop shared params
         for i, kol in enumerate(p_s_IO_cat_kol):
+            DebugPrint('Looping shared params')
             # presync header
             if n_elements == 1:
                 presync_top_row.append(p_s_IO_cat_name[i])
@@ -656,6 +657,7 @@ for cat in cat_list:
                     presync_skjema_row.append('')
             if IO_liste_row == (-1):
                 # sync
+                DebugPrint('Syncing')
                 IOliste_tekst = IOliste[IO_liste_row][kol]
                 if IOliste_tekst is None:
                     IOliste_tekst = ' '
