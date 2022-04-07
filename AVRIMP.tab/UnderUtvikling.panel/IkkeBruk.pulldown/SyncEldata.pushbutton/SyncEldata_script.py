@@ -154,7 +154,7 @@ def SaveListToExcel(filePath, exportData):
 def DecodeIfString(cellValue):
     print('DeCodeIfString launched')
     if isinstance(cellValue, str):
-        print('decoding ' + cellValue)
+        #print('decoding ' + cellValue)
         #return cellValue.decode(encoding = 'utf-8', errors = 'replace')  #ignore
         #print type(cellValue)  #str
         #print('decoded: ' + cellValue.decode(encoding='utf-8'))
@@ -162,10 +162,10 @@ def DecodeIfString(cellValue):
         #return cellValue.decode(encoding='utf-8')
         #print (unicode(' unicode utf8 ') + unicode(cellValue, "utf-8") )
         #print (unicode(' unicode 1252 ') + unicode(cellValue, "Windows-1252"))
-        print('decode 1252 ' + cellValue.decode(encoding='Windows-1252'))
-        c = cellValue.decode(encoding='Windows-1252')
-        testlist = ['a', 'øæå', c]
-        print(testlist)
+        #print('decode 1252 ' + cellValue.decode(encoding='Windows-1252'))
+        #c = cellValue.decode(encoding='Windows-1252')
+        #testlist = ['a', 'øæå', c]
+        #print(testlist)
 
         #print('decode utf8 ' + cellValue.decode(encoding='utf-8'))
 
@@ -308,12 +308,12 @@ rows = ws_IO_liste.UsedRange.Rows.Count
 #print('cols: '+ str(cols))
 #print('rows: '+ str(rows))
 IOliste =[]
-for i in range(1,rows):
+for i in range(1,rows+1):
     rad = []
-    for j in range(1,cols):
+    for j in range(1,cols+1):
         #rad.append(DecodeIfString(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Value2))
-        rad.append(DecodeIfString(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text))
-        #rad.append(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
+        #rad.append(DecodeIfString(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text))
+        rad.append(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
         #print('Undecoded :' + ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
         #print('Decorded :' + DecodeIfString(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text))
     IOliste.append(rad)
@@ -325,10 +325,10 @@ for i in range(1,rows):
 #IOliste = IO_liste_range.Text
 #IOliste = IO_liste_range.Value
 
-print('default øæøå')
+#print('default øæøå')
 print(IOliste)
-print('dearray')
-print(IOliste[0])
+#print('dearray')
+#print(IOliste[0])
 
 
 if tag_param is None or tag_param == '':
