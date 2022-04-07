@@ -344,13 +344,17 @@ parametre_shared_name = ['Entreprise', 'Tekstlinje 1', 'Tekstlinje 2', 'Driftsfo
                          'Sikkerhetsbryter', 'Kommentar', 'Fabrikat', 'Modell', 'Merkespenning', 'Merkeeffekt',
                          'Merkestrøm', 'Status', 'Access_TagType', 'Access_TagType beskrivelse', 'IO-er', 'Datablad']
 
+print('parametre_shared_name')
+print(parametre_shared_name)
+
+
 print('parametre_shared_name[12]')
 print(parametre_shared_name[12])
 
 print('IOliste[1][2]')
 print(IOliste[1][2])
 
-if(IOliste[1][3] == parametre_shared_name[12]):
+if(IOliste[1][2] == parametre_shared_name[12]):
     print('samme')
 
 parametre_guid = ['2c78b93c-2c2d-4bf5-a4cd-b5ab37d40b3f', '88e7a061-da67-44a8-bdab-19fd0e111277',
