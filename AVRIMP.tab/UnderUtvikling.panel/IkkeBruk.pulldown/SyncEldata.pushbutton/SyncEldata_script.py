@@ -156,7 +156,7 @@ def DecodeIfString(cellValue):
     if isinstance(cellValue, str):
         print('decoding ' + cellValue)
         #return cellValue.decode(encoding = 'utf-8', errors = 'replace')  #ignore
-        print cellCalue.type()
+        print cellValue.type()
         #print('decoded: ' + cellValue.decode(encoding='utf-8'))
         #print('encoded: ' + cellValue.encode(encoding='utf-8'))
         #return cellValue.decode(encoding='utf-8')
