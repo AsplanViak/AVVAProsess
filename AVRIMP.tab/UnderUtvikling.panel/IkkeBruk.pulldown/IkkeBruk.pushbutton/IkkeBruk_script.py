@@ -84,7 +84,7 @@ print('øæå')
 print(a)
 print('encoded: '+ a.encode('utf-8'))
 b = a.encode()
-print('redecoded' + b.decode('utf-8¨''))
+print('redecoded' + b.decode('utf-8'))
 
 
 print('IO liste')
