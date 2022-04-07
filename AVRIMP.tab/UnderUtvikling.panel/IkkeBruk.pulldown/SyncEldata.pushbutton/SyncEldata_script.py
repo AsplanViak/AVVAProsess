@@ -536,9 +536,9 @@ for cat in cat_list:
 
     # find remaining parameters by name
     for param in FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().FirstElement().Parameters:
-        SummaryPrint('param.Definition.Name : ' + param.Definition.Name)
+        #SummaryPrint('param.Definition.Name : ' + param.Definition.Name)
         for i, name in enumerate(p_IO_cat_uandp_name):
-            SummaryPrint('name in p_IO_cat_uandp_name: ' + name)
+            #SummaryPrint('name in p_IO_cat_uandp_name: ' + name)
             if param.Definition.Name == name:
                 p_r_IO_cat_kol.append(p_IO_cat_uandp_kol[i])  # r = remaining
                 p_r_IO_cat_name.append(p_IO_cat_uandp_name[i])
@@ -643,19 +643,24 @@ for cat in cat_list:
             DebugPrint('Looping shared params')
             # presync header
             if n_elements == 1:
+                DebugPrint('presync header')
                 presync_top_row.append(p_s_IO_cat_name[i])
             # presync data
             try:
+                DebugPrint('Check if detail item')
                 if cat <> BuiltInCategory.OST_DetailComponents:
+                    DebugPrint('Is detail item')
                     presync_3d_row.append(k.get_Parameter(p_s_IO_cat_guid[i]).AsString())
                 else:
+                    DebugPrint('Is not detail item')
                     presync_skjema_row.append(k.get_Parameter(p_s_IO_cat_guid[i]).AsString())
             except:
+                DebugPrint('Something went wrong with check if detail item')
                 if cat <> BuiltInCategory.OST_DetailComponents:
                     presync_3d_row.append('')
                 else:
                     presync_skjema_row.append('')
-            if IO_liste_row == (-1):
+            if IO_liste_row != (-1):
                 # sync
                 DebugPrint('Syncing')
                 IOliste_tekst = IOliste[IO_liste_row][kol]
@@ -672,6 +677,7 @@ for cat in cat_list:
                     DebugPrint('shared parameter ' + p_s_IO_cat_name[i] + ': exception')
                     DebugPrint('k.get_Parameter(' + str(p_s_IO_cat_guid[i]) + ').Set(' + str(IOliste_tekst) + ')')
                     DebugPrint(ex.message)
+
         # loop remaining params
         for i, kol in enumerate(p_r_IO_cat_kol):
             # presync header
@@ -688,7 +694,7 @@ for cat in cat_list:
                     presync_3d_row.append('')
                 else:
                     presync_skjema_row.append('')
-            if IO_liste_row == (-1):
+            if IO_liste_row != (-1):
                 # sync
                 IOliste_tekst = IOliste[IO_liste_row][kol]
                 if IOliste_tekst is None:
