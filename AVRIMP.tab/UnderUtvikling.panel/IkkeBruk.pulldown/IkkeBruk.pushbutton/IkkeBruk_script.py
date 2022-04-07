@@ -88,7 +88,7 @@ print('redecoded' + b.decode('utf-8'))
 
 
 print('IO liste')
-wb_IO_liste = xl.Workbooks.Open('C:\Test\IO-liste.xlsx')
+wb_IO_liste = xl.Workbooks.Open('C:\Test\IO-liste.xlsx', encoding = 'utf-8')
 #linje under må rettes på senere
 ws_IO_liste = wb_IO_liste.Worksheets[1]
 #used = ws_IO_liste.UsedRange
@@ -97,15 +97,15 @@ rows = ws_IO_liste.UsedRange.Rows.Count
 #print('cols: '+ str(cols))
 #print('rows: '+ str(rows))
 IOliste =[]
-if (0):
-#for i in range(1,rows):
+#if (0):
+for i in range(1,rows):
     rad = []
     for j in range(1,cols):
         #rad.append(DecodeIfString(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Value2))
-        rad.append(DecodeIfString(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text))
+        #rad.append(DecodeIfString(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text))
         #rad.append(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
         print('Undecoded :' + ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
-        print('Decorded :' + DecodeIfString(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text))
+        #print('Decorded :' + DecodeIfString(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text))
     IOliste.append(rad)
 
 
