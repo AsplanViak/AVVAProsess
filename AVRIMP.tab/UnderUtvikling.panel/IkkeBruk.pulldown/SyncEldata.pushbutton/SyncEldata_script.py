@@ -160,10 +160,10 @@ def DecodeIfString(cellValue):
         #print('decoded: ' + cellValue.decode(encoding='utf-8'))
         #print('encoded: ' + cellValue.encode(encoding='utf-8'))
         #return cellValue.decode(encoding='utf-8')
-        print (unicode(' unicode utf8') + unicode(cellValue, "utf-8") )
+        #print (unicode(' unicode utf8') + unicode(cellValue, "utf-8") )
         print (unicode(' unicode 1252') + unicode(cellValue, "Windows-1252"))
         print('decode 1252' + cellValue.decode(encoding='Windows-1252'))
-        print('decode utf8' + cellValue.decode(encoding='utf-8'))
+        #print('decode utf8' + cellValue.decode(encoding='utf-8'))
 
         return cellValue
         #return cellValue
