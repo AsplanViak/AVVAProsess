@@ -50,7 +50,10 @@ app = HOST_APP.app
 #app = uiapp.Application
 
 
+
 import clr
+
+import codecs
 
 clr.AddReferenceByName('Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')
 from Microsoft.Office.Interop import Excel
@@ -79,9 +82,9 @@ print(1)
 a = 'øæå'
 print('øæå')
 print(a)
-print('encoded: '+ a.encode(utf-8))
+print('encoded: '+ a.encode('utf-8'))
 b = a.encode()
-print('redecoded' + b.decode(utf-8))
+print('redecoded' + b.decode('utf-8¨''))
 
 
 print('IO liste')
