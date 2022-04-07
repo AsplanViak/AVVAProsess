@@ -82,9 +82,9 @@ print(1)
 a = 'øæå'
 print('øæå')
 print(a)
-print('encoded: '+ a.encode('utf-8'))
-b = a.encode('utf-8')
-print('redecoded' + b.decode('utf-8'))
+print('encoded: '+ a.encode('Windows-1252'))
+b = a.encode('Windows-1252')
+print('redecoded' + b.decode('Windows-1252'))
 
 
 print('IO liste')
