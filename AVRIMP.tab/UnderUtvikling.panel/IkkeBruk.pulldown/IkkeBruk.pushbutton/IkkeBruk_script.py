@@ -86,6 +86,8 @@ print('encoded: '+ a.encode('Windows-1252'))
 b = a.encode('Windows-1252')
 print('redecoded' + b.decode('Windows-1252'))
 
+clist  = ['זרו', 'abc']
+print(clist)
 
 print('IO liste')
 wb_IO_liste = xl.Workbooks.Open('C:\Test\IO-liste.xlsx')
