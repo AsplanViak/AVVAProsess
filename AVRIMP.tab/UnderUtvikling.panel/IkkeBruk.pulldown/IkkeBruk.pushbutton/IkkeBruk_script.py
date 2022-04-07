@@ -83,7 +83,7 @@ a = 'øæå'
 print('øæå')
 print(a)
 print('encoded: '+ a.encode('utf-8'))
-b = a.encode()
+b = a.encode('utf-8')
 print('redecoded' + b.decode('utf-8'))
 
 
