@@ -307,7 +307,7 @@ cols = ws_IO_liste.UsedRange.Columns.Count
 rows = ws_IO_liste.UsedRange.Rows.Count
 #print('cols: '+ str(cols))
 #print('rows: '+ str(rows))
-IOliste =['øæå']
+IOliste =[]
 for i in range(1,rows):
     rad = []
     for j in range(1,cols):
@@ -351,10 +351,10 @@ print(parametre_shared_name)
 print('parametre_shared_name[12]')
 print(parametre_shared_name[12])
 
-print('IOliste[1][2]')
-print(IOliste[1][2])
+print('IOliste[0][2]')
+print(IOliste[0][2])
 
-if(IOliste[1][2] == parametre_shared_name[12]):
+if(IOliste[0][2] == parametre_shared_name[12]):
     print('samme')
 
 parametre_guid = ['2c78b93c-2c2d-4bf5-a4cd-b5ab37d40b3f', '88e7a061-da67-44a8-bdab-19fd0e111277',
