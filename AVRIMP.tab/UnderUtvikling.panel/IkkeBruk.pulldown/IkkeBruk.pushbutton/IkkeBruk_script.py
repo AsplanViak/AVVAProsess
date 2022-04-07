@@ -88,7 +88,7 @@ print('redecoded' + b.decode('utf-8'))
 
 
 print('IO liste')
-wb_IO_liste = xl.Workbooks.Open('C:\Test\IO-liste.xlsx', encoding = 'utf-8')
+wb_IO_liste = xl.Workbooks.Open('C:\Test\IO-liste.xlsx')
 #linje under må rettes på senere
 ws_IO_liste = wb_IO_liste.Worksheets[1]
 #used = ws_IO_liste.UsedRange

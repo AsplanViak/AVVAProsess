@@ -154,12 +154,13 @@ def SaveListToExcel(filePath, exportData):
 def DecodeIfString(cellValue):
     print('DeCodeIfString launched')
     if isinstance(cellValue, str):
-        #print('decoding ' + cellValue)
+        print('decoding ' + cellValue)
         #return cellValue.decode(encoding = 'utf-8', errors = 'replace')  #ignore
 
         #print('decoded: ' + cellValue.decode(encoding='utf-8'))
         #print('encoded: ' + cellValue.encode(encoding='utf-8'))
-        return cellValue.decode(encoding='utf-8')
+        #return cellValue.decode(encoding='utf-8')
+        return cellValue.decode(encoding='Windows-1252')
         #return cellValue
     else:
         print('not decoding, no string')
