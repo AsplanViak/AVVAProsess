@@ -347,8 +347,8 @@ parametre_shared_name = ['Entreprise', 'Tekstlinje 1', 'Tekstlinje 2', 'Driftsfo
 print('parametre_shared_name[12]')
 print(parametre_shared_name[12])
 
-print('IOliste[1][3]')
-print(IOliste[1][3])
+print('IOliste[1][2]')
+print(IOliste[1][2])
 
 if(IOliste[1][3] == parametre_shared_name[12]):
     print('samme')

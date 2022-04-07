@@ -1,9 +1,9 @@
-# -*- coding: utf-8 -*-
-#  Headeren over mÃ¥ du ha om scriptet inneholder Ã¦Ã¸Ã¥.
+# -*- coding: Windows-1252 -*-
+#  Headeren over må du ha om scriptet inneholder æøå.
 
 """
 Du trenger:
-IronPython innstallert pÃ¥ din PC.
+IronPython innstallert på din PC.
 pyCharm(python editor).
 Fungerende autocomplete i pycharm.
     Under pyCharm settings:
@@ -15,19 +15,19 @@ Fungerende autocomplete i pycharm.
 
 """
 
-# Start MÃ… ha
-__title__ = 'IkkeBruk'  # Denne overstyrer navnet pÃ¥ scriptfilen
-__author__ = 'Asplan Viak'  # Dette kommer opp som navnet pÃ¥ utvikler av knappen
-__doc__ = "Klikk for Ã¥ legge til flenser i prosjektet."  # Dette blir hjelp teksten som kommer opp nÃ¥r man holder musepekeren over knappen.
-# End MÃ… ha
+# Start MÅ ha
+__title__ = 'IkkeBruk'  # Denne overstyrer navnet på scriptfilen
+__author__ = 'Asplan Viak'  # Dette kommer opp som navnet på utvikler av knappen
+__doc__ = "Klikk for å legge til flenser i prosjektet."  # Dette blir hjelp teksten som kommer opp når man holder musepekeren over knappen.
+# End MÅ ha
 
-# Kan slÃ¸yfes
-__cleanengine__ = True  # Dette forteller tolkeren at den skal sette opp en ny ironpython motor for denne knappen, slik at den ikke kommer i konflikt med andre funksjoner, settes nesten alltid til FALSE, TRUE nÃ¥r du jobber med knappen.
-__fullframeengine__ = False  # Denne er nÃ¸dvendig for Ã¥ fÃ¥ tilgang til noen moduler, denne gjÃ¸r knappen vesentrlig tregere i oppstart hvis den stÃ¥r som TRUE
-# __context__ = "zerodoc"  # Denne forteller tolkeren at knappen skal kunne brukes selv om et Revit dokument ikke er Ã¥pent.
-# __helpurl__ = "google.no"  # Hjelp URL nÃ¥r bruker trykker F1 over knapp.
+# Kan sløyfes
+__cleanengine__ = True  # Dette forteller tolkeren at den skal sette opp en ny ironpython motor for denne knappen, slik at den ikke kommer i konflikt med andre funksjoner, settes nesten alltid til FALSE, TRUE når du jobber med knappen.
+__fullframeengine__ = False  # Denne er nødvendig for å få tilgang til noen moduler, denne gjør knappen vesentrlig tregere i oppstart hvis den står som TRUE
+# __context__ = "zerodoc"  # Denne forteller tolkeren at knappen skal kunne brukes selv om et Revit dokument ikke er åpent.
+# __helpurl__ = "google.no"  # Hjelp URL når bruker trykker F1 over knapp.
 __min_revit_ver__ = 2015  # knapp deaktivert hvis klient bruker lavere versjon
-__max_revit_ver__ = 2032  # SkjÃ¸nner?
+__max_revit_ver__ = 2032  # Skjønner?
 __beta__ = False  # Knapp deaktivert hos brukere som ikke har spesifikt aktivert betaknapper
 
 # Finn flere variabler her:
@@ -79,8 +79,8 @@ def measure(startpoint, point):
     return startpoint.DistanceTo(point)
 
 print(1)
-a = 'Ã¸Ã¦Ã¥'
-print('Ã¸Ã¦Ã¥')
+a = 'øæå'
+print('øæå')
 print(a)
 print('encoded: '+ a.encode('Windows-1252'))
 b = a.encode('Windows-1252')
@@ -89,7 +89,7 @@ print('redecoded' + b.decode('Windows-1252'))
 
 print('IO liste')
 wb_IO_liste = xl.Workbooks.Open('C:\Test\IO-liste.xlsx')
-#linje under mÃ¥ rettes pÃ¥ senere
+#linje under må rettes på senere
 ws_IO_liste = wb_IO_liste.Worksheets[1]
 #used = ws_IO_liste.UsedRange
 cols = ws_IO_liste.UsedRange.Columns.Count
