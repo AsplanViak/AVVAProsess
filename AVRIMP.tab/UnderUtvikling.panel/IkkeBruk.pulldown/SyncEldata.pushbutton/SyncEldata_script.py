@@ -350,7 +350,8 @@ print(parametre_shared_name[12])
 print('IOliste[1][3]')
 print(IOliste[1][3])
 
-
+if(IOliste[1][3] == parametre_shared_name[12]):
+    print('samme')
 
 parametre_guid = ['2c78b93c-2c2d-4bf5-a4cd-b5ab37d40b3f', '88e7a061-da67-44a8-bdab-19fd0e111277',
                   '8bd618c5-4b04-4089-8c1c-d3329c359af7', 'da7bed97-096f-4949-840f-3125bdf40605',
