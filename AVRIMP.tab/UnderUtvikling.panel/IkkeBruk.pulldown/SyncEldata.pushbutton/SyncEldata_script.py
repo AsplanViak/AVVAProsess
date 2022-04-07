@@ -165,7 +165,7 @@ def DecodeIfString(cellValue):
         print('decode 1252 ' + cellValue.decode(encoding='Windows-1252'))
         #print('decode utf8 ' + cellValue.decode(encoding='utf-8'))
 
-        return cellValue
+        return cellValue.decode(encoding='Windows-1252')
         #return cellValue
     else:
         print('not decoding, no string')
