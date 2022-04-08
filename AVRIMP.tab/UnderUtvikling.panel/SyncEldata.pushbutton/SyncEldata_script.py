@@ -396,25 +396,25 @@ except:
     tag_kol = -1
 
     for j, celle in enumerate(IOliste[0]):
-    try:
-        # if celle.lower() == tag_param.lower():
-        if celle.lower() == 'tag':  # Bruker tag her og ikke tag_param.lower(), siden det alltid er TAG som brukes i eksport fra database.
-            # Kan evt. splitte dette opp i to forskjellige parametre i ark med parametre.
+        try:
+            # if celle.lower() == tag_param.lower():
+            if celle.lower() == 'tag':  # Bruker tag her og ikke tag_param.lower(), siden det alltid er TAG som brukes i eksport fra database.
+                # Kan evt. splitte dette opp i to forskjellige parametre i ark med parametre.
 
-            tag_kol = j
-        if celle.lower() == 'guid':
-            GUID_kol = j
-        if celle.lower() not in parametre_shared_name_lc:
-            if celle.lower() not in parametre_signalinfo_lc and celle.lower() not in parametre_ikke_sync_lc:
-                parametre_project_name.append(celle)
-                DebugPrint('project param lagt til: ' + celle.lower())
+                tag_kol = j
+            if celle.lower() == 'guid':
+                GUID_kol = j
+            if celle.lower() not in parametre_shared_name_lc:
+                if celle.lower() not in parametre_signalinfo_lc and celle.lower() not in parametre_ikke_sync_lc:
+                    parametre_project_name.append(celle)
+                    DebugPrint('project param lagt til: ' + celle.lower())
 
-        DebugPrint('j, celle, try: ' + str(j) + ' ' + celle)
+            DebugPrint('j, celle, try: ' + str(j) + ' ' + celle)
 
-    except:
-        DebugPrint('j, celle, continue: ' + str(j) + ' ' + celle)
-        # Tidligere stod det break her. Tror continue er bedre.
-        continue
+        except:
+            DebugPrint('j, celle, continue: ' + str(j) + ' ' + celle)
+            # Tidligere stod det break her. Tror continue er bedre.
+            continue
 
 # sjekk om det ble funnet kolonne med tag/tfm
 if tag_kol == (-1):
