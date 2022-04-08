@@ -167,6 +167,7 @@ output_message = []
 stat = []
 errorReport = []
 
+
 # Finn IO liste og andre parametre i ark "Kobling mot IO-liste"
 har_funnet_IOliste_ark_revit = 0
 for sheet in FilteredElementCollector(doc).OfCategory(
@@ -189,6 +190,7 @@ for sheet in FilteredElementCollector(doc).OfCategory(
         DebugPrint('AV_room_link_str: ' + AV_room_link_str)
         break
 
+#Avbryt script dersom ikke IO-liste regneark er definert.
 if (har_funnet_IOliste_ark_revit == 0):
     button = UI.TaskDialogCommonButtons.None
     result = UI.TaskDialogResult.Ok
