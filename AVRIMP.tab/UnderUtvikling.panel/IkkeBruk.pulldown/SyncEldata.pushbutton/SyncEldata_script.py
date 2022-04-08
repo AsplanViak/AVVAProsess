@@ -116,7 +116,7 @@ def DebugPrint(tekst):
         print(tekst)
     return 1
 
-def SummaryPrint(tekst):
+def DetailedDebugPrint(tekst):
     if summary_mode == 1:
         print(tekst)
     return 1
@@ -154,45 +154,24 @@ def SaveListToExcel(filePath, exportData):
         xlrange = ws.Range["A1", chr(ord('@') + cols) + str(rows)]
         xlrange.Value2 = a
         wb.SaveAs(filePath)
-        wb.Close(False)
+        #wb.Close(False)
+        wb.Close()
         return True
     except:
+        print('Feil med lagring av excel-eksport')
         return False
-
-def DecodeIfString(cellValue):
-    print('DeCodeIfString launched')
-    if isinstance(cellValue, str):
-        #print('decoding ' + cellValue)
-        #return cellValue.decode(encoding = 'utf-8', errors = 'replace')  #ignore
-        #print type(cellValue)  #str
-        #print('decoded: ' + cellValue.decode(encoding='utf-8'))
-        #print('encoded: ' + cellValue.encode(encoding='utf-8'))
-        #return cellValue.decode(encoding='utf-8')
-        #print (unicode(' unicode utf8 ') + unicode(cellValue, "utf-8") )
-        #print (unicode(' unicode 1252 ') + unicode(cellValue, "Windows-1252"))
-        #print('decode 1252 ' + cellValue.decode(encoding='Windows-1252'))
-        #c = cellValue.decode(encoding='Windows-1252')
-        #testlist = ['a', 'øæå', c]
-        #print(testlist)
-
-        #print('decode utf8 ' + cellValue.decode(encoding='utf-8'))
-
-        #return cellValue.decode(encoding='Windows-1252')
-        return cellValue
-    else:
-        print('not decoding, no string')
-        return cellValue
-
 
 output_message = []
 stat = []
 errorReport = []
 
 # Finn IO liste og andre parametre i ark "Kobling mot IO-liste"
+har_funnet_IO-liste_ark_revit = 0
 for sheet in FilteredElementCollector(doc).OfCategory(
         BuiltInCategory.OST_Sheets).WhereElementIsNotElementType().ToElements():
     if sheet.get_Parameter(DB.BuiltInParameter.SHEET_NAME).AsString() == 'Kobling mot IO-liste':
-        DebugPrint('Fant riktig ark')
+        har_funnet_IO - liste_ark_revit = 1
+        DebugPrint('Fant riktig ark med IO-liste info')
         IO_liste_filplassering = sheet.LookupParameter('IO-liste_filplassering').AsString()
         DebugPrint('IO-liste_filplassering :' + IO_liste_filplassering)
         Datablader_filplassering = sheet.LookupParameter('Datablader_filplassering').AsString()
@@ -207,6 +186,13 @@ for sheet in FilteredElementCollector(doc).OfCategory(
             AV_room_link_str = 'RIB'
         DebugPrint('AV_room_link_str: ' + AV_room_link_str)
         break
+
+if (har_funnet_IO-liste_ark_revit==0) :
+    button = UI.TaskDialogCommonButtons.None
+    result = UI.TaskDialogResult.Ok
+    UI.TaskDialog.Show('Synkronisering avbrutt', 'Fant ikke noe ark med navn "Kobling mot IO-liste" som angir filplassering IO-liste', button)
+    #Sjekk at rad under ikke lukker revit!!!
+    sys.exit(0)
 
 # Filename for excel exports
 filename = Document.PathName.GetValue(doc)
@@ -301,9 +287,21 @@ except:
 
 #IOliste = IN[0]
 # LES INN IO-LISTE FRA EXCEL
-wb_IO_liste = xl.Workbooks.Open(IO_liste_filplassering)
-#linje under må rettes på senere
-ws_IO_liste = wb_IO_liste.Worksheets[1]
+try:
+    wb_IO_liste = xl.Workbooks.Open(IO_liste_filplassering)
+except:
+    button = UI.TaskDialogCommonButtons.None
+    result = UI.TaskDialogResult.Ok
+    UI.TaskDialog.Show('Synkronisering avbrutt', 'Fant ikke excel-dokument med IO-liste på plassering angitt i ', button)
+
+#Finn sheet med IO-liste. Bruker sheet1 dersom ingen treff på navn
+try:
+    ws_IO_liste = wb_IO_liste.Worksheets('IO-liste')
+except:
+    try:
+        ws_IO_liste = wb_IO_liste.Worksheets('IOliste')
+    except:
+        ws_IO_liste = wb_IO_liste.Worksheets[1]]
 #used = ws_IO_liste.UsedRange
 cols = ws_IO_liste.UsedRange.Columns.Count
 rows = ws_IO_liste.UsedRange.Rows.Count
@@ -471,7 +469,7 @@ transaction.Start("Sync eldata")
 # loop all categories
 for cat in cat_list:
     DebugPrint(cat)
-    SummaryPrint(cat)
+    DetailedDebugPrint(cat)
 
     # sjekk om tag/tfm parameter finnes, og om den er shared, og om den er definert med samme GUID som den riktige shared parameteren
     tag_cat_status = (-1)
@@ -536,9 +534,9 @@ for cat in cat_list:
 
     # find remaining parameters by name
     for param in FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().FirstElement().Parameters:
-        #SummaryPrint('param.Definition.Name : ' + param.Definition.Name)
+        #DetailedDebugPrint('param.Definition.Name : ' + param.Definition.Name)
         for i, name in enumerate(p_IO_cat_uandp_name):
-            #SummaryPrint('name in p_IO_cat_uandp_name: ' + name)
+            #DetailedDebugPrint('name in p_IO_cat_uandp_name: ' + name)
             if param.Definition.Name == name:
                 p_r_IO_cat_kol.append(p_IO_cat_uandp_kol[i])  # r = remaining
                 p_r_IO_cat_name.append(p_IO_cat_uandp_name[i])
@@ -573,7 +571,7 @@ for cat in cat_list:
                     tguid).AsString() == '=-' or k.get_Parameter(tguid).AsString() == '' or k.get_Parameter(
                 tguid).AsString() is None:
                 # gå til neste element dersom blank tag/tfm
-                SummaryPrint('blank tag/tfm (shared)')
+                DetailedDebugPrint('blank tag/tfm (shared)')
                 continue
             tag = k.get_Parameter(tguid).AsString()
             # DebugPrint('k.get_Parameter(tguid).AsString() : ' + k.get_Parameter(tguid).AsString())
@@ -583,7 +581,7 @@ for cat in cat_list:
                     tag_param).AsString() == '=-' or k.LookupParameter(tag_param).AsString() == '' or k.LookupParameter(
                 tag_param).AsString() is None:
                 # gå til neste element dersom blank tag/tfm
-                SummaryPrint('blank tag/tfm (string)')
+                DetailedDebugPrint('blank tag/tfm (string)')
                 continue
             tag = k.LookupParameter(tag_param).AsString()
         elif tag_cat_status == 2:
@@ -594,7 +592,7 @@ for cat in cat_list:
                 TFM11FkKompGruppe = i.Symbol.LookupParameter('TFM11FkKompGruppe').AsString()
                 tag = r"'" + '=' + SystemVar + '-' + TFM11FkKompGruppe + TFM11FkKompLNR
             except:
-                SummaryPrint('feil ved sammenslåing/avlesing av parametre som inngår i TFM for skjema')
+                DetailedDebugPrint('feil ved sammenslåing/avlesing av parametre som inngår i TFM for skjema')
                 continue
         DebugPrint('Tag: ' + tag)
 
@@ -624,7 +622,7 @@ for cat in cat_list:
                 if tag == IOliste[b][tag_kol]:
                     IO_liste_row = b
                     break
-        SummaryPrint('IO_liste_row :' + str(IO_liste_row))
+        DetailedDebugPrint('IO_liste_row :' + str(IO_liste_row))
 
         # Presync data
         # lag tom header list for denne category (antall parametre kan variere mellom categories)
@@ -866,24 +864,30 @@ for v in viewscollector:
 
 excel_eksport = [komp_3d, komp_skjema, presync_3d, presync_skjema]
 
-#for i in range(4):
-if 0:
+for i in range(4):
+#if 0:
     # def SaveListToExcel(filePath, exportData)
     if SaveListToExcel(excel_filenames[i], excel_eksport[i]):
-        SummaryPrint('Fileksport success ' + str(i))
+        DetailedDebugPrint('Fileksport success ' + str(i))
     else:
-        SummaryPrint('Fileksport failed ' + str(i))
+        DetailedDebugPrint('Fileksport failed ' + str(i))
         # Lag melding her: 'Kunne ikke eksportere fil ' + excel_filenames[i] + '. Sjekk om fil allerede er åpen, og lukk den, og prøv på ny.'
 
 #OUT = [excel_eksport, excel_filenames, debug, debug_details, debug_summary, errorReport]
 # OUT = [parameter, parameter_kolonne]
 # OUT = parameter_kolonne
+
+wb_IO_liste.Close()
+
+
 xl.DisplayAlerts = True
 xl.Visible = True
 
 transaction.Commit()
 
 #wb_IO_liste.close()
+
+
 
 button = UI.TaskDialogCommonButtons.None
 result = UI.TaskDialogResult.Ok
