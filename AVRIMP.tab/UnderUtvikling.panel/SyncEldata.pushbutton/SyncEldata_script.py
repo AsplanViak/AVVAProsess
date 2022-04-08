@@ -312,22 +312,12 @@ except:
 IOliste = []
 for i in range(1, rows + 1):
     rad = []
-for j in range(1, cols + 1):
-    rad.append(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
+    for j in range(1, cols + 1):
+        rad.append(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
 
-IOliste.append(rad)
-# IO_liste_range = ws_IO_liste.Range["A1", chr(ord('@') + cols) + str(rows)]
-# IO_liste_range = ws_IO_liste.Range["A1", "A" + str(rows)]
-# IO_liste_range = ws_IO_liste.Range["A1", "A4"]
-# rad under gir kanskje problemer med array
-# IOliste = IO_liste_range.Value2
-# IOliste = IO_liste_range.Text
-# IOliste = IO_liste_range.Value
+    IOliste.append(rad)
 
-# print('default øæøå')
 print(IOliste)
-# print('dearray')
-# print(IOliste[0])
 
 if tag_param is None or tag_param == '':
     tag_param = 'TAG'
