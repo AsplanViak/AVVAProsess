@@ -59,8 +59,6 @@ from Autodesk.Revit.DB import *
 
 from System.Collections.Generic import List
 
-from Autodesk.Revit.DB import Plumbing, IFamilyLoadOptions
-
 import sys
 import math
 
@@ -70,7 +68,6 @@ import math
 clr.AddReferenceByName(
     'Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')
 from Microsoft.Office.Interop import Excel
-from Microsoft.Office.Interop.Excel import XlListObjectSourceType, Worksheet, Range, XlYesNoGuess
 
 # clr.AddReference("RevitServices")
 # import RevitServices
@@ -84,7 +81,6 @@ from Microsoft.Office.Interop.Excel import XlListObjectSourceType, Worksheet, Ra
 # clr.ImportExtensions(Revit.GeometryConversion)
 
 # clr.AddReference("RevitAPI")
-import Autodesk
 
 from System.Collections.Generic import List
 # from System.Collections.Generic import *
@@ -312,109 +308,110 @@ except:
         rows = ws_IO_liste.UsedRange.Rows.Count
         # print('cols: '+ str(cols))
         # print('rows: '+ str(rows))
-        IOliste = []
-        for i in range(1, rows + 1):
-            rad = []
-        for j in range(1, cols + 1):
-            rad.append(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
 
-        IOliste.append(rad)
-        # IO_liste_range = ws_IO_liste.Range["A1", chr(ord('@') + cols) + str(rows)]
-        # IO_liste_range = ws_IO_liste.Range["A1", "A" + str(rows)]
-        # IO_liste_range = ws_IO_liste.Range["A1", "A4"]
-        # rad under gir kanskje problemer med array
-        # IOliste = IO_liste_range.Value2
-        # IOliste = IO_liste_range.Text
-        # IOliste = IO_liste_range.Value
+IOliste = []
+for i in range(1, rows + 1):
+    rad = []
+for j in range(1, cols + 1):
+    rad.append(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
 
-        # print('default øæøå')
-        print(IOliste)
-        # print('dearray')
-        # print(IOliste[0])
+IOliste.append(rad)
+# IO_liste_range = ws_IO_liste.Range["A1", chr(ord('@') + cols) + str(rows)]
+# IO_liste_range = ws_IO_liste.Range["A1", "A" + str(rows)]
+# IO_liste_range = ws_IO_liste.Range["A1", "A4"]
+# rad under gir kanskje problemer med array
+# IOliste = IO_liste_range.Value2
+# IOliste = IO_liste_range.Text
+# IOliste = IO_liste_range.Value
 
-        if tag_param is None or tag_param == '':
-            tag_param = 'TAG'
+# print('default øæøå')
+print(IOliste)
+# print('dearray')
+# print(IOliste[0])
 
-        if sync_guid is None or sync_guid == 0:
-            sync_guid = False
+if tag_param is None or tag_param == '':
+    tag_param = 'TAG'
 
-        DebugPrint('Tag parameter: ' + str(tag_param))
-        DebugPrint('sync_guid: ' + str(sync_guid))
+if sync_guid is None or sync_guid == 0:
+    sync_guid = False
 
-        parametre_shared_name = ['Entreprise', 'Tekstlinje 1', 'Tekstlinje 2', 'Driftsform', 'AV_MMI',
-                                 'BUS-kommunikasjon',
-        'Sikkerhetsbryter', 'Kommentar', 'Fabrikat', 'Modell', 'Merkespenning', 'Merkeeffekt',
-        'Merkestrøm', 'Status', 'Access_TagType', 'Access_TagType beskrivelse', 'IO-er', 'Datablad']
+DebugPrint('Tag parameter: ' + str(tag_param))
+DebugPrint('sync_guid: ' + str(sync_guid))
 
-        print('parametre_shared_name')
-        print(parametre_shared_name)
+parametre_shared_name = ['Entreprise', 'Tekstlinje 1', 'Tekstlinje 2', 'Driftsform', 'AV_MMI',
+                         'BUS-kommunikasjon',
+                         'Sikkerhetsbryter', 'Kommentar', 'Fabrikat', 'Modell', 'Merkespenning', 'Merkeeffekt',
+                         'Merkestrøm', 'Status', 'Access_TagType', 'Access_TagType beskrivelse', 'IO-er', 'Datablad']
 
-        print('parametre_shared_name[12]')
-        print(parametre_shared_name[12])
+print('parametre_shared_name')
+print(parametre_shared_name)
 
-        print('IOliste[0][2]')
-        print(IOliste[0][2])
+print('parametre_shared_name[12]')
+print(parametre_shared_name[12])
 
-        if (IOliste[0][2] == parametre_shared_name[12]):
-            print('samme')
+print('IOliste[0][2]')
+print(IOliste[0][2])
 
-        parametre_guid = ['2c78b93c-2c2d-4bf5-a4cd-b5ab37d40b3f', '88e7a061-da67-44a8-bdab-19fd0e111277',
-    '8bd618c5-4b04-4089-8c1c-d3329c359af7', 'da7bed97-096f-4949-840f-3125bdf40605',
-    'fd766c10-96b3-470b-aa1e-3b1b5b572492', '18f9c00a-61cf-4429-b022-311b2ce6a667',
-    'daf45c3a-35fc-4994-a29a-180483305de1', '3df6ebff-09dd-475f-8ca7-6eb31e697fd5',
-    'c4a831f8-4d5f-46a3-a40c-41f987c910f6', 'e854697d-4f77-4882-b709-72bcc27ee040',
-    'c6dde6a0-ab66-4102-9e09-30ab645e56bb', 'ed0e58dd-3954-47f7-b7eb-f561f2b55ff9',
-    '55e65789-9ba8-40fe-9795-287755774934', '57e99ba0-ecc1-43aa-8de5-60155ae1e99d',
-    '78d27e5c-b652-4ef5-b19c-767de086fe46', '2603489f-989b-4df2-b87f-0cbfbe9d4f5b',
-    '1c7f04a2-ed1a-412e-a7c1-170dde0c203c', 'bf7410c5-c78b-4463-8b39-fefedd6b4ac7']
-    for i, g in enumerate(parametre_guid):
-        parametre_guid[i] = Guid(g)
+if (IOliste[0][2] == parametre_shared_name[12]):
+    print('samme')
 
-    parametre_shared_name_lc = [x.lower() for x in parametre_shared_name]
-    # DebugPrint('parametre_shared_name_lc ')
-    # DebugPrint(parametre_shared_name_lc)
+parametre_guid = ['2c78b93c-2c2d-4bf5-a4cd-b5ab37d40b3f', '88e7a061-da67-44a8-bdab-19fd0e111277',
+                  '8bd618c5-4b04-4089-8c1c-d3329c359af7', 'da7bed97-096f-4949-840f-3125bdf40605',
+                  'fd766c10-96b3-470b-aa1e-3b1b5b572492', '18f9c00a-61cf-4429-b022-311b2ce6a667',
+                  'daf45c3a-35fc-4994-a29a-180483305de1', '3df6ebff-09dd-475f-8ca7-6eb31e697fd5',
+                  'c4a831f8-4d5f-46a3-a40c-41f987c910f6', 'e854697d-4f77-4882-b709-72bcc27ee040',
+                  'c6dde6a0-ab66-4102-9e09-30ab645e56bb', 'ed0e58dd-3954-47f7-b7eb-f561f2b55ff9',
+                  '55e65789-9ba8-40fe-9795-287755774934', '57e99ba0-ecc1-43aa-8de5-60155ae1e99d',
+                  '78d27e5c-b652-4ef5-b19c-767de086fe46', '2603489f-989b-4df2-b87f-0cbfbe9d4f5b',
+                  '1c7f04a2-ed1a-412e-a7c1-170dde0c203c', 'bf7410c5-c78b-4463-8b39-fefedd6b4ac7']
+for i, g in enumerate(parametre_guid):
+    parametre_guid[i] = Guid(g)
 
-    parametre_signalinfo_lc = ['tekst', 'signaltag', 'type', 'signalkilde', 'spenning', 'tilleggstekst']
-    parametre_ikke_sync_lc = ['sortering', 'tag', 'guid', ' tfm11fksamlet']
+parametre_shared_name_lc = [x.lower() for x in parametre_shared_name]
+# DebugPrint('parametre_shared_name_lc ')
+# DebugPrint(parametre_shared_name_lc)
 
-    # Plan etterhvert: laste inn parametre_project fra kobling_IO_liste_sheet i revit
-    # En enda bedre plan: Last inn alle ubrukte parametre fra IO liste her. Slik at de ikke trenger å defineres noe sted.
-    # parametre_project_name = ['Byggtype', 'MMI']
-    parametre_project_name = []
+parametre_signalinfo_lc = ['tekst', 'signaltag', 'type', 'signalkilde', 'spenning', 'tilleggstekst']
+parametre_ikke_sync_lc = ['sortering', 'tag', 'guid', ' tfm11fksamlet']
 
-    TAG_guid = '141d33b4-0f91-4dd8-a8b6-be1fa232d39f'
-    TFM11FkSamlet_guid = '6b52eb8b-6935-45f9-a509-bb76724ba272'
+# Plan etterhvert: laste inn parametre_project fra kobling_IO_liste_sheet i revit
+# En enda bedre plan: Last inn alle ubrukte parametre fra IO liste her. Slik at de ikke trenger å defineres noe sted.
+# parametre_project_name = ['Byggtype', 'MMI']
+parametre_project_name = []
 
-    if tag_param == 'TAG':
-        tguid = Guid(TAG_guid)
-    elif tag_param == 'TFM11FkSamlet':
-        tguid = Guid(TFM11FkSamlet_guid)
-    else:
-        tguid = -1
+TAG_guid = '141d33b4-0f91-4dd8-a8b6-be1fa232d39f'
+TFM11FkSamlet_guid = '6b52eb8b-6935-45f9-a509-bb76724ba272'
 
-    # finn kolonne i Io liste med tag/tfm, og finn project parametre
-    tag_kol = -1
+if tag_param == 'TAG':
+    tguid = Guid(TAG_guid)
+elif tag_param == 'TFM11FkSamlet':
+    tguid = Guid(TFM11FkSamlet_guid)
+else:
+    tguid = -1
 
-    for j, celle in enumerate(IOliste[0]):
-        try:
-            # if celle.lower() == tag_param.lower():
-            if celle.lower() == 'tag':  # Bruker tag her og ikke tag_param.lower(), siden det alltid er TAG som brukes i eksport fra database.
-                # Kan evt. splitte dette opp i to forskjellige parametre i ark med parametre.
+# finn kolonne i Io liste med tag/tfm, og finn project parametre
+tag_kol = -1
 
-                tag_kol = j
-            if celle.lower() == 'guid':
-                GUID_kol = j
-            if celle.lower() not in parametre_shared_name_lc:
-                if celle.lower() not in parametre_signalinfo_lc and celle.lower() not in parametre_ikke_sync_lc:
-                    parametre_project_name.append(celle)
-                    DebugPrint('project param lagt til: ' + celle.lower())
+for j, celle in enumerate(IOliste[0]):
+    try:
+        # if celle.lower() == tag_param.lower():
+        if celle.lower() == 'tag':  # Bruker tag her og ikke tag_param.lower(), siden det alltid er TAG som brukes i eksport fra database.
+            # Kan evt. splitte dette opp i to forskjellige parametre i ark med parametre.
 
-            DebugPrint('j, celle, try: ' + str(j) + ' ' + celle)
+            tag_kol = j
+        if celle.lower() == 'guid':
+            GUID_kol = j
+        if celle.lower() not in parametre_shared_name_lc:
+            if celle.lower() not in parametre_signalinfo_lc and celle.lower() not in parametre_ikke_sync_lc:
+                parametre_project_name.append(celle)
+                DebugPrint('project param lagt til: ' + celle.lower())
 
-        except:
-            DebugPrint('j, celle, continue: ' + str(j) + ' ' + celle)
-            # Tidligere stod det break her. Tror continue er bedre.
-            continue
+        DebugPrint('j, celle, try: ' + str(j) + ' ' + celle)
+
+    except:
+        DebugPrint('j, celle, continue: ' + str(j) + ' ' + celle)
+        # Tidligere stod det break her. Tror continue er bedre.
+        continue
 
 # sjekk om det ble funnet kolonne med tag/tfm
 if tag_kol == (-1):
