@@ -152,7 +152,8 @@ def SaveListToExcel(filePath, exportData):
         xlrange.Value2 = a
         wb.SaveAs(filePath)
         # wb.Close(False)
-        wb.Close()
+        #wb.Close()
+        print('excel eksport ok')
         return True
     except:
         print('Feil med lagring av excel-eksport')
