@@ -306,7 +306,7 @@ except:
     try:
         ws_IO_liste = wb_IO_liste.Worksheets('IOliste')
     except:
-        ws_IO_liste = wb_IO_liste.Worksheets[1]]
+        ws_IO_liste = wb_IO_liste.Worksheets[1]
         # used = ws_IO_liste.UsedRange
         cols = ws_IO_liste.UsedRange.Columns.Count
         rows = ws_IO_liste.UsedRange.Rows.Count
