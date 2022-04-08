@@ -38,16 +38,17 @@ import math
 import clr
 
 from pyrevit import HOST_APP
+
 doc = HOST_APP.doc
 uidoc = HOST_APP.uidoc
 app = HOST_APP.app
-#app = uidoc.Application
-#uidoc=DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
+# app = uidoc.Application
+# uidoc=DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
 
-#doc = DocumentManager.Instance.CurrentDBDocument
-#uiapp = DocumentManager.Instance.CurrentUIApplication
-#uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
-#app = uiapp.Application
+# doc = DocumentManager.Instance.CurrentDBDocument
+# uiapp = DocumentManager.Instance.CurrentUIApplication
+# uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
+# app = uiapp.Application
 
 
 clr.AddReference("RevitNodes")
@@ -63,64 +64,64 @@ from Autodesk.Revit.DB import Plumbing, IFamilyLoadOptions
 import sys
 import math
 
-#clr.AddReference('ProtoGeometry')
-#from Autodesk.DesignScript.Geometry import *
+# clr.AddReference('ProtoGeometry')
+# from Autodesk.DesignScript.Geometry import *
 
 clr.AddReferenceByName(
     'Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')
 from Microsoft.Office.Interop import Excel
 from Microsoft.Office.Interop.Excel import XlListObjectSourceType, Worksheet, Range, XlYesNoGuess
 
-#clr.AddReference("RevitServices")
-#import RevitServices
-#from RevitServices.Persistence import DocumentManager
-#from RevitServices.Transactions import TransactionManager
+# clr.AddReference("RevitServices")
+# import RevitServices
+# from RevitServices.Persistence import DocumentManager
+# from RevitServices.Transactions import TransactionManager
 
-#clr.AddReference("RevitNodes")
-#import Revit
+# clr.AddReference("RevitNodes")
+# import Revit
 
-#clr.ImportExtensions(Revit.Elements)
-#clr.ImportExtensions(Revit.GeometryConversion)
+# clr.ImportExtensions(Revit.Elements)
+# clr.ImportExtensions(Revit.GeometryConversion)
 
-#clr.AddReference("RevitAPI")
+# clr.AddReference("RevitAPI")
 import Autodesk
 
 from System.Collections.Generic import List
-#from System.Collections.Generic import *
+# from System.Collections.Generic import *
 from System import Guid
 from System import Array
 
-
 # Import RevitAPI
-#clr.AddReference("RevitAPI")
+# clr.AddReference("RevitAPI")
 import Autodesk
-#from Autodesk.Revit.DB import *
-#from Autodesk.Revit.DB.Analysis import *
+# from Autodesk.Revit.DB import *
+# from Autodesk.Revit.DB.Analysis import *
 
-#clr.AddReference('RevitAPIUI')
+# clr.AddReference('RevitAPIUI')
 
 from Autodesk.Revit.UI import TaskDialog
 
-#import System
+# import System
 
 import datetime
 
-#pyt_path = r'C:\Program Files (x86)\IronPython 2.7\Lib'
-#sys.path.append(pyt_path)
+# pyt_path = r'C:\Program Files (x86)\IronPython 2.7\Lib'
+# sys.path.append(pyt_path)
 
 debug_mode = 1
 summary_mode = 1
+
 
 def DebugPrint(tekst):
     if debug_mode == 1:
         print(tekst)
     return 1
 
+
 def DetailedDebugPrint(tekst):
     if summary_mode == 1:
         print(tekst)
     return 1
-
 
 
 def TryGetRoom(room, phase):
@@ -154,23 +155,24 @@ def SaveListToExcel(filePath, exportData):
         xlrange = ws.Range["A1", chr(ord('@') + cols) + str(rows)]
         xlrange.Value2 = a
         wb.SaveAs(filePath)
-        #wb.Close(False)
+        # wb.Close(False)
         wb.Close()
         return True
     except:
         print('Feil med lagring av excel-eksport')
         return False
 
+
 output_message = []
 stat = []
 errorReport = []
 
 # Finn IO liste og andre parametre i ark "Kobling mot IO-liste"
-har_funnet_IO-liste_ark_revit = 0
+har_funnet_IOliste_ark_revit = 0
 for sheet in FilteredElementCollector(doc).OfCategory(
         BuiltInCategory.OST_Sheets).WhereElementIsNotElementType().ToElements():
     if sheet.get_Parameter(DB.BuiltInParameter.SHEET_NAME).AsString() == 'Kobling mot IO-liste':
-        har_funnet_IO - liste_ark_revit = 1
+        har_funnet_IOliste_ark_revit = 1
         DebugPrint('Fant riktig ark med IO-liste info')
         IO_liste_filplassering = sheet.LookupParameter('IO-liste_filplassering').AsString()
         DebugPrint('IO-liste_filplassering :' + IO_liste_filplassering)
@@ -187,11 +189,12 @@ for sheet in FilteredElementCollector(doc).OfCategory(
         DebugPrint('AV_room_link_str: ' + AV_room_link_str)
         break
 
-if (har_funnet_IO-liste_ark_revit==0) :
+if (har_funnet_IOliste_ark_revit == 0):
     button = UI.TaskDialogCommonButtons.None
     result = UI.TaskDialogResult.Ok
-    UI.TaskDialog.Show('Synkronisering avbrutt', 'Fant ikke noe ark med navn "Kobling mot IO-liste" som angir filplassering IO-liste', button)
-    #Sjekk at rad under ikke lukker revit!!!
+    UI.TaskDialog.Show('Synkronisering avbrutt',
+                       'Fant ikke noe ark med navn "Kobling mot IO-liste" som angir filplassering IO-liste', button)
+    # Sjekk at rad under ikke lukker revit!!!
     sys.exit(0)
 
 # Filename for excel exports
@@ -284,17 +287,17 @@ except:
     DebugPrint(
         "Feil : Kan ikke lese romdata fra link. Kan skyldes at ARK/RIB link ikke er lastet inn, eller er i lukket workset.")
 
-
-#IOliste = IN[0]
+# IOliste = IN[0]
 # LES INN IO-LISTE FRA EXCEL
 try:
     wb_IO_liste = xl.Workbooks.Open(IO_liste_filplassering)
 except:
     button = UI.TaskDialogCommonButtons.None
     result = UI.TaskDialogResult.Ok
-    UI.TaskDialog.Show('Synkronisering avbrutt', 'Fant ikke excel-dokument med IO-liste på plassering angitt i ', button)
+    UI.TaskDialog.Show('Synkronisering avbrutt', 'Fant ikke excel-dokument med IO-liste på plassering angitt i ',
+                       button)
 
-#Finn sheet med IO-liste. Bruker sheet1 dersom ingen treff på navn
+# Finn sheet med IO-liste. Bruker sheet1 dersom ingen treff på navn
 try:
     ws_IO_liste = wb_IO_liste.Worksheets('IO-liste')
 except:
@@ -302,98 +305,95 @@ except:
         ws_IO_liste = wb_IO_liste.Worksheets('IOliste')
     except:
         ws_IO_liste = wb_IO_liste.Worksheets[1]]
-#used = ws_IO_liste.UsedRange
-cols = ws_IO_liste.UsedRange.Columns.Count
-rows = ws_IO_liste.UsedRange.Rows.Count
-#print('cols: '+ str(cols))
-#print('rows: '+ str(rows))
-IOliste =[]
-for i in range(1,rows+1):
-    rad = []
-    for j in range(1,cols+1):
+        # used = ws_IO_liste.UsedRange
+        cols = ws_IO_liste.UsedRange.Columns.Count
+        rows = ws_IO_liste.UsedRange.Rows.Count
+        # print('cols: '+ str(cols))
+        # print('rows: '+ str(rows))
+        IOliste = []
+        for i in range(1, rows + 1):
+            rad = []
+        for j in range(1, cols + 1):
+            rad.append(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
 
-        rad.append(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
+        IOliste.append(rad)
+        # IO_liste_range = ws_IO_liste.Range["A1", chr(ord('@') + cols) + str(rows)]
+        # IO_liste_range = ws_IO_liste.Range["A1", "A" + str(rows)]
+        # IO_liste_range = ws_IO_liste.Range["A1", "A4"]
+        # rad under gir kanskje problemer med array
+        # IOliste = IO_liste_range.Value2
+        # IOliste = IO_liste_range.Text
+        # IOliste = IO_liste_range.Value
 
-    IOliste.append(rad)
-#IO_liste_range = ws_IO_liste.Range["A1", chr(ord('@') + cols) + str(rows)]
-#IO_liste_range = ws_IO_liste.Range["A1", "A" + str(rows)]
-#IO_liste_range = ws_IO_liste.Range["A1", "A4"]
-#rad under gir kanskje problemer med array
-#IOliste = IO_liste_range.Value2
-#IOliste = IO_liste_range.Text
-#IOliste = IO_liste_range.Value
+        # print('default øæøå')
+        print(IOliste)
+        # print('dearray')
+        # print(IOliste[0])
 
-#print('default øæøå')
-print(IOliste)
-#print('dearray')
-#print(IOliste[0])
+        if tag_param is None or tag_param == '':
+            tag_param = 'TAG'
 
+        if sync_guid is None or sync_guid == 0:
+            sync_guid = False
 
-if tag_param is None or tag_param == '':
-    tag_param = 'TAG'
+        DebugPrint('Tag parameter: ' + str(tag_param))
+        DebugPrint('sync_guid: ' + str(sync_guid))
 
-if sync_guid is None or sync_guid == 0:
-    sync_guid = False
+        parametre_shared_name = ['Entreprise', 'Tekstlinje 1', 'Tekstlinje 2', 'Driftsform', 'AV_MMI',
+                                 'BUS-kommunikasjon',
+        'Sikkerhetsbryter', 'Kommentar', 'Fabrikat', 'Modell', 'Merkespenning', 'Merkeeffekt',
+        'Merkestrøm', 'Status', 'Access_TagType', 'Access_TagType beskrivelse', 'IO-er', 'Datablad']
 
-DebugPrint('Tag parameter: ' + str(tag_param))
-DebugPrint('sync_guid: ' + str(sync_guid))
+        print('parametre_shared_name')
+        print(parametre_shared_name)
 
-parametre_shared_name = ['Entreprise', 'Tekstlinje 1', 'Tekstlinje 2', 'Driftsform', 'AV_MMI', 'BUS-kommunikasjon',
-                         'Sikkerhetsbryter', 'Kommentar', 'Fabrikat', 'Modell', 'Merkespenning', 'Merkeeffekt',
-                         'Merkestrøm', 'Status', 'Access_TagType', 'Access_TagType beskrivelse', 'IO-er', 'Datablad']
+        print('parametre_shared_name[12]')
+        print(parametre_shared_name[12])
 
-print('parametre_shared_name')
-print(parametre_shared_name)
+        print('IOliste[0][2]')
+        print(IOliste[0][2])
 
+        if (IOliste[0][2] == parametre_shared_name[12]):
+            print('samme')
 
-print('parametre_shared_name[12]')
-print(parametre_shared_name[12])
+        parametre_guid = ['2c78b93c-2c2d-4bf5-a4cd-b5ab37d40b3f', '88e7a061-da67-44a8-bdab-19fd0e111277',
+    '8bd618c5-4b04-4089-8c1c-d3329c359af7', 'da7bed97-096f-4949-840f-3125bdf40605',
+    'fd766c10-96b3-470b-aa1e-3b1b5b572492', '18f9c00a-61cf-4429-b022-311b2ce6a667',
+    'daf45c3a-35fc-4994-a29a-180483305de1', '3df6ebff-09dd-475f-8ca7-6eb31e697fd5',
+    'c4a831f8-4d5f-46a3-a40c-41f987c910f6', 'e854697d-4f77-4882-b709-72bcc27ee040',
+    'c6dde6a0-ab66-4102-9e09-30ab645e56bb', 'ed0e58dd-3954-47f7-b7eb-f561f2b55ff9',
+    '55e65789-9ba8-40fe-9795-287755774934', '57e99ba0-ecc1-43aa-8de5-60155ae1e99d',
+    '78d27e5c-b652-4ef5-b19c-767de086fe46', '2603489f-989b-4df2-b87f-0cbfbe9d4f5b',
+    '1c7f04a2-ed1a-412e-a7c1-170dde0c203c', 'bf7410c5-c78b-4463-8b39-fefedd6b4ac7']
+    for i, g in enumerate(parametre_guid):
+        parametre_guid[i] = Guid(g)
 
-print('IOliste[0][2]')
-print(IOliste[0][2])
+    parametre_shared_name_lc = [x.lower() for x in parametre_shared_name]
+    # DebugPrint('parametre_shared_name_lc ')
+    # DebugPrint(parametre_shared_name_lc)
 
-if(IOliste[0][2] == parametre_shared_name[12]):
-    print('samme')
+    parametre_signalinfo_lc = ['tekst', 'signaltag', 'type', 'signalkilde', 'spenning', 'tilleggstekst']
+    parametre_ikke_sync_lc = ['sortering', 'tag', 'guid', ' tfm11fksamlet']
 
-parametre_guid = ['2c78b93c-2c2d-4bf5-a4cd-b5ab37d40b3f', '88e7a061-da67-44a8-bdab-19fd0e111277',
-                  '8bd618c5-4b04-4089-8c1c-d3329c359af7', 'da7bed97-096f-4949-840f-3125bdf40605',
-                  'fd766c10-96b3-470b-aa1e-3b1b5b572492', '18f9c00a-61cf-4429-b022-311b2ce6a667',
-                  'daf45c3a-35fc-4994-a29a-180483305de1', '3df6ebff-09dd-475f-8ca7-6eb31e697fd5',
-                  'c4a831f8-4d5f-46a3-a40c-41f987c910f6', 'e854697d-4f77-4882-b709-72bcc27ee040',
-                  'c6dde6a0-ab66-4102-9e09-30ab645e56bb', 'ed0e58dd-3954-47f7-b7eb-f561f2b55ff9',
-                  '55e65789-9ba8-40fe-9795-287755774934', '57e99ba0-ecc1-43aa-8de5-60155ae1e99d',
-                  '78d27e5c-b652-4ef5-b19c-767de086fe46', '2603489f-989b-4df2-b87f-0cbfbe9d4f5b',
-                  '1c7f04a2-ed1a-412e-a7c1-170dde0c203c', 'bf7410c5-c78b-4463-8b39-fefedd6b4ac7']
-for i, g in enumerate(parametre_guid):
-    parametre_guid[i] = Guid(g)
+    # Plan etterhvert: laste inn parametre_project fra kobling_IO_liste_sheet i revit
+    # En enda bedre plan: Last inn alle ubrukte parametre fra IO liste her. Slik at de ikke trenger å defineres noe sted.
+    # parametre_project_name = ['Byggtype', 'MMI']
+    parametre_project_name = []
 
-parametre_shared_name_lc = [x.lower() for x in parametre_shared_name]
-# DebugPrint('parametre_shared_name_lc ')
-# DebugPrint(parametre_shared_name_lc)
+    TAG_guid = '141d33b4-0f91-4dd8-a8b6-be1fa232d39f'
+    TFM11FkSamlet_guid = '6b52eb8b-6935-45f9-a509-bb76724ba272'
 
-parametre_signalinfo_lc = ['tekst', 'signaltag', 'type', 'signalkilde', 'spenning', 'tilleggstekst']
-parametre_ikke_sync_lc = ['sortering', 'tag', 'guid', ' tfm11fksamlet']
+    if tag_param == 'TAG':
+        tguid = Guid(TAG_guid)
+    elif tag_param == 'TFM11FkSamlet':
+        tguid = Guid(TFM11FkSamlet_guid)
+    else:
+        tguid = -1
 
-# Plan etterhvert: laste inn parametre_project fra kobling_IO_liste_sheet i revit
-# En enda bedre plan: Last inn alle ubrukte parametre fra IO liste her. Slik at de ikke trenger å defineres noe sted.
-# parametre_project_name = ['Byggtype', 'MMI']
-parametre_project_name = []
+    # finn kolonne i Io liste med tag/tfm, og finn project parametre
+    tag_kol = -1
 
-TAG_guid = '141d33b4-0f91-4dd8-a8b6-be1fa232d39f'
-TFM11FkSamlet_guid = '6b52eb8b-6935-45f9-a509-bb76724ba272'
-
-if tag_param == 'TAG':
-    tguid = Guid(TAG_guid)
-elif tag_param == 'TFM11FkSamlet':
-    tguid = Guid(TFM11FkSamlet_guid)
-else:
-    tguid = -1
-
-# finn kolonne i Io liste med tag/tfm, og finn project parametre
-tag_kol = -1
-
-
-for j, celle in enumerate(IOliste[0]):
+    for j, celle in enumerate(IOliste[0]):
     try:
         # if celle.lower() == tag_param.lower():
         if celle.lower() == 'tag':  # Bruker tag her og ikke tag_param.lower(), siden det alltid er TAG som brukes i eksport fra database.
@@ -461,8 +461,6 @@ cat_list = [BuiltInCategory.OST_PipeAccessory, BuiltInCategory.OST_MechanicalEqu
 
 transaction = DB.Transaction(doc)
 transaction.Start("Sync eldata")
-
-
 
 # loop all categories
 for cat in cat_list:
@@ -532,9 +530,9 @@ for cat in cat_list:
 
     # find remaining parameters by name
     for param in FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().FirstElement().Parameters:
-        #DetailedDebugPrint('param.Definition.Name : ' + param.Definition.Name)
+        # DetailedDebugPrint('param.Definition.Name : ' + param.Definition.Name)
         for i, name in enumerate(p_IO_cat_uandp_name):
-            #DetailedDebugPrint('name in p_IO_cat_uandp_name: ' + name)
+            # DetailedDebugPrint('name in p_IO_cat_uandp_name: ' + name)
             if param.Definition.Name == name:
                 p_r_IO_cat_kol.append(p_IO_cat_uandp_kol[i])  # r = remaining
                 p_r_IO_cat_name.append(p_IO_cat_uandp_name[i])
@@ -558,7 +556,7 @@ for cat in cat_list:
     # loop elements in category
     EQ = FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().ToElements()
     n_elements = 0
-    
+
     for k in EQ:
         # Tag reset
         tag = ''
@@ -632,7 +630,6 @@ for cat in cat_list:
         else:
             presync_skjema_row = [tag]
         # oppdater_eldata(IO_liste_row, k)
-
 
         # loop shared params
         for i, kol in enumerate(p_s_IO_cat_kol):
@@ -709,8 +706,6 @@ for cat in cat_list:
 
             # Update TAG if GUID sync????
             # Funksjon må legges til her!!
-
-
 
         if cat <> BuiltInCategory.OST_DetailComponents:
             if n_elements == 1:
@@ -863,7 +858,7 @@ for v in viewscollector:
 excel_eksport = [komp_3d, komp_skjema, presync_3d, presync_skjema]
 
 for i in range(4):
-#if 0:
+    # if 0:
     # def SaveListToExcel(filePath, exportData)
     if SaveListToExcel(excel_filenames[i], excel_eksport[i]):
         DetailedDebugPrint('Fileksport success ' + str(i))
@@ -871,20 +866,18 @@ for i in range(4):
         DetailedDebugPrint('Fileksport failed ' + str(i))
         # Lag melding her: 'Kunne ikke eksportere fil ' + excel_filenames[i] + '. Sjekk om fil allerede er åpen, og lukk den, og prøv på ny.'
 
-#OUT = [excel_eksport, excel_filenames, debug, debug_details, debug_summary, errorReport]
+# OUT = [excel_eksport, excel_filenames, debug, debug_details, debug_summary, errorReport]
 # OUT = [parameter, parameter_kolonne]
 # OUT = parameter_kolonne
 
 wb_IO_liste.Close()
-
 
 xl.DisplayAlerts = True
 xl.Visible = True
 
 transaction.Commit()
 
-#wb_IO_liste.close()
-
+# wb_IO_liste.close()
 
 
 button = UI.TaskDialogCommonButtons.None
