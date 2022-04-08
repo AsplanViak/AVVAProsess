@@ -304,10 +304,8 @@ except:
     except:
         ws_IO_liste = wb_IO_liste.Worksheets[1]
         # used = ws_IO_liste.UsedRange
-        cols = ws_IO_liste.UsedRange.Columns.Count
-        rows = ws_IO_liste.UsedRange.Rows.Count
-        # print('cols: '+ str(cols))
-        # print('rows: '+ str(rows))
+cols = ws_IO_liste.UsedRange.Columns.Count
+rows = ws_IO_liste.UsedRange.Rows.Count
 
 IOliste = []
 for i in range(1, rows + 1):
@@ -333,17 +331,13 @@ parametre_shared_name = ['Entreprise', 'Tekstlinje 1', 'Tekstlinje 2', 'Driftsfo
                          'Sikkerhetsbryter', 'Kommentar', 'Fabrikat', 'Modell', 'Merkespenning', 'Merkeeffekt',
                          'Merkestrøm', 'Status', 'Access_TagType', 'Access_TagType beskrivelse', 'IO-er', 'Datablad']
 
-print('parametre_shared_name')
-print(parametre_shared_name)
+#print('parametre_shared_name')
+#print(parametre_shared_name)
+#print('IOliste[0][2]')
+#print(IOliste[0][2])
 
-print('parametre_shared_name[12]')
-print(parametre_shared_name[12])
-
-print('IOliste[0][2]')
-print(IOliste[0][2])
-
-if (IOliste[0][2] == parametre_shared_name[12]):
-    print('samme')
+#if (IOliste[0][2] == parametre_shared_name[12]):
+#    print('samme')
 
 parametre_guid = ['2c78b93c-2c2d-4bf5-a4cd-b5ab37d40b3f', '88e7a061-da67-44a8-bdab-19fd0e111277',
                   '8bd618c5-4b04-4089-8c1c-d3329c359af7', 'da7bed97-096f-4949-840f-3125bdf40605',
