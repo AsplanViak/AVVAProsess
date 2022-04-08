@@ -78,37 +78,6 @@ from Autodesk.Revit.DB import Plumbing, IFamilyLoadOptions
 def measure(startpoint, point):
     return startpoint.DistanceTo(point)
 
-print(1)
-a = 'רזו'
-print('רזו')
-print(a)
-print('encoded: '+ a.encode('Windows-1252'))
-b = a.encode('Windows-1252')
-print('redecoded' + b.decode('Windows-1252'))
-
-clist  = ['זרו', 'abc']
-print(clist)
-
-print('IO liste')
-wb_IO_liste = xl.Workbooks.Open('C:\Test\IO-liste.xlsx')
-#linje under mו rettes pו senere
-ws_IO_liste = wb_IO_liste.Worksheets[1]
-#used = ws_IO_liste.UsedRange
-cols = ws_IO_liste.UsedRange.Columns.Count
-rows = ws_IO_liste.UsedRange.Rows.Count
-#print('cols: '+ str(cols))
-#print('rows: '+ str(rows))
-IOliste =[]
-#if (0):
-for i in range(1,rows):
-    rad = []
-    for j in range(1,cols):
-        #rad.append(DecodeIfString(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Value2))
-        #rad.append(DecodeIfString(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text))
-        #rad.append(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
-        print('Undecoded :' + ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
-        #print('Decorded :' + DecodeIfString(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text))
-    IOliste.append(rad)
-
+print('gitkloning dolly')
 
 
