@@ -194,7 +194,8 @@ if (har_funnet_IOliste_ark_revit == 0):
     UI.TaskDialog.Show('Synkronisering avbrutt',
                        'Fant ikke noe ark med navn "Kobling mot IO-liste" som angir filplassering IO-liste', button)
     # Sjekk at rad under ikke lukker revit!!!
-    sys.exit(0)
+    #sys.exit(0)
+    exit()
 
 # Filename for excel exports
 filename = Document.PathName.GetValue(doc)
