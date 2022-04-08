@@ -152,8 +152,8 @@ def SaveListToExcel(filePath, exportData):
         xlrange.Value2 = a
         wb.SaveAs(filePath)
         # wb.Close(False)
-        #wb.Close()
-        print('excel eksport ok')
+        wb.Close()
+        #print('excel eksport ok')
         return True
     except:
         print('Feil med lagring av excel-eksport')
@@ -848,6 +848,7 @@ for i in range(4):
         DetailedDebugPrint('Fileksport success ' + str(i))
     else:
         DetailedDebugPrint('Fileksport failed ' + str(i))
+        DetailedDebugPrint(excel_filenames[i])
         # Lag melding her: 'Kunne ikke eksportere fil ' + excel_filenames[i] + '. Sjekk om fil allerede er åpen, og lukk den, og prøv på ny.'
 
 # OUT = [excel_eksport, excel_filenames, debug, debug_details, debug_summary, errorReport]
