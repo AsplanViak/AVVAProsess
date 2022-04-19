@@ -767,8 +767,8 @@ def MainFunction():
             # komp_skjema
             else:
                 # Finn family
-                DebugPrint('skjemaelement')
-                DebugPrint(tag)
+                #DebugPrint('skjemaelement')
+                #DebugPrint(tag)
                 # Finn family
                 try:
                     # family = k.Symbol.FamilyName
@@ -800,14 +800,14 @@ def MainFunction():
         viewelemcollector = DB.FilteredElementCollector(doc, v.Id).ToElementIds()
         vparam = v.get_Parameter(DB.BuiltInParameter.VIEWPORT_SHEET_NUMBER)  # type: DB.Parameter
         # loop komp 3d
-        DebugPrint('Tegning: ' + vparam.AsString())
+        #DebugPrint('Tegning: ' + vparam.AsString())
         for n, e in enumerate(komp_3d):
             if n == 0:
                 # må hoppe over tabell headers
                 continue
             # DebugPrint('Tag : ' + e[2])
             if e[0] in viewelemcollector:
-                DebugPrint('Treff ' + vparam.AsString() + ' - ' + e[2])
+                #DebugPrint('Treff ' + vparam.AsString() + ' - ' + e[2])
                 if komp_3d[n][9] == '':
                     komp_3d[n][9] = vparam.AsString()
                 else:
@@ -818,7 +818,7 @@ def MainFunction():
                 # må hoppe over tabell headers
                 continue
             if e[0] in viewelemcollector:
-                DebugPrint('Treff ' + vparam.AsString() + ' - ' + e[1])
+                #DebugPrint('Treff ' + vparam.AsString() + ' - ' + e[1])
                 if komp_skjema[n][4] == '':
                     komp_skjema[n][4] = vparam.AsString()
                 else:
