@@ -126,9 +126,9 @@ def SaveListToExcel(filePath, exportData):
 def MainFunction():
 
     #kritiske feil:
-    errorReport = []
+    errorReport = ""
     #ikke-kritiske feil og generell info:
-    summaryReport = []
+    summaryReport = ""
 
     # Finn IO liste og andre parametre i ark "Kobling mot IO-liste"
     har_funnet_IOliste_ark_revit = 0
@@ -170,7 +170,7 @@ def MainFunction():
 
     #Avbryt script dersom ikke IO-liste regneark er definert.
     if (har_funnet_IOliste_ark_revit == 0):
-        errorReport.append('Fant ikke noe ark med navn "Kobling mot IO-liste" som angir filplassering IO-liste')
+        errorReport += 'Fant ikke noe ark med navn "Kobling mot IO-liste" som angir filplassering IO-liste'
         button = UI.TaskDialogCommonButtons.None
         result = UI.TaskDialogResult.Ok
         UI.TaskDialog.Show('Synkronisering avbrutt',
@@ -280,21 +280,20 @@ def MainFunction():
     try:
         rooms = FilteredElementCollector(linkDoc).WherePasses(filter).WhereElementIsNotElementType().ToElements()
         if len(rooms) == 0:
-            summaryReport.append("Feil: Mangler definesjoner på rom i link. Kan ikke sende info om romplassering til database.")
+            summaryReport += "Feil: Mangler definesjoner på rom i link. Kan ikke sende info om romplassering til database."
 
     except:
         # if error accurs anywhere in the process catch it
         import traceback
-        summaryReport.append(traceback.format_exc())
+        summaryReport += traceback.format_exc()
         rooms = []
-        summaryReport.append(
-            "Feil : Kan ikke lese romdata fra link. Kan skyldes at ARK/RIB link ikke er lastet inn, eller er i lukket workset.")
+        summaryReport += "Feil : Kan ikke lese romdata fra link. Kan skyldes at ARK/RIB link ikke er lastet inn, eller er i lukket workset."
 
     # LES INN IO-LISTE FRA EXCEL
     try:
         wb_IO_liste = xl.Workbooks.Open(IO_liste_filplassering)
     except:
-        errorReport.append('Fant ikke excel-dokument med IO-liste på plassering angitt i ark "kobling mot IO-liste" ')
+        errorReport += 'Fant ikke excel-dokument med IO-liste på plassering angitt i ark "kobling mot IO-liste" '
         button = UI.TaskDialogCommonButtons.None
         result = UI.TaskDialogResult.Ok
         UI.TaskDialog.Show('Synkronisering avbrutt', errorReport, button)
@@ -390,7 +389,7 @@ def MainFunction():
     # sjekk om det ble funnet kolonne med tag/tfm
     if tag_kol == (-1):
         # tag_kol not found
-        errorReport.append('Fant ikke kolonne ved navn ' + tag_param + ' i IO liste excel-ark. Sync avbrutt')
+        errorReport += 'Fant ikke kolonne ved navn ' + tag_param + ' i IO liste excel-ark. Sync avbrutt'
         ## må legge til en avbryt-funksjon her
         button = UI.TaskDialogCommonButtons.None
         result = UI.TaskDialogResult.Ok
@@ -566,7 +565,7 @@ def MainFunction():
                     tag = r"'" + '=' + SystemVar + '-' + TFM11FkKompGruppe + TFM11FkKompLNR
                 except:
                     DetailedDebugPrint('feil ved sammenslåing/avlesing av parametre som inngår i TFM for skjema')
-                    errorReport.append('feil ved sammenslåing/avlesing av parametre som inngår i TFM for skjema')
+                    errorReport += 'feil ved sammenslåing/avlesing av parametre som inngår i TFM for skjema'
                     continue
             DebugPrint('Tag: ' + tag)
 
@@ -837,7 +836,7 @@ def MainFunction():
         else:
             DetailedDebugPrint('Fileksport failed ' + str(i))
             DetailedDebugPrint(excel_filenames[i])
-            summaryReport.append('Kunne ikke eksportere fil ' + excel_filenames[i] + '. Sjekk om fil allerede er åpen, og lukk den, og prøv på ny.')
+            summaryReport += 'Kunne ikke eksportere fil ' + excel_filenames[i] + '. Sjekk om fil allerede er åpen, og lukk den, og prøv på ny.'
 
 
     wb_IO_liste.Close()
@@ -849,8 +848,8 @@ def MainFunction():
 
     button = UI.TaskDialogCommonButtons.None
     result = UI.TaskDialogResult.Ok
-    if summaryReport == []:
-        summaryReport.append('Ingen feil')
+    if summaryReport == "":
+        summaryReport = 'Ingen feil'
     UI.TaskDialog.Show('Synkronisering eldata ferdig', summaryReport, button)
 
     return
