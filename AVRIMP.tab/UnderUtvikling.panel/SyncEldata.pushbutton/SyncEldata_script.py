@@ -71,7 +71,7 @@ import datetime
 # sys.path.append(pyt_path)
 
 debug_mode = 1
-summary_mode = 1
+summary_mode = 0
 
 #printer en del meldinger til terminal i revit dersom man setter debug_mode til 1
 def DebugPrint(tekst):
