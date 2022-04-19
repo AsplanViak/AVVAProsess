@@ -142,16 +142,31 @@ def MainFunction():
             DebugPrint('IO-liste_filplassering :' + IO_liste_filplassering)
             Datablader_filplassering = sheet.LookupParameter('Datablader_filplassering').AsString()
             DebugPrint('Datablader_filplassering :' + Datablader_filplassering)
-            tag_param = sheet.LookupParameter('AV_Tag-parameter_sync').AsString()
-            DebugPrint('tag_param: ' + tag_param)
-            sync_guid = sheet.LookupParameter('AV_sync_mot_GUID').AsInteger()
-            DebugPrint('Sync mot GUID: ' + str(sync_guid))
+            try:
+                tag_param = sheet.LookupParameter('AV_Tag-parameter_sync').AsString()
+                DebugPrint('tag_param: ' + tag_param)
+            except:
+                tag_param = 'TAG'
+                DebugPrint('Fant ikke tag_parameter  i sheet. Satt som default til: ' + tag_param)
+            try:
+                sync_guid = sheet.LookupParameter('AV_sync_mot_GUID').AsInteger()
+                DebugPrint('Sync mot GUID: ' + str(sync_guid))
+            except:
+                sync_guid = False
+                DebugPrint('Fant ikke parameter for sync mot GUID. Satt som default til: ' + str(sync_guid))
             try:
                 AV_room_link_str = sheet.LookupParameter('AV_room_link_str').AsString()
             except:
                 AV_room_link_str = 'RIB'
             DebugPrint('AV_room_link_str: ' + AV_room_link_str)
             break
+
+    #if tag_param is None or tag_param == '':
+    #    tag_param = 'TAG'
+
+    #if sync_guid is None or sync_guid == 0:
+    #    sync_guid = False
+
 
     #Avbryt script dersom ikke IO-liste regneark er definert.
     if (har_funnet_IOliste_ark_revit == 0):
@@ -306,12 +321,6 @@ def MainFunction():
 
     print(IOliste)
 
-    if tag_param is None or tag_param == '':
-        tag_param = 'TAG'
-
-    if sync_guid is None or sync_guid == 0:
-        sync_guid = False
-
     DebugPrint('Tag parameter: ' + str(tag_param))
     DebugPrint('sync_guid: ' + str(sync_guid))
 
@@ -345,9 +354,11 @@ def MainFunction():
     TAG_guid = '141d33b4-0f91-4dd8-a8b6-be1fa232d39f'
     TFM11FkSamlet_guid = '6b52eb8b-6935-45f9-a509-bb76724ba272'
 
-    if tag_param == 'TAG':
+    if upper(tag_param) == 'TAG':
         tguid = Guid(TAG_guid)
     elif tag_param == 'TFM11FkSamlet':
+        tguid = Guid(TFM11FkSamlet_guid)
+    elif upper(tag_param) == 'TFM':
         tguid = Guid(TFM11FkSamlet_guid)
     else:
         tguid = -1
