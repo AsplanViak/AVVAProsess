@@ -354,11 +354,11 @@ def MainFunction():
     TAG_guid = '141d33b4-0f91-4dd8-a8b6-be1fa232d39f'
     TFM11FkSamlet_guid = '6b52eb8b-6935-45f9-a509-bb76724ba272'
 
-    if upper(tag_param) == 'TAG':
+    if tag_param.upper() == 'TAG':
         tguid = Guid(TAG_guid)
     elif tag_param == 'TFM11FkSamlet':
         tguid = Guid(TFM11FkSamlet_guid)
-    elif upper(tag_param) == 'TFM':
+    elif tag_param.upper() == 'TFM':
         tguid = Guid(TFM11FkSamlet_guid)
     else:
         tguid = -1
