@@ -123,7 +123,7 @@ def SaveListToExcel(filePath, exportData):
         return False
 
 
-def MainFunction()
+def MainFunction():
 
     #kritiske feil:
     errorReport = []
@@ -189,7 +189,7 @@ def MainFunction()
     mappe_finnes = os.path.isdir(mappe + '\Backup_presync\\')
     #lag mappe dersom ikke finnes
     if mappe_finnes == False :
-        os.mkdir((mappe + '\Backup_presync\\')
+        os.mkdir(mappe + '\Backup_presync\\')
 
     #klargjør filnavn for excel-eksport. Selve eksporten kjøres helt mot slutten av script
     excel_filenames = [mappe + '\Komponenter_' + prosjektnavn + '.xlsx',
