@@ -70,14 +70,17 @@ import datetime
 # pyt_path = r'C:\Program Files (x86)\IronPython 2.7\Lib'
 # sys.path.append(pyt_path)
 
-#debug_mode = 0
-#summary_mode = 0
+try:
+    debug_mode_id = GlobalParametersManager.FindByName(doc, "debug_mode")
+    debug_mode = doc.GetElement(debug_mode_id).GetValue().Value
+except:
+    debug_mode = 0
 
-debug_mode_id = GlobalParametersManager.FindByName(doc, "debug_mode")
-debug_mode = doc.GetElement(debug_mode_id).GetValue().Value
-summary_mode_id = GlobalParametersManager.FindByName(doc, "summary_mode")
-summary_mode = doc.GetElement(summary_mode_id).GetValue().Value
-
+try:
+    summary_mode_id = GlobalParametersManager.FindByName(doc, "summary_mode")
+    summary_mode = doc.GetElement(summary_mode_id).GetValue().Value
+except:
+    summary_mode = 0
 
 #printer en del meldinger til terminal i revit dersom man setter debug_mode til 1
 def DebugPrint(tekst):
