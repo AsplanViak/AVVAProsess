@@ -631,8 +631,10 @@ def MainFunction():
                 presync_top_row = ['TAG']
             # lag tom list til presync-data for dette elementet
             if cat <> BuiltInCategory.OST_DetailComponents:
+                DebugPrint('Ny rad presync - 3d. Tag: ' + tag)
                 presync_3d_row = [tag]
             else:
+                DebugPrint('Ny rad presync - skjema. Tag: ' + tag)
                 presync_skjema_row = [tag]
 
             # oppdater_eldata(IO_liste_row, k)
@@ -883,7 +885,7 @@ def MainFunction():
     button = UI.TaskDialogCommonButtons.None
     result = UI.TaskDialogResult.Ok
     if summaryReport == "":
-        summaryReport = 'Ingen feil'
+        summaryReport = 'Synkronisering gjennomført uten feil'
     UI.TaskDialog.Show('Synkronisering eldata ferdig', summaryReport, button)
 
     return
