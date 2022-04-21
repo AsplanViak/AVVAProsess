@@ -664,16 +664,16 @@ def MainFunction():
                         DebugPrint(ex.message)
 
             # loop remaining params
-            for i, kol in enumerate(p_r_IO_cat_kol):
+            for j, kol in enumerate(p_r_IO_cat_kol):
                 # presync header
                 if n_elements == 1:
-                    presync_top_row.append(p_r_IO_cat_name[i])
+                    presync_top_row.append(p_r_IO_cat_name[j])
                 # presync data
                 try:
                     if cat <> BuiltInCategory.OST_DetailComponents:
-                        presync_3d_row.append(k.LookupParameter(p_r_IO_cat_name[i]).AsString())
+                        presync_3d_row.append(k.LookupParameter(p_r_IO_cat_name[j]).AsString())
                     else:
-                        presync_skjema_row.append(k.LookupParameter(p_r_IO_cat_name[i]).AsString())
+                        presync_skjema_row.append(k.LookupParameter(p_r_IO_cat_name[j]).AsString())
                 except:
                     if cat <> BuiltInCategory.OST_DetailComponents:
                         presync_3d_row.append('')
@@ -686,14 +686,14 @@ def MainFunction():
                         IOliste_tekst = ' '
                     DebugPrint('IOliste_tekst: ' + str(IOliste_tekst))
                     try:
-                        res = k.LookupParameter(p_r_IO_cat_name[i]).Set(IOliste_tekst)
+                        res = k.LookupParameter(p_r_IO_cat_name[j]).Set(IOliste_tekst)
                         if (res):
-                            DebugPrint('remaining parameter ' + p_r_IO_cat_name[i] + ': ok')
+                            DebugPrint('remaining parameter ' + p_r_IO_cat_name[j] + ': ok')
                         else:
-                            DebugPrint('remaining parameter ' + p_r_IO_cat_name[i] + ': feil')
+                            DebugPrint('remaining parameter ' + p_r_IO_cat_name[j] + ': feil')
                     except Exception, ex:
-                        DebugPrint('remaining parameter ' + p_r_IO_cat_name[i] + ': exception')
-                        DebugPrint('k.LookupParameter(' + str(p_r_IO_cat_name[i]) + ').Set(' + str(IOliste_tekst) + ')')
+                        DebugPrint('remaining parameter ' + p_r_IO_cat_name[j] + ': exception')
+                        DebugPrint('k.LookupParameter(' + str(p_r_IO_cat_name[j]) + ').Set(' + str(IOliste_tekst) + ')')
                         DebugPrint(ex.message)
 
                 # Update TAG if GUID sync????
