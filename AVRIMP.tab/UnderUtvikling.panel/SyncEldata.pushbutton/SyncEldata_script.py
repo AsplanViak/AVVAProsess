@@ -333,6 +333,7 @@ def MainFunction():
                 #linje under fungerer kun til og med kolonne z
                 rad.append(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
             except:
+                a = 1
                 #DebugPrint("Feil ved innlesing av IO-liste rad " + str(i) + " og kolonne " + str(j))
 
         IOliste.append(rad)
