@@ -73,9 +73,9 @@ import datetime
 #debug_mode = 0
 #summary_mode = 0
 
-debug_mode_id = GlobalParameterManager.FindByName("debug_mode")
+debug_mode_id = GlobalParametersManager.FindByName("debug_mode")
 debug_mode = doc.GetElement(debug_mode_id).GetValue().Value
-summary_mode_id = GlobalParameterManager.FindByName("summary_mode")
+summary_mode_id = GlobalParametersManager.FindByName("summary_mode")
 summary_mode = doc.GetElement(summary_mode_id).GetValue().Value
 
 
