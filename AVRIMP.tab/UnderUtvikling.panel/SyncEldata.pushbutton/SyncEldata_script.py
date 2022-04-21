@@ -206,7 +206,7 @@ def MainFunction():
     DebugPrint('Mappe :' + mappe)
 
     x = datetime.datetime.now()
-    timestamp = x.strftime("%Y %H-%M")
+    timestamp = x.strftime("%y%m%d %H-%M")
     DebugPrint(timestamp)
 
     #Sjekk om mappe 'Bakcup-presync' finnes
@@ -216,10 +216,11 @@ def MainFunction():
         os.mkdir(mappe + '\Backup_presync\\')
 
     #klargjør filnavn for excel-eksport. Selve eksporten kjøres helt mot slutten av script
+    prosjektnavn_uten_nr = ''.join([i for i in prosjektnavn if not i.isdigit()])
     excel_filenames = [mappe + '\Komponenter_' + prosjektnavn + '.xlsx',
                        mappe + '\Komponenter_skjema_' + prosjektnavn + '.xlsx',
-                       mappe + '\Backup_presync\\' + prosjektnavn + '_3D - ' + timestamp + '.xlsx',
-                       mappe + '\Backup_presync\\' + prosjektnavn + '_skjema - ' + timestamp + '.xlsx']
+                       mappe + '\Backup_presync\\' + prosjektnavn_uten_nr + '_3D_' + timestamp + '.xlsx',
+                       mappe + '\Backup_presync\\' + prosjektnavn_uten_nr + '_skjema_' + timestamp + '.xlsx']
 
     #Liste over alle komponenter i 3d. Skal eksporters til excel og importeres til database.
     komp_3d = []
@@ -703,6 +704,7 @@ def MainFunction():
                     presync_3d.append(presync_top_row)
                 presync_3d.append(presync_3d_row)
             else:
+                DebugPrint('skjemaleement presync')
                 if n_elements == 1:
                     presync_skjema.append(presync_top_row)
                 presync_skjema.append(presync_skjema_row)
@@ -781,7 +783,7 @@ def MainFunction():
             # komp_skjema
             else:
                 # Finn family
-                #DebugPrint('skjemaelement')
+                DebugPrint('skjemaelement')
                 #DebugPrint(tag)
                 # Finn family
                 try:
