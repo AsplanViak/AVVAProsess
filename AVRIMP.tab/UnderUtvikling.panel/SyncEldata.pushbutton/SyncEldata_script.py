@@ -227,8 +227,8 @@ def MainFunction():
     prosjektnavn_uten_nr = prosjektnavn_uten_nr[2:]
     excel_filenames = [mappe + '\Komponenter_' + prosjektnavn + '.xlsx',
                        mappe + '\Komponenter_skjema_' + prosjektnavn + '.xlsx',
-                       mappe + '\Backup_presync\\' + prosjektnavn_uten_nr + '_skjema_' + timestamp + '.xlsx',
-                       mappe + '\Backup_presync\\' + prosjektnavn_uten_nr + '_3D_' + timestamp + '.xlsx']
+                       mappe + '\Backup_presync\\' + prosjektnavn_uten_nr + '_3D_' + timestamp + '.xlsx',
+                       mappe + '\Backup_presync\\' + prosjektnavn_uten_nr + '_skjema_' + timestamp + '.xlsx']
 
     #Liste over alle komponenter i 3d. Skal eksporters til excel og importeres til database.
     komp_3d = []
@@ -857,19 +857,20 @@ def MainFunction():
     ############Eksporter til excel
     #####################################################
 
-    #excel_eksport = [komp_3d, komp_skjema, presync_3d, presync_skjema]
-    excel_eksport = [komp_3d, komp_skjema, presync_skjema, presync_3d]
+    excel_eksport = [komp_3d, komp_skjema, presync_3d, presync_skjema]
+
 
     DebugPrint('presync skjema')
     DebugPrint(presync_skjema)
 
     for i in range(4):
-        if SaveListToExcel(excel_filenames[i], excel_eksport[i]):
-            DebugPrint('Fileksport success ' + str(i))
-        else:
-            DebugPrint('Fileksport failed ' + str(i))
-            DebugPrint(excel_filenames[i])
-            summaryReport += 'Kunne ikke eksportere fil ' + excel_filenames[i] + '. Sjekk om fil allerede er åpen, og lukk den, og prøv på ny.'
+        if excel_eksport[i] <> []:
+            if SaveListToExcel(excel_filenames[i], excel_eksport[i]):
+                DebugPrint('Fileksport success ' + str(i))
+            else:
+                DebugPrint('Fileksport failed ' + str(i))
+                DebugPrint(excel_filenames[i])
+                summaryReport += 'Kunne ikke eksportere fil ' + excel_filenames[i] + '. Sjekk om fil allerede er åpen, og lukk den, og prøv på ny.'
 
 
     wb_IO_liste.Close()
