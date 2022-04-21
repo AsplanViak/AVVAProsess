@@ -299,9 +299,11 @@ def MainFunction():
         summaryReport += traceback.format_exc()
         rooms = []
         summaryReport += "Feil : Kan ikke lese romdata fra link. Kan skyldes at ARK/RIB link ikke er lastet inn, eller er i lukket workset."
-    ###########################
+
+
+    #################################################
     # LES INN IO-LISTE FRA EXCEL
-    ##############################
+    #################################################
     try:
         wb_IO_liste = xl.Workbooks.Open(IO_liste_filplassering)
     except:
@@ -326,10 +328,12 @@ def MainFunction():
     for i in range(1, rows + 1):
         rad = []
         for j in range(1, cols + 1):
+            DebugPrint(chr(ord('@') + j))
             try:
+                #linje under fungerer kun til og med kolonne z
                 rad.append(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
             except:
-                DebugPrint("Feil ved print av rad " + str(i) + " og kolonne " + str(j))
+                #DebugPrint("Feil ved innlesing av IO-liste rad " + str(i) + " og kolonne " + str(j))
 
         IOliste.append(rad)
 
@@ -848,10 +852,10 @@ def MainFunction():
 
     for i in range(4):
         if SaveListToExcel(excel_filenames[i], excel_eksport[i]):
-            SummaryPrint('Fileksport success ' + str(i))
+            DebugPrint('Fileksport success ' + str(i))
         else:
-            SummaryPrint('Fileksport failed ' + str(i))
-            SummaryPrint(excel_filenames[i])
+            DebugPrint('Fileksport failed ' + str(i))
+            DebugPrint(excel_filenames[i])
             summaryReport += 'Kunne ikke eksportere fil ' + excel_filenames[i] + '. Sjekk om fil allerede er åpen, og lukk den, og prøv på ny.'
 
 
