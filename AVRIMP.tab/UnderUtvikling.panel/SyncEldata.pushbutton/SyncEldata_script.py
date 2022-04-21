@@ -66,6 +66,8 @@ from System import Array
 import Autodesk
 from Autodesk.Revit.UI import TaskDialog
 import datetime
+import string
+
 
 # pyt_path = r'C:\Program Files (x86)\IronPython 2.7\Lib'
 # sys.path.append(pyt_path)
