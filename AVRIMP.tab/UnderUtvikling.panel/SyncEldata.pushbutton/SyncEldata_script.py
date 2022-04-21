@@ -224,10 +224,11 @@ def MainFunction():
 
     #klargjør filnavn for excel-eksport. Selve eksporten kjøres helt mot slutten av script
     prosjektnavn_uten_nr = ''.join([i for i in prosjektnavn if not i.isdigit()])
+    prosjektnavn_uten_nr = prosjektnavn_uten_nr[2:]
     excel_filenames = [mappe + '\Komponenter_' + prosjektnavn + '.xlsx',
                        mappe + '\Komponenter_skjema_' + prosjektnavn + '.xlsx',
-                       mappe + '\Backup_presync\\' + prosjektnavn_uten_nr + '_3D_' + timestamp + '.xlsx',
-                       mappe + '\Backup_presync\\' + prosjektnavn_uten_nr + '_skjema_' + timestamp + '.xlsx']
+                       mappe + '\Backup_presync\\' + prosjektnavn_uten_nr + '_skjema_' + timestamp + '.xlsx',
+                       mappe + '\Backup_presync\\' + prosjektnavn_uten_nr + '_3D_' + timestamp + '.xlsx']
 
     #Liste over alle komponenter i 3d. Skal eksporters til excel og importeres til database.
     komp_3d = []
@@ -856,7 +857,11 @@ def MainFunction():
     ############Eksporter til excel
     #####################################################
 
-    excel_eksport = [komp_3d, komp_skjema, presync_3d, presync_skjema]
+    #excel_eksport = [komp_3d, komp_skjema, presync_3d, presync_skjema]
+    excel_eksport = [komp_3d, komp_skjema, presync_skjema, presync_3d]
+
+    DebugPrint('presync skjema')
+    DebugPrint(presync_skjema)
 
     for i in range(4):
         if SaveListToExcel(excel_filenames[i], excel_eksport[i]):
