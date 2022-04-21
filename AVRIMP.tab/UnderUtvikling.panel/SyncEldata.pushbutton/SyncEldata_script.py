@@ -70,8 +70,14 @@ import datetime
 # pyt_path = r'C:\Program Files (x86)\IronPython 2.7\Lib'
 # sys.path.append(pyt_path)
 
-debug_mode = 0
-summary_mode = 0
+#debug_mode = 0
+#summary_mode = 0
+
+debug_mode_id = GlobalParameterManager.FindByName("debug_mode")
+debug_mode = doc.GetElement(debug_mode_id).GetValue().Value
+summary_mode_id = GlobalParameterManager.FindByName("summary_mode")
+summary_mode = doc.GetElement(summary_mode_id).GetValue().Value
+
 
 #printer en del meldinger til terminal i revit dersom man setter debug_mode til 1
 def DebugPrint(tekst):
@@ -80,7 +86,7 @@ def DebugPrint(tekst):
     return 1
 
 #printer en del meldinger til terminal i revit dersom man setter summary_mode til 1
-def DetailedDebugPrint(tekst):
+def SummaryPrint(tekst):
     if summary_mode == 1:
         print(tekst)
     return 1
@@ -273,6 +279,7 @@ def MainFunction():
                 DebugPrint("link_score: " + str(link_score))
                 linkDoc = i.GetLinkDocument()
 
+
     cat_list = [BuiltInCategory.OST_Rooms]
     typed_list = List[BuiltInCategory](cat_list)
     filter = ElementMulticategoryFilter(typed_list)
@@ -288,8 +295,9 @@ def MainFunction():
         summaryReport += traceback.format_exc()
         rooms = []
         summaryReport += "Feil : Kan ikke lese romdata fra link. Kan skyldes at ARK/RIB link ikke er lastet inn, eller er i lukket workset."
-
+    ###########################
     # LES INN IO-LISTE FRA EXCEL
+    ##############################
     try:
         wb_IO_liste = xl.Workbooks.Open(IO_liste_filplassering)
     except:
@@ -314,7 +322,10 @@ def MainFunction():
     for i in range(1, rows + 1):
         rad = []
         for j in range(1, cols + 1):
-            rad.append(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
+            try:
+                rad.append(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
+            except:
+                DebugPrint("Feil ved print av rad " + str(i) + " og kolonne " + str(j))
 
         IOliste.append(rad)
 
@@ -441,7 +452,7 @@ def MainFunction():
     # loop all categories
     for cat in cat_list:
         DebugPrint(cat)
-        DetailedDebugPrint(cat)
+        SummaryPrint(cat)
 
         # sjekk om tag/tfm parameter finnes, og om den er shared, og om den er definert med samme GUID som den riktige shared parameteren
         tag_cat_status = (-1)
@@ -506,9 +517,9 @@ def MainFunction():
 
         # find remaining parameters by name
         for param in FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().FirstElement().Parameters:
-            # DetailedDebugPrint('param.Definition.Name : ' + param.Definition.Name)
+            # SummaryPrint('param.Definition.Name : ' + param.Definition.Name)
             for i, name in enumerate(p_IO_cat_uandp_name):
-                # DetailedDebugPrint('name in p_IO_cat_uandp_name: ' + name)
+                # SummaryPrint('name in p_IO_cat_uandp_name: ' + name)
                 if param.Definition.Name == name:
                     p_r_IO_cat_kol.append(p_IO_cat_uandp_kol[i])  # r = remaining
                     p_r_IO_cat_name.append(p_IO_cat_uandp_name[i])
@@ -543,7 +554,7 @@ def MainFunction():
                         tguid).AsString() == '=-' or k.get_Parameter(tguid).AsString() == '' or k.get_Parameter(
                     tguid).AsString() is None:
                     # gå til neste element dersom blank tag/tfm
-                    DetailedDebugPrint('blank tag/tfm (shared)')
+                    SummaryPrint('blank tag/tfm (shared)')
                     continue
                 tag = k.get_Parameter(tguid).AsString()
                 # DebugPrint('k.get_Parameter(tguid).AsString() : ' + k.get_Parameter(tguid).AsString())
@@ -553,7 +564,7 @@ def MainFunction():
                         tag_param).AsString() == '=-' or k.LookupParameter(tag_param).AsString() == '' or k.LookupParameter(
                     tag_param).AsString() is None:
                     # gå til neste element dersom blank tag/tfm
-                    DetailedDebugPrint('blank tag/tfm (string)')
+                    SummaryPrint('blank tag/tfm (string)')
                     continue
                 tag = k.LookupParameter(tag_param).AsString()
             elif tag_cat_status == 2:
@@ -564,7 +575,7 @@ def MainFunction():
                     TFM11FkKompGruppe = i.Symbol.LookupParameter('TFM11FkKompGruppe').AsString()
                     tag = r"'" + '=' + SystemVar + '-' + TFM11FkKompGruppe + TFM11FkKompLNR
                 except:
-                    DetailedDebugPrint('feil ved sammenslåing/avlesing av parametre som inngår i TFM for skjema')
+                    SummaryPrint('feil ved sammenslåing/avlesing av parametre som inngår i TFM for skjema')
                     errorReport += 'feil ved sammenslåing/avlesing av parametre som inngår i TFM for skjema'
                     continue
             DebugPrint('Tag: ' + tag)
@@ -595,7 +606,7 @@ def MainFunction():
                     if tag == IOliste[b][tag_kol]:
                         IO_liste_row = b
                         break
-            DetailedDebugPrint('IO_liste_row :' + str(IO_liste_row))
+            SummaryPrint('IO_liste_row :' + str(IO_liste_row))
 
             # Presync data
             # lag tom header list for denne category (antall parametre kan variere mellom categories)
@@ -832,10 +843,10 @@ def MainFunction():
 
     for i in range(4):
         if SaveListToExcel(excel_filenames[i], excel_eksport[i]):
-            DetailedDebugPrint('Fileksport success ' + str(i))
+            SummaryPrint('Fileksport success ' + str(i))
         else:
-            DetailedDebugPrint('Fileksport failed ' + str(i))
-            DetailedDebugPrint(excel_filenames[i])
+            SummaryPrint('Fileksport failed ' + str(i))
+            SummaryPrint(excel_filenames[i])
             summaryReport += 'Kunne ikke eksportere fil ' + excel_filenames[i] + '. Sjekk om fil allerede er åpen, og lukk den, og prøv på ny.'
 
 
