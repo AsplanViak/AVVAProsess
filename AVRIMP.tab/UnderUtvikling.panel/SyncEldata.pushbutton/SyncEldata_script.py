@@ -107,6 +107,11 @@ xl = Excel.ApplicationClass()
 xl.Visible = False
 xl.DisplayAlerts = False
 
+#funksjon for å returnere kolonnenavn for excel.
+def n2a(n,b=string.ascii_uppercase):
+   d, m = divmod(n,len(b))
+   return n2a(d-1,b)+b[m] if d else b[m]
+
 #funksjon for å lagre dataset (2d-lister) til excel, og lukke dem etterpå
 def SaveListToExcel(filePath, exportData):
     try:
@@ -328,13 +333,13 @@ def MainFunction():
     for i in range(1, rows + 1):
         rad = []
         for j in range(1, cols + 1):
-            DebugPrint(chr(ord('@') + j))
+
             try:
+                rad.append(ws_IO_liste.Range[n2a(j) + str(i)].Text)
                 #linje under fungerer kun til og med kolonne z
-                rad.append(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
+                #rad.append(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
             except:
-                a = 1
-                #DebugPrint("Feil ved innlesing av IO-liste rad " + str(i) + " og kolonne " + str(j))
+                DebugPrint("Feil ved innlesing av IO-liste rad " + str(i) + " og kolonne " + str(j))
 
         IOliste.append(rad)
 
