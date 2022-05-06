@@ -557,8 +557,6 @@ def MainFunction():
     # loop all categories
     for cat in cat_list:
         DebugPrint(cat)
-        print(cat)
-        print(cat.Name)
 
         # sjekk om tag/tfm parameter finnes, og om den er shared, og om den er definert med samme GUID som den riktige shared parameteren
         tag_cat_status = (-1)
@@ -651,7 +649,7 @@ def MainFunction():
                         tguid).AsString() == '=-' or k.get_Parameter(tguid).AsString() == '' or k.get_Parameter(
                     tguid).AsString() is None:
                     # gå til neste element dersom blank tag/tfm
-                    DebugPrint('blank tag/tfm (shared param)' + cat.Name)
+                    DebugPrint('blank tag/tfm (shared param)' + cat)
                     continue
                 tag = k.get_Parameter(tguid).AsString()
                 # DebugPrint('k.get_Parameter(tguid).AsString() : ' + k.get_Parameter(tguid).AsString())
@@ -661,7 +659,7 @@ def MainFunction():
                         tag_param).AsString() == '=-' or k.LookupParameter(tag_param).AsString() == '' or k.LookupParameter(
                     tag_param).AsString() is None:
                     # gå til neste element dersom blank tag/tfm
-                    DebugPrint('blank tag/tfm (project param)' + cat.Name)
+                    DebugPrint('blank tag/tfm (project param)' + cat)
                     continue
                 tag = k.LookupParameter(tag_param).AsString()
             elif tag_cat_status == 2:
