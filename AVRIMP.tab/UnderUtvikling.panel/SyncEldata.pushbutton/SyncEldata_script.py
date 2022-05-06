@@ -72,17 +72,6 @@ import string
 # pyt_path = r'C:\Program Files (x86)\IronPython 2.7\Lib'
 # sys.path.append(pyt_path)
 
-try:
-    debug_mode_id = GlobalParametersManager.FindByName(doc, "debug_mode")
-    debug_mode = doc.GetElement(debug_mode_id).GetValue().Value
-except:
-    debug_mode = 0
-
-try:
-    summary_mode_id = GlobalParametersManager.FindByName(doc, "summary_mode")
-    summary_mode = doc.GetElement(summary_mode_id).GetValue().Value
-except:
-    summary_mode = 0
 
 #printer en del meldinger til terminal i revit dersom man setter debug_mode til 1
 def DebugPrint(tekst):
@@ -95,6 +84,19 @@ def SummaryPrint(tekst):
     if summary_mode == 1:
         print(tekst)
     return 1
+
+try:
+    debug_mode_id = GlobalParametersManager.FindByName(doc, "debug_mode")
+    debug_mode = doc.GetElement(debug_mode_id).GetValue().Value
+except:
+    debug_mode = 0
+
+try:
+    summary_mode_id = GlobalParametersManager.FindByName(doc, "summary_mode")
+    summary_mode = doc.GetElement(summary_mode_id).GetValue().Value
+except:
+    summary_mode = 0
+
 
 def TryGetRoom(room, phase):
     try:
@@ -138,6 +140,91 @@ def SaveListToExcel(filePath, exportData):
         DebugPrint('Feil med lagring av excel-eksport')
         return False
 
+def OppdaterEldata(IO_liste_row, k, n_elements):
+    # loop shared params
+    global presync_top_row
+    global presync_3d_row
+    global presync_skjema_row
+
+    for i, kol in enumerate(p_s_IO_cat_kol):
+        # DebugPrint('Looping shared params')
+        # presync header
+        if n_elements == 1:
+            # DebugPrint('presync header')
+            presync_top_row.append(p_s_IO_cat_name[i])
+        # presync data
+        try:
+            # DebugPrint('Check if detail item')
+            if cat <> BuiltInCategory.OST_DetailComponents:
+                # DebugPrint('Is not detail item')
+                presync_3d_row.append(k.get_Parameter(p_s_IO_cat_guid[i]).AsString())
+            else:
+                # DebugPrint('Is detail item')
+                presync_skjema_row.append(k.get_Parameter(p_s_IO_cat_guid[i]).AsString())
+        except:
+            if cat <> BuiltInCategory.OST_DetailComponents:
+                presync_3d_row.append('')
+            else:
+                presync_skjema_row.append('')
+        if IO_liste_row != (-1):
+            # sync
+            # DebugPrint('Syncing')
+            IOliste_tekst = IOliste[IO_liste_row][kol]
+            if IOliste_tekst is None:
+                IOliste_tekst = ' '
+            # DebugPrint('IOliste_tekst: ' + str(IOliste_tekst))
+            try:
+                #rad under er den som utfører selve endringen av parameter-verdi i Revit
+                ############SKAL TROLIG STÅ kol ISTEDET FOR i PÅ RAD UNDER!!!!!!!!!!!!!!!!!!!!!
+
+                res = k.get_Parameter(p_s_IO_cat_guid[i]).Set(IOliste_tekst)
+                if (res):
+                    SummaryPrint('shared parameter ' + p_s_IO_cat_name[i] + ': ok')
+                else:
+                    SummaryPrint('shared parameter ' + p_s_IO_cat_name[i] + ': feil')
+            except Exception, ex:
+                DebugPrint('shared parameter ' + p_s_IO_cat_name[i] + ': exception')
+                DebugPrint('k.get_Parameter(' + str(p_s_IO_cat_guid[i]) + ').Set(' + str(IOliste_tekst) + ')')
+                DebugPrint(ex.message)
+
+    # loop remaining params
+    for j, kol in enumerate(p_r_IO_cat_kol):
+        # presync header
+        if n_elements == 1:
+            presync_top_row.append(p_r_IO_cat_name[j])
+        # presync data
+        try:
+            if cat <> BuiltInCategory.OST_DetailComponents:
+                presync_3d_row.append(k.LookupParameter(p_r_IO_cat_name[j]).AsString())
+            else:
+                presync_skjema_row.append(k.LookupParameter(p_r_IO_cat_name[j]).AsString())
+        except:
+            if cat <> BuiltInCategory.OST_DetailComponents:
+                presync_3d_row.append('')
+            else:
+                presync_skjema_row.append('')
+        if IO_liste_row != (-1):
+            # sync
+            IOliste_tekst = IOliste[IO_liste_row][kol]
+            if IOliste_tekst is None:
+                IOliste_tekst = ' '
+            # DebugPrint('IOliste_tekst: ' + str(IOliste_tekst))
+            try:
+                #rad under er den som utfører selve endringen av parameter-verdi i Revit
+                ############SKAL TROLIG STÅ kol ISTEDET FOR j PÅ RAD UNDER!!!!!!!!!!!!!!!!!!!!!
+                res = k.LookupParameter(p_r_IO_cat_name[j]).Set(IOliste_tekst)
+                if (res):
+                    SummaryPrint('remaining parameter ' + p_r_IO_cat_name[j] + ': ok')
+                else:
+                    SummaryPrint('remaining parameter ' + p_r_IO_cat_name[j] + ': feil')
+            except Exception, ex:
+                DebugPrint('remaining parameter ' + p_r_IO_cat_name[j] + ': exception')
+                DebugPrint('k.LookupParameter(' + str(p_r_IO_cat_name[j]) + ').Set(' + str(IOliste_tekst) + ')')
+                DebugPrint(ex.message)
+
+    # Update TAG if GUID sync????
+    # Funksjon må legges til her!!
+    return
 
 def MainFunction():
 
@@ -346,8 +433,6 @@ def MainFunction():
 
         IOliste.append(rad)
 
-    print(IOliste)
-
     DebugPrint('Tag parameter: ' + str(tag_param))
     DebugPrint('sync_guid: ' + str(sync_guid))
 
@@ -375,7 +460,7 @@ def MainFunction():
     parametre_signalinfo_lc = ['tekst', 'signaltag', 'type', 'signalkilde', 'spenning', 'tilleggstekst']
     parametre_ikke_sync_lc = ['sortering', 'tag', 'guid', ' tfm11fksamlet']
 
-    # Last inn alle ubrukte parametre fra IO liste her. Slik at de ikke trenger å defineres noe sted.
+    # Last inn alle ubrukte parametre fra IO liste i list. Slik at de ikke trenger å defineres noe sted.
     parametre_project_name = []
 
     TAG_guid = '141d33b4-0f91-4dd8-a8b6-be1fa232d39f'
@@ -469,7 +554,6 @@ def MainFunction():
     # loop all categories
     for cat in cat_list:
         DebugPrint(cat)
-        SummaryPrint(cat)
 
         # sjekk om tag/tfm parameter finnes, og om den er shared, og om den er definert med samme GUID som den riktige shared parameteren
         tag_cat_status = (-1)
@@ -481,7 +565,7 @@ def MainFunction():
         p_r_IO_cat_kol = []
         p_r_IO_cat_name = []
 
-        # må kanskje bruke try: her for å unngå feil for categorier som ikke er i bruk, og dermed ikke har firstElement
+        # bruker try her for å unngå feil for categorier som ikke er i bruk, og dermed ikke har firstElement
         # find all shared parameters defined for the category
         try:
             for param in FilteredElementCollector(doc).OfCategory(
@@ -500,26 +584,17 @@ def MainFunction():
             continue
 
         DebugPrint('Size p_s_IO_cat_name: ' + str(len(p_s_IO_cat_name)))
-        # DebugPrint('p_s_IO_cat_name: ')
-        # DebugPrint(p_s_IO_cat_name)
-        # sorting params
 
-        # Z1 = [x for _,x in sorted(zip(p_s_IO_cat_kol,p_s_IO_cat_name))]
+        # sorting params
         p_s_IO_cat_name = [x for (y, x) in sorted(zip(p_s_IO_cat_kol, p_s_IO_cat_name), key=lambda pair: pair[0])]
         p_s_IO_cat_guid = [x for (y, x) in sorted(zip(p_s_IO_cat_kol, p_s_IO_cat_guid), key=lambda pair: pair[0])]
         p_s_IO_cat_kol = sorted(p_s_IO_cat_kol)
-        # DebugPrint(p_s_IO_cat_name)
-        # DebugPrint(p_s_IO_cat_kol)
-        # DebugPrint(p_s_IO_cat_guid)
 
         # find all shared parameters not defined for category
         p_s_IO_cat_unused_kol = list(set(parametre_shared_IO_liste_kolonne) - set(p_s_IO_cat_kol))
-        # p_s_IO_cat_unused_kol = [item for item in parametre_shared_IO_liste_kolonne if item not in p_s_IO_cat_kol]     #gjør samme som linje over
         p_s_IO_cat_unused_name = list(set(parametre_shared_IO_liste_name) - set(p_s_IO_cat_name))
-        # p_s_IO_cat_unused_name = [item for item in parametre_shared_IO_liste_name if item not in p_s_IO_cat_name]		#gjør samme som linje over
 
         DebugPrint('Size p_s_IO_cat_unused_kol : ' + str(len(p_s_IO_cat_unused_kol)))
-        # DebugPrint(p_s_IO_cat_unused_kol)
         DebugPrint('p_s_IO_cat_unused_name : ')
         DebugPrint(p_s_IO_cat_unused_name)
 
@@ -545,7 +620,7 @@ def MainFunction():
                         tag_cat_status = 0  # status 0 betyr at den finnes, men at man ikke kan bruke GUID (enten fordi tag_param er ulik både tfm og tag, eller fordi det ikke er brukt shared parameter for denne)
 
         if tag_cat_status == -1 and cat == BuiltInCategory.OST_DetailComponents:
-            if tag_param == 'TFM11FkSamlet':
+            if tag_param == 'TFM11FkSamlet' or tag_param == 'TFM':
                 tag_cat_status = 2  # Betyr at man bruker denne som tag: SystemVar + '-' + TFM11FkKompGruppe + TFM11FkKompLNR
 
         DebugPrint('Size p_r_IO_cat_name: ' + str(len(p_r_IO_cat_name)))
@@ -571,7 +646,7 @@ def MainFunction():
                         tguid).AsString() == '=-' or k.get_Parameter(tguid).AsString() == '' or k.get_Parameter(
                     tguid).AsString() is None:
                     # gå til neste element dersom blank tag/tfm
-                    SummaryPrint('blank tag/tfm (shared)')
+                    DebugPrint('blank tag/tfm (shared param)' + cat.Name)
                     continue
                 tag = k.get_Parameter(tguid).AsString()
                 # DebugPrint('k.get_Parameter(tguid).AsString() : ' + k.get_Parameter(tguid).AsString())
@@ -581,7 +656,7 @@ def MainFunction():
                         tag_param).AsString() == '=-' or k.LookupParameter(tag_param).AsString() == '' or k.LookupParameter(
                     tag_param).AsString() is None:
                     # gå til neste element dersom blank tag/tfm
-                    SummaryPrint('blank tag/tfm (string)')
+                    DebugPrint('blank tag/tfm (project param)' + cat.Name)
                     continue
                 tag = k.LookupParameter(tag_param).AsString()
             elif tag_cat_status == 2:
@@ -591,6 +666,7 @@ def MainFunction():
                     TFM11FkKompLNR = i.LookupParameter('TFM11FkKompLNR').AsString()
                     TFM11FkKompGruppe = i.Symbol.LookupParameter('TFM11FkKompGruppe').AsString()
                     tag = r"'" + '=' + SystemVar + '-' + TFM11FkKompGruppe + TFM11FkKompLNR
+                    #Bør trolig legge inn sjekk her mot tomme verdier
                 except:
                     SummaryPrint('feil ved sammenslåing/avlesing av parametre som inngår i TFM for skjema')
                     errorReport += 'feil ved sammenslåing/avlesing av parametre som inngår i TFM for skjema'
@@ -602,9 +678,10 @@ def MainFunction():
             #############################################################################################################
             # SYNC DATA TIL REVIT. Inkl. eksport presync
             #############################################################################################################
-            # guid-syncrom_eksport.append(Element.Name.GetValue(r))
-            # break
+
+            #####Finn matchende rad i IO-liste
             IO_liste_row = (-1)
+            #Sjekk om sync mot GUID
             if sync_guid == True and cat <> BuiltInCategory.OST_DetailComponents:  # Kan ikke bruke guid-sync mot skjema. Kun tag/TFM.
                 TAG_match_id = (-1)
                 for b in range(1, len(IOliste)):
@@ -638,78 +715,82 @@ def MainFunction():
                 presync_skjema_row = [tag]
 
             # oppdater_eldata(IO_liste_row, k)
-            # loop shared params
-            for i, kol in enumerate(p_s_IO_cat_kol):
-                DebugPrint('Looping shared params')
-                # presync header
-                if n_elements == 1:
-                    DebugPrint('presync header')
-                    presync_top_row.append(p_s_IO_cat_name[i])
-                # presync data
-                try:
-                    DebugPrint('Check if detail item')
-                    if cat <> BuiltInCategory.OST_DetailComponents:
-                        DebugPrint('Is detail item')
-                        presync_3d_row.append(k.get_Parameter(p_s_IO_cat_guid[i]).AsString())
-                    else:
-                        DebugPrint('Is not detail item')
-                        presync_skjema_row.append(k.get_Parameter(p_s_IO_cat_guid[i]).AsString())
-                except:
-                    DebugPrint('Something went wrong with check if detail item')
-                    if cat <> BuiltInCategory.OST_DetailComponents:
-                        presync_3d_row.append('')
-                    else:
-                        presync_skjema_row.append('')
-                if IO_liste_row != (-1):
-                    # sync
-                    DebugPrint('Syncing')
-                    IOliste_tekst = IOliste[IO_liste_row][kol]
-                    if IOliste_tekst is None:
-                        IOliste_tekst = ' '
-                    DebugPrint('IOliste_tekst: ' + str(IOliste_tekst))
-                    try:
-                        res = k.get_Parameter(p_s_IO_cat_guid[i]).Set(IOliste_tekst)
-                        if (res):
-                            DebugPrint('shared parameter ' + p_s_IO_cat_name[i] + ': ok')
-                        else:
-                            DebugPrint('shared parameter ' + p_s_IO_cat_name[i] + ': feil')
-                    except Exception, ex:
-                        DebugPrint('shared parameter ' + p_s_IO_cat_name[i] + ': exception')
-                        DebugPrint('k.get_Parameter(' + str(p_s_IO_cat_guid[i]) + ').Set(' + str(IOliste_tekst) + ')')
-                        DebugPrint(ex.message)
 
-            # loop remaining params
-            for j, kol in enumerate(p_r_IO_cat_kol):
-                # presync header
-                if n_elements == 1:
-                    presync_top_row.append(p_r_IO_cat_name[j])
-                # presync data
-                try:
-                    if cat <> BuiltInCategory.OST_DetailComponents:
-                        presync_3d_row.append(k.LookupParameter(p_r_IO_cat_name[j]).AsString())
-                    else:
-                        presync_skjema_row.append(k.LookupParameter(p_r_IO_cat_name[j]).AsString())
-                except:
-                    if cat <> BuiltInCategory.OST_DetailComponents:
-                        presync_3d_row.append('')
-                    else:
-                        presync_skjema_row.append('')
-                if IO_liste_row != (-1):
-                    # sync
-                    IOliste_tekst = IOliste[IO_liste_row][kol]
-                    if IOliste_tekst is None:
-                        IOliste_tekst = ' '
-                    DebugPrint('IOliste_tekst: ' + str(IOliste_tekst))
+            #kod under if(0)-et for å ikke kommentere ue
+            if(0):
+                # loop shared params
+                for i, kol in enumerate(p_s_IO_cat_kol):
+                    #DebugPrint('Looping shared params')
+                    # presync header
+                    if n_elements == 1:
+                        #DebugPrint('presync header')
+                        presync_top_row.append(p_s_IO_cat_name[i])
+                    # presync data
                     try:
-                        res = k.LookupParameter(p_r_IO_cat_name[j]).Set(IOliste_tekst)
-                        if (res):
-                            DebugPrint('remaining parameter ' + p_r_IO_cat_name[j] + ': ok')
+                        #DebugPrint('Check if detail item')
+                        if cat <> BuiltInCategory.OST_DetailComponents:
+                            #DebugPrint('Is not detail item')
+                            presync_3d_row.append(k.get_Parameter(p_s_IO_cat_guid[i]).AsString())
                         else:
-                            DebugPrint('remaining parameter ' + p_r_IO_cat_name[j] + ': feil')
-                    except Exception, ex:
-                        DebugPrint('remaining parameter ' + p_r_IO_cat_name[j] + ': exception')
-                        DebugPrint('k.LookupParameter(' + str(p_r_IO_cat_name[j]) + ').Set(' + str(IOliste_tekst) + ')')
-                        DebugPrint(ex.message)
+                            #DebugPrint('Is detail item')
+                            presync_skjema_row.append(k.get_Parameter(p_s_IO_cat_guid[i]).AsString())
+                    except:
+                        if cat <> BuiltInCategory.OST_DetailComponents:
+                            presync_3d_row.append('')
+                        else:
+                            presync_skjema_row.append('')
+                    if IO_liste_row != (-1):
+                        # sync
+                        #DebugPrint('Syncing')
+                        IOliste_tekst = IOliste[IO_liste_row][kol]
+                        if IOliste_tekst is None:
+                            IOliste_tekst = ' '
+                        #DebugPrint('IOliste_tekst: ' + str(IOliste_tekst))
+                        try:
+                            ############SKAL TROLIG STÅ kol ISTEDET FOR i PÅ RAD UNDER!!!!!!!!!!!!!!!!!!!!!
+                            res = k.get_Parameter(p_s_IO_cat_guid[i]).Set(IOliste_tekst)
+                            if (res):
+                                SummaryPrint('shared parameter ' + p_s_IO_cat_name[i] + ': ok')
+                            else:
+                                SummaryPrint('shared parameter ' + p_s_IO_cat_name[i] + ': feil')
+                        except Exception, ex:
+                            DebugPrint('shared parameter ' + p_s_IO_cat_name[i] + ': exception')
+                            DebugPrint('k.get_Parameter(' + str(p_s_IO_cat_guid[i]) + ').Set(' + str(IOliste_tekst) + ')')
+                            DebugPrint(ex.message)
+
+                # loop remaining params
+                for j, kol in enumerate(p_r_IO_cat_kol):
+                    # presync header
+                    if n_elements == 1:
+                        presync_top_row.append(p_r_IO_cat_name[j])
+                    # presync data
+                    try:
+                        if cat <> BuiltInCategory.OST_DetailComponents:
+                            presync_3d_row.append(k.LookupParameter(p_r_IO_cat_name[j]).AsString())
+                        else:
+                            presync_skjema_row.append(k.LookupParameter(p_r_IO_cat_name[j]).AsString())
+                    except:
+                        if cat <> BuiltInCategory.OST_DetailComponents:
+                            presync_3d_row.append('')
+                        else:
+                            presync_skjema_row.append('')
+                    if IO_liste_row != (-1):
+                        # sync
+                        IOliste_tekst = IOliste[IO_liste_row][kol]
+                        if IOliste_tekst is None:
+                            IOliste_tekst = ' '
+                        #DebugPrint('IOliste_tekst: ' + str(IOliste_tekst))
+                        try:
+                            ############SKAL TROLIG STÅ kol ISTEDET FOR j PÅ RAD UNDER!!!!!!!!!!!!!!!!!!!!!
+                            res = k.LookupParameter(p_r_IO_cat_name[j]).Set(IOliste_tekst)
+                            if (res):
+                                SummaryPrint('remaining parameter ' + p_r_IO_cat_name[j] + ': ok')
+                            else:
+                                SummaryPrint('remaining parameter ' + p_r_IO_cat_name[j] + ': feil')
+                        except Exception, ex:
+                            DebugPrint('remaining parameter ' + p_r_IO_cat_name[j] + ': exception')
+                            DebugPrint('k.LookupParameter(' + str(p_r_IO_cat_name[j]) + ').Set(' + str(IOliste_tekst) + ')')
+                            DebugPrint(ex.message)
 
                 # Update TAG if GUID sync????
                 # Funksjon må legges til her!!
@@ -739,13 +820,6 @@ def MainFunction():
                         rom = Element.Name.GetValue(r)
                         room_hit = 1
                         break
-                    # else:
-                #	for phase in doc.Phases:
-                # inRoom = TryGetRoom(family, phase)
-                #		inRoom = TryGetRoom(k, phase)
-                #		if inRoom != None and inRoom.ToDSType(True).Name == _room.ToDSType(True).Name:
-                #			rom_eksport.append(Element.Name.GetValue(r))
-                #			break
                 if room_hit == 0:
                     rom = ''
 
@@ -793,7 +867,6 @@ def MainFunction():
 
                 # header: komp_3d.append(['l__element__l', 'Family','FamilyType', 'TAG','Rom','System Type','X','Y','Z', 'Tegning'])
                 komp_3d.append([k.Id, family, familytype, tag, rom, systemtype, x, y, z, ''])
-                # DebugPrint('komp_3d.append() ' + tag + ' , ' + family])
 
             # komp_skjema
             else:
