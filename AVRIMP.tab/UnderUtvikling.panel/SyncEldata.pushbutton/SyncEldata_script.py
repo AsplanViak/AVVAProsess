@@ -54,6 +54,7 @@ from System.Collections.Generic import List
 import sys
 import math
 import os
+import time
 
 clr.AddReferenceByName(
     'Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')
@@ -232,6 +233,7 @@ def MainFunction():
     errorReport = ""
     #ikke-kritiske feil og generell info:
     summaryReport = ""
+    start = time.time()
 
     # Finn IO liste og andre parametre i ark "Kobling mot IO-liste"
     har_funnet_IOliste_ark_revit = 0
@@ -553,6 +555,8 @@ def MainFunction():
 
     transaction = DB.Transaction(doc)
     transaction.Start("Sync eldata")
+
+    DebugPrint(str(time.time() - start))
 
     # loop all categories
     for cat in cat_list:
@@ -966,9 +970,9 @@ def MainFunction():
     if summaryReport == "":
         summaryReport = 'Synkronisering gjennomført uten feil'
     else:
-        summaryReport.insert(0, 'Synkronisering ferdig.')
+        summaryReport =  'Synkronisering ferdig.' + summaryReport
     UI.TaskDialog.Show('Synkronisering eldata ferdig', summaryReport, button)
-
+    DebugPrint(str(time.time() - start))
     return
 
 MainFunction()
