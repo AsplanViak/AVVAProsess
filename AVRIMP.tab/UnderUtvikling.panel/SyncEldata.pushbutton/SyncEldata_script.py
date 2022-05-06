@@ -487,10 +487,13 @@ def MainFunction():
                 tag_kol = j
             if celle.lower() == 'guid':
                 GUID_kol = j
+            #Fjern linje under
             if celle.lower() not in parametre_shared_name_lc:
                 if celle.lower() not in parametre_signalinfo_lc and celle.lower() not in parametre_ikke_sync_lc:
                     parametre_project_name.append(celle)
                     DebugPrint('project param lagt til: ' + celle.lower())
+                    #Sjekk om finnes i parametre_shared. Dersom den gjør det, legg til i array for GUId. Hvis ikke, legg til [null] for guid.
+                    #Legg til kolonne
 
             DebugPrint('j, celle, try: ' + str(j) + ' ' + celle)
 
