@@ -391,7 +391,7 @@ def MainFunction():
     except:
         # if error accurs anywhere in the process catch it
         import traceback
-        summaryReport += traceback.format_exc()
+        #summaryReport += traceback.format_exc()
         rooms = []
         summaryReport += "Feil : Kan ikke lese romdata fra link. Kan skyldes at ARK/RIB link ikke er lastet inn, eller er i lukket workset."
 
@@ -649,8 +649,7 @@ def MainFunction():
                         tguid).AsString() == '=-' or k.get_Parameter(tguid).AsString() == '' or k.get_Parameter(
                     tguid).AsString() is None:
                     # gå til neste element dersom blank tag/tfm
-                    DebugPrint('blank tag/tfm (shared param) for:')
-                    DebugPrint(cat)
+                    SummaryPrint('blank tag/tfm (shared param):')
                     continue
                 tag = k.get_Parameter(tguid).AsString()
                 # DebugPrint('k.get_Parameter(tguid).AsString() : ' + k.get_Parameter(tguid).AsString())
@@ -660,8 +659,7 @@ def MainFunction():
                         tag_param).AsString() == '=-' or k.LookupParameter(tag_param).AsString() == '' or k.LookupParameter(
                     tag_param).AsString() is None:
                     # gå til neste element dersom blank tag/tfm
-                    DebugPrint('blank tag/tfm (project param) for:')
-                    DebugPrint(cat)
+                    SummaryPrint('blank tag/tfm (project param) for:')
                     continue
                 tag = k.LookupParameter(tag_param).AsString()
             elif tag_cat_status == 2:
@@ -705,7 +703,7 @@ def MainFunction():
                     if tag == IOliste[b][tag_kol]:
                         IO_liste_row = b
                         break
-            SummaryPrint('IO_liste_row :' + str(IO_liste_row))
+            DebugPrint('IO_liste_row :' + str(IO_liste_row))
 
             # Presync data
             # lag tom header list for denne category (antall parametre kan variere mellom categories)
@@ -713,19 +711,19 @@ def MainFunction():
                 presync_top_row = ['TAG']
             # lag tom list til presync-data for dette elementet
             if cat <> BuiltInCategory.OST_DetailComponents:
-                DebugPrint('Ny rad presync - 3d. Tag: ' + tag)
+                SummaryPrint('Ny rad presync - 3d. Tag: ' + tag)
                 presync_3d_row = [tag]
             else:
-                DebugPrint('Ny rad presync - skjema. Tag: ' + tag)
+                SummaryPrint('Ny rad presync - skjema. Tag: ' + tag)
                 presync_skjema_row = [tag]
 
             # oppdater_eldata(IO_liste_row, k)
-            try:
-                OppdaterEldata(IO_liste_row, k, n_elements)
-            except:
-                DebugPrint("feil for rad:" + str(IO_liste_row))
+            #try:
+            #    OppdaterEldata(IO_liste_row, k, n_elements)
+            #except:
+            #    DebugPrint("feil for rad:" + str(IO_liste_row))
             #kod under if(0)-et for å ikke kommentere ue
-            if(0):
+            if(1):
                 # loop shared params
                 for i, kol in enumerate(p_s_IO_cat_kol):
                     #DebugPrint('Looping shared params')
@@ -967,6 +965,8 @@ def MainFunction():
     result = UI.TaskDialogResult.Ok
     if summaryReport == "":
         summaryReport = 'Synkronisering gjennomført uten feil'
+    else:
+        summaryReport.insert(0, 'Synkronisering ferdig.')
     UI.TaskDialog.Show('Synkronisering eldata ferdig', summaryReport, button)
 
     return
