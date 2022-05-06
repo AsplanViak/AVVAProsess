@@ -488,7 +488,7 @@ def MainFunction():
             if celle.lower() == 'guid':
                 GUID_kol = j
             #Fjern linje under
-            if celle.lower() not in parametre_shared_name_lc:
+            #if celle.lower() not in parametre_shared_name_lc:
                 if celle.lower() not in parametre_signalinfo_lc and celle.lower() not in parametre_ikke_sync_lc:
                     parametre_project_name.append(celle)
                     DebugPrint('project param lagt til: ' + celle.lower())
@@ -557,6 +557,8 @@ def MainFunction():
     # loop all categories
     for cat in cat_list:
         DebugPrint(cat)
+        print(cat)
+        print(cat.Name)
 
         # sjekk om tag/tfm parameter finnes, og om den er shared, og om den er definert med samme GUID som den riktige shared parameteren
         tag_cat_status = (-1)
