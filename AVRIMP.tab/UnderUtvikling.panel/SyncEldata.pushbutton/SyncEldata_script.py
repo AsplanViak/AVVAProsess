@@ -649,7 +649,8 @@ def MainFunction():
                         tguid).AsString() == '=-' or k.get_Parameter(tguid).AsString() == '' or k.get_Parameter(
                     tguid).AsString() is None:
                     # gå til neste element dersom blank tag/tfm
-                    DebugPrint('blank tag/tfm (shared param)' + cat)
+                    DebugPrint('blank tag/tfm (shared param) for:')
+                    DebugPrint(cat)
                     continue
                 tag = k.get_Parameter(tguid).AsString()
                 # DebugPrint('k.get_Parameter(tguid).AsString() : ' + k.get_Parameter(tguid).AsString())
@@ -659,7 +660,8 @@ def MainFunction():
                         tag_param).AsString() == '=-' or k.LookupParameter(tag_param).AsString() == '' or k.LookupParameter(
                     tag_param).AsString() is None:
                     # gå til neste element dersom blank tag/tfm
-                    DebugPrint('blank tag/tfm (project param)' + cat)
+                    DebugPrint('blank tag/tfm (project param) for:')
+                    DebugPrint(cat)
                     continue
                 tag = k.LookupParameter(tag_param).AsString()
             elif tag_cat_status == 2:
@@ -718,7 +720,10 @@ def MainFunction():
                 presync_skjema_row = [tag]
 
             # oppdater_eldata(IO_liste_row, k)
-
+            try:
+                OppdaterEldata(IO_liste_row, k, n_elements)
+            except:
+                DebugPrint("feil for rad:" + str(IO_liste_row))
             #kod under if(0)-et for å ikke kommentere ue
             if(0):
                 # loop shared params
