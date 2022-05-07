@@ -55,6 +55,7 @@ import sys
 import math
 import os
 import time
+import csv
 
 clr.AddReferenceByName(
     'Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')
@@ -141,7 +142,7 @@ def SaveListToExcel(filePath, exportData):
         DebugPrint('Feil med lagring av excel-eksport')
         return False
 
-def OppdaterEldata(IO_liste_row, k, n_elements, p_s_IO_cat_kol, p_s_IO_cat_guid, p_s_IO_cat_name, p_r_IO_cat_name, p_r_IO_cat_kol):
+def OppdaterEldata(cat, IO_liste_row, k, n_elements, p_s_IO_cat_kol, p_s_IO_cat_guid, p_s_IO_cat_name, p_r_IO_cat_name, p_r_IO_cat_kol):
     # loop shared params
     global presync_top_row
     global presync_3d_row
@@ -412,43 +413,49 @@ def MainFunction():
     #################################################
     # LES INN IO-LISTE FRA EXCEL
     #################################################
-    try:
-        wb_IO_liste = xl.Workbooks.Open(IO_liste_filplassering)
-    except:
-        errorReport += 'Fant ikke excel-dokument med IO-liste på plassering angitt i ark "kobling mot IO-liste" '
-        button = UI.TaskDialogCommonButtons.None
-        result = UI.TaskDialogResult.Ok
-        UI.TaskDialog.Show('Synkronisering avbrutt', errorReport, button)
-
-    # Finn sheet med IO-liste. Bruker sheet1 dersom ingen treff på navn
-    try:
-        ws_IO_liste = wb_IO_liste.Worksheets('IO-liste')
-    except:
+    if 'xls' in IO_liste_filplassering:
         try:
-            ws_IO_liste = wb_IO_liste.Worksheets('IOliste')
+            wb_IO_liste = xl.Workbooks.Open(IO_liste_filplassering)
         except:
-            ws_IO_liste = wb_IO_liste.Worksheets[1]
-            # used = ws_IO_liste.UsedRange
-    cols = ws_IO_liste.UsedRange.Columns.Count
-    rows = ws_IO_liste.UsedRange.Rows.Count
+            errorReport += 'Fant ikke excel-dokument med IO-liste på plassering angitt i ark "kobling mot IO-liste" '
+            button = UI.TaskDialogCommonButtons.None
+            result = UI.TaskDialogResult.Ok
+            UI.TaskDialog.Show('Synkronisering avbrutt', errorReport, button)
 
-    DebugPrint(' Finne excel-fil og riktig worksheet ' + str(time.time() - start))
-
-    IOliste = []
-    for i in range(1, rows+1):
-        rad = []
-        for j in range(0, cols):
-
+        # Finn sheet med IO-liste. Bruker sheet1 dersom ingen treff på navn
+        try:
+            ws_IO_liste = wb_IO_liste.Worksheets('IO-liste')
+        except:
             try:
-                rad.append(ws_IO_liste.Range[n2a(j) + str(i)].Text)
-                #linje under fungerer kun til og med kolonne z
-                #rad.append(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
+                ws_IO_liste = wb_IO_liste.Worksheets('IOliste')
             except:
-                DebugPrint("Feil ved innlesing av IO-liste rad " + str(i) + " og kolonne " + str(j))
+                ws_IO_liste = wb_IO_liste.Worksheets[1]
+                # used = ws_IO_liste.UsedRange
+        cols = ws_IO_liste.UsedRange.Columns.Count
+        rows = ws_IO_liste.UsedRange.Rows.Count
 
-        IOliste.append(rad)
-    #DebugPrint(IOliste)
-    DebugPrint('Lese inn IO liste fra excel ' + str(time.time() - start))
+        DebugPrint(' Finne excel-fil og riktig worksheet ' + str(time.time() - start))
+
+        IOliste = []
+        for i in range(1, rows+1):
+            rad = []
+            for j in range(0, cols):
+
+                try:
+                    rad.append(ws_IO_liste.Range[n2a(j) + str(i)].Text)
+                    #linje under fungerer kun til og med kolonne z
+                    #rad.append(ws_IO_liste.Range[chr(ord('@') + j) + str(i)].Text)
+                except:
+                    DebugPrint("Feil ved innlesing av IO-liste rad " + str(i) + " og kolonne " + str(j))
+
+            IOliste.append(rad)
+        #DebugPrint(IOliste)
+        DebugPrint('Lese inn IO liste fra excel ' + str(time.time() - start))
+
+    elif 'csv' in IO_liste_filplassering:
+        IOliste = list(csv.reader(open(IO_liste_filplassering)))
+        DebugPrint('Lese inn IO liste fra csv fil ' + str(time.time() - start))
+
 
     DebugPrint('Tag parameter: ' + str(tag_param))
     DebugPrint('sync_guid: ' + str(sync_guid))
@@ -768,7 +775,7 @@ def MainFunction():
             DebugPrint('presync_top_row')
             DebugPrint(presync_top_row)
             DebugPrint('IO_liste_row: ' + str(IO_liste_row) + ', n_elements: ' + str(n_elements))
-            OppdaterEldata(IO_liste_row, k, n_elements, p_s_IO_cat_kol, p_s_IO_cat_guid, p_s_IO_cat_name,
+            OppdaterEldata(cat, IO_liste_row, k, n_elements, p_s_IO_cat_kol, p_s_IO_cat_guid, p_s_IO_cat_name,
                            p_r_IO_cat_name, p_r_IO_cat_kol)
             #except:
             #    DebugPrint("feil for rad:" + str(IO_liste_row))
