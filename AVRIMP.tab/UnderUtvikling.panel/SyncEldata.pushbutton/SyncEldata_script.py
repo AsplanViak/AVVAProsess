@@ -141,7 +141,7 @@ def SaveListToExcel(filePath, exportData):
         DebugPrint('Feil med lagring av excel-eksport')
         return False
 
-def OppdaterEldata(IO_liste_row, k, n_elements):
+def OppdaterEldata(IO_liste_row, k, n_elements, p_s_IO_cat_kol, p_s_IO_cat_guid, p_s_IO_cat_name, p_r_IO_cat_name, p_r_IO_cat_kol):
     # loop shared params
     global presync_top_row
     global presync_3d_row
@@ -761,7 +761,8 @@ def MainFunction():
 
             # oppdater_eldata(IO_liste_row, k)
             #try:
-            OppdaterEldata(IO_liste_row, k, n_elements)
+            OppdaterEldata(IO_liste_row, k, n_elements, p_s_IO_cat_kol, p_s_IO_cat_guid, p_s_IO_cat_name,
+                           p_r_IO_cat_name, p_r_IO_cat_kol):
             #except:
             #    DebugPrint("feil for rad:" + str(IO_liste_row))
             #kod under if(0)-et for å ikke kommentere ue
