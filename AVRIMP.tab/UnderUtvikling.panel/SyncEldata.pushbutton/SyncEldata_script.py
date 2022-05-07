@@ -586,7 +586,7 @@ def MainFunction():
                     cat).WhereElementIsNotElementType().FirstElement().Parameters:
                 if param.Definition.Name.lower() in parametre_project_name:
                     i = parametre_project_name.index(param.Definition.Name.lower())
-                    if param.IsShared == True and param.GUID = parametre_project_guid[i]:
+                    if param.IsShared == True and param.GUID == parametre_project_guid[i]:
                         p_s_IO_cat_kol.append(parametre_project_IO_liste_kolonne[i])    # s = shared
                         p_s_IO_cat_name.append(parametre_project_IO_liste_name[i])
                         p_s_IO_cat_guid.append(parametre_project_IO_liste_guid[i])
