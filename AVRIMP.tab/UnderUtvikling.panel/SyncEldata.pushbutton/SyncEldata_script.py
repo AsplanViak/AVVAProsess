@@ -461,7 +461,7 @@ def MainFunction():
     # DebugPrint('parametre_shared_name_lc ')
     # DebugPrint(parametre_shared_name_lc)
 
-    parametre_signalinfo_lc = ['tekst', 'signaltag', 'type', 'signalkilde', 'spenning', 'tilleggstekst']
+    parametre_signalinfo_lc = ['tekst', 'signaltag', 'type', 'signalkilde', 'spenning', 'tilleggstekst', 'TypeAnalogtSignal']
     parametre_ikke_sync_lc = ['sortering', 'tag', 'guid', ' tfm11fksamlet']
 
     # Last inn alle ubrukte parametre fra IO liste i list. Slik at de ikke trenger å defineres noe sted.
@@ -483,7 +483,8 @@ def MainFunction():
     tag_kol = -1
 
     for j, celle in enumerate(IOliste[0]):
-        try:
+        #try:
+        if(1):
             # if celle.lower() == tag_param.lower():
             if celle.lower() == 'tag':  # Bruker tag her og ikke tag_param.lower(), siden det alltid er TAG som brukes i eksport fra database.
                 # Kan evt. splitte dette opp i to forskjellige parametre i ark med parametre.
@@ -501,7 +502,8 @@ def MainFunction():
                 DebugPrint('project param lagt til: ' + celle.lower())
                 DebugPrint('IO liste headers, j, celle, try: ' + str(j) + ' ' + celle)
 
-        except:
+        #except:
+        if(0):
             DebugPrint('IO liste headers, j, celle, continue: ' + str(j) + ' ' + celle)
             # Tidligere stod det break her. Tror continue er bedre.
             continue
@@ -563,10 +565,11 @@ def MainFunction():
     transaction = DB.Transaction(doc)
     transaction.Start("Sync eldata")
 
-    DebugPrint(str(time.time() - start))
+    #DebugPrint(str(time.time() - start))
 
     # loop all categories
     for cat in cat_list:
+        DebugPrint(str(time.time() - start))
         DebugPrint(cat)
 
         # sjekk om tag/tfm parameter finnes, og om den er shared, og om den er definert med samme GUID som den riktige shared parameteren
@@ -658,6 +661,9 @@ def MainFunction():
         # loop elements in category
         EQ = FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().ToElements()
         n_elements = 0
+
+        DebugPrint('parameteromfang klarert')
+        DebugPrint(str(time.time() - start))
 
         for k in EQ:
             # Tag reset
