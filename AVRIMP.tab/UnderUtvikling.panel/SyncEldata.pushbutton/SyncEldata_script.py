@@ -466,6 +466,8 @@ def MainFunction():
 
     # Last inn alle ubrukte parametre fra IO liste i list. Slik at de ikke trenger å defineres noe sted.
     parametre_project_name = []
+    parametre_project_IO_liste_kolonne = []
+    parametre_project_guid = []
 
     TAG_guid = '141d33b4-0f91-4dd8-a8b6-be1fa232d39f'
     TFM11FkSamlet_guid = '6b52eb8b-6935-45f9-a509-bb76724ba272'
@@ -591,11 +593,11 @@ def MainFunction():
                     i = parametre_project_name.index(param.Definition.Name.lower())
                     if param.IsShared == True and param.GUID == parametre_project_guid[i]:
                         p_s_IO_cat_kol.append(parametre_project_IO_liste_kolonne[i])    # s = shared
-                        p_s_IO_cat_name.append(parametre_project_IO_liste_name[i])
-                        p_s_IO_cat_guid.append(parametre_project_IO_liste_guid[i])
+                        p_s_IO_cat_name.append(parametre_project_name[i])
+                        p_s_IO_cat_guid.append(parametre_project_guid[i])
                     else:
                         p_r_IO_cat_kol.append(parametre_project_IO_liste_kolonne[i])  # r = remaining (dvs. not shared)
-                        p_r_IO_cat_name.append(parametre_project_IO_liste_name[i])
+                        p_r_IO_cat_name.append(parametre_project_name[i])
                 if param.GUID == tguid:
                     tag_cat_status = 1  # status 1 betyr at den finnes som shared parameter, og at definisjonen stemmer overens med offisiel AV standard.
                 elif param.Definition.Name == tag_param:
@@ -972,6 +974,7 @@ def MainFunction():
 
     DebugPrint('presync skjema')
     DebugPrint(presync_skjema)
+    DebugPrint(' Før excel-eksport ' +str(time.time() - start))
 
     for i in range(4):
         if excel_eksport[i] <> []:
@@ -987,9 +990,9 @@ def MainFunction():
 
     xl.DisplayAlerts = True
     xl.Visible = True
-
+    DebugPrint(' Etter excel-eksport, før transaction ' + str(time.time() - start))
     transaction.Commit()
-
+    DebugPrint(' Etter transaction ' + str(time.time() - start))
     button = UI.TaskDialogCommonButtons.None
     result = UI.TaskDialogResult.Ok
     if summaryReport == "":
