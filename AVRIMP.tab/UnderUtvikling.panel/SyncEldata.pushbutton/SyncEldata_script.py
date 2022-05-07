@@ -274,6 +274,7 @@ def MainFunction():
     #if sync_guid is None or sync_guid == 0:
     #    sync_guid = False
 
+    DebugPrint'Parametre fra sheet ' + (str(time.time() - start))
 
     #Avbryt script dersom ikke IO-liste regneark er definert.
     if (har_funnet_IOliste_ark_revit == 0):
@@ -306,12 +307,15 @@ def MainFunction():
     x = datetime.datetime.now()
     timestamp = x.strftime("%y%m%d %H-%M")
     DebugPrint(timestamp)
+    DebugPrint(str(time.time() - start))
 
     #Sjekk om mappe 'Bakcup-presync' finnes
     mappe_finnes = os.path.isdir(mappe + '\Backup_presync\\')
     #lag mappe dersom ikke finnes
     if mappe_finnes == False :
         os.mkdir(mappe + '\Backup_presync\\')
+
+    DebugPrint('Lag mappe ' + str(time.time() - start))
 
     #klargjør filnavn for excel-eksport. Selve eksporten kjøres helt mot slutten av script
     prosjektnavn_uten_nr = ''.join([i for i in prosjektnavn if not i.isdigit()])
@@ -382,7 +386,7 @@ def MainFunction():
                 DebugPrint("link_score: " + str(link_score))
                 linkDoc = i.GetLinkDocument()
 
-
+    DebugPrint('Loope linker ' + str(time.time() - start))
     cat_list = [BuiltInCategory.OST_Rooms]
     typed_list = List[BuiltInCategory](cat_list)
     filter = ElementMulticategoryFilter(typed_list)
@@ -399,6 +403,7 @@ def MainFunction():
         rooms = []
         summaryReport += "Feil : Kan ikke lese romdata fra link. Kan skyldes at ARK/RIB link ikke er lastet inn, eller er i lukket workset."
 
+    DebugPrint(' Lese inn romdata' +  str(time.time() - start))
 
     #################################################
     # LES INN IO-LISTE FRA EXCEL
@@ -436,6 +441,8 @@ def MainFunction():
                 DebugPrint("Feil ved innlesing av IO-liste rad " + str(i) + " og kolonne " + str(j))
 
         IOliste.append(rad)
+
+    DebugPrint('Lese inn IO liste fra excel ' + str(time.time() - start))
 
     DebugPrint('Tag parameter: ' + str(tag_param))
     DebugPrint('sync_guid: ' + str(sync_guid))
@@ -525,6 +532,7 @@ def MainFunction():
         UI.TaskDialog.Show('Synkronisering avbrutt', errorReport, button)
         return
 
+    DebugPrint('Behandle parameternavn i første rad IO liste '+ str(time.time() - start))
     # Finn alle parametre som brukes i IO_liste
     #parametre_shared_IO_liste_kolonne = []
     #parametre_shared_IO_liste_name = []
@@ -586,7 +594,8 @@ def MainFunction():
 
         # bruker try her for å unngå feil for categorier som ikke er i bruk, og dermed ikke har firstElement
         # find all shared parameters defined for the category
-        try:
+        #try:
+        if(1):
             for param in FilteredElementCollector(doc).OfCategory(
                     cat).WhereElementIsNotElementType().FirstElement().Parameters:
                 if param.Definition.Name.lower() in parametre_project_name:
@@ -603,8 +612,8 @@ def MainFunction():
                 elif param.Definition.Name == tag_param:
                     if tag_cat_status == -1:
                         tag_cat_status = 0  # status 0 betyr at den finnes, men at man ikke kan bruke GUID (enten fordi tag_param er ulik både tfm og tag, eller fordi det ikke er brukt shared parameter for denne)
-
-        except:
+        if(0):
+        #except:
             # bør legge inn en advarsel her
             DebugPrint('failed parameter testing')
             continue
