@@ -147,6 +147,7 @@ def OppdaterEldata(cat, IO_liste_row, k, n_elements, p_s_IO_cat_kol, p_s_IO_cat_
     global presync_top_row
     global presync_3d_row
     global presync_skjema_row
+    global IOliste
 
     for i, kol in enumerate(p_s_IO_cat_kol):
         # DebugPrint('Looping shared params')
@@ -235,6 +236,7 @@ def MainFunction():
     global presync_top_row
     global presync_3d_row
     global presync_skjema_row
+    global IOliste
 
     #kritiske feil:
     errorReport = ""
@@ -436,7 +438,7 @@ def MainFunction():
 
         DebugPrint(' Finne excel-fil og riktig worksheet ' + str(time.time() - start))
 
-        IOliste = []
+
         for i in range(1, rows+1):
             rad = []
             for j in range(0, cols):
@@ -1035,5 +1037,6 @@ def MainFunction():
 presync_top_row = []
 presync_3d_row = []
 presync_skjema_row = []
+IOliste = []
 
 MainFunction()
