@@ -453,7 +453,7 @@ def MainFunction():
         DebugPrint('Lese inn IO liste fra excel ' + str(time.time() - start))
 
     elif 'csv' in IO_liste_filplassering:
-        IOliste = list(csv.reader(open(IO_liste_filplassering)))
+        IOliste = list(csv.reader(open(IO_liste_filplassering), delimiter  =";"))
         DebugPrint('Lese inn IO liste fra csv fil ' + str(time.time() - start))
 
 
