@@ -1031,7 +1031,7 @@ def MainFunction():
     if summaryReport == "":
         summaryReport = 'Synkronisering gjennomført uten feil'
     else:
-        summaryReport =  'Synkronisering ferdig.' + summaryReport
+        summaryReport =  'Synkronisering ferdig.\n\n' + summaryReport
     UI.TaskDialog.Show('Synkronisering eldata ferdig', summaryReport, button)
     DebugPrint(str(time.time() - start))
     return
