@@ -761,6 +761,9 @@ def MainFunction():
 
             # oppdater_eldata(IO_liste_row, k)
             #try:
+            DebugPrint('presync_top_row')
+            DebugPrint(presync_top_row)
+            DebugPrint('IO_liste_row: ' + str(IO_liste_row) + ', n_elements: ' + str(n_elements))
             OppdaterEldata(IO_liste_row, k, n_elements, p_s_IO_cat_kol, p_s_IO_cat_guid, p_s_IO_cat_name,
                            p_r_IO_cat_name, p_r_IO_cat_kol)
             #except:
