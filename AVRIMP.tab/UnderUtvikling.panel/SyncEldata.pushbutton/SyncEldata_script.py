@@ -274,7 +274,7 @@ def MainFunction():
     #if sync_guid is None or sync_guid == 0:
     #    sync_guid = False
 
-    DebugPrint'Parametre fra sheet ' + (str(time.time() - start))
+    DebugPrint('Parametre fra sheet ' + str(time.time() - start))
 
     #Avbryt script dersom ikke IO-liste regneark er definert.
     if (har_funnet_IOliste_ark_revit == 0):
