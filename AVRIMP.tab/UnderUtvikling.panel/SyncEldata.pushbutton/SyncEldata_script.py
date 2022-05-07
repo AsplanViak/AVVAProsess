@@ -452,6 +452,9 @@ def MainFunction():
 
             IOliste.append(rad)
         #DebugPrint(IOliste)
+
+        wb_IO_liste.Close()
+
         DebugPrint('Lese inn IO liste fra excel ' + str(time.time() - start))
 
     elif 'csv' in IO_liste_filplassering:
@@ -509,7 +512,7 @@ def MainFunction():
     DebugPrint(IOliste[0])
 
     for j, celle in enumerate(IOliste[0]):
-        DebugPrint('j: ' + str(j) + ', ' + celle.lower() )
+        DebugPrint('j: ' + str(j) + ', ' + celle )
         if(1):
             # if celle.lower() == tag_param.lower():
             if celle.lower() == 'tag':  # Bruker tag her og ikke tag_param.lower(), siden det alltid er TAG som brukes i eksport fra database.
@@ -518,14 +521,14 @@ def MainFunction():
             if celle.lower() == 'guid':
                 GUID_kol = j
             if celle.lower() not in parametre_signalinfo_lc and celle.lower() not in parametre_ikke_sync_lc:
-                parametre_project_name.append(celle.lower())
+                parametre_project_name.append(celle)
                 parametre_project_IO_liste_kolonne.append(j)
                 if celle.lower() in parametre_shared_name_lc:
                     p_index = parametre_shared_name_lc.index(celle.lower())
                     parametre_project_guid.append(parametre_guid[p_index])
                 else:
                     parametre_project_guid.append(None)
-                DebugPrint('project param lagt til: ' + celle.lower() + '. Kolonne: ' + str(j))
+                DebugPrint('project param lagt til: ' + celle + '. Kolonne: ' + str(j))
                 #DebugPrint('IO liste headers, j, celle, try: ' + str(j) + ' ' + celle)
 
         #except:
@@ -616,8 +619,8 @@ def MainFunction():
         catel = FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().FirstElement()
         if catel is not None:
             for param in catel.Parameters:
-                if param.Definition.Name.lower() in parametre_project_name:
-                    i = parametre_project_name.index(param.Definition.Name.lower())
+                if param.Definition.Name in parametre_project_name:
+                    i = parametre_project_name.index(param.Definition.Name)
                     if param.IsShared == True and param.GUID == parametre_project_guid[i]:
                         p_s_IO_cat_kol.append(parametre_project_IO_liste_kolonne[i])    # s = shared
                         p_s_IO_cat_name.append(parametre_project_name[i])
@@ -1017,7 +1020,6 @@ def MainFunction():
                 summaryReport += 'Kunne ikke eksportere fil ' + excel_filenames[i] + '. Sjekk om fil allerede er åpen, og lukk den, og prøv på ny.'
 
 
-    wb_IO_liste.Close()
 
     xl.DisplayAlerts = True
     xl.Visible = True
