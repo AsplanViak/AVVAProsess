@@ -443,7 +443,7 @@ def MainFunction():
                 DebugPrint("Feil ved innlesing av IO-liste rad " + str(i) + " og kolonne " + str(j))
 
         IOliste.append(rad)
-    DebugPrint(IOliste)
+    #DebugPrint(IOliste)
     DebugPrint('Lese inn IO liste fra excel ' + str(time.time() - start))
 
     DebugPrint('Tag parameter: ' + str(tag_param))
