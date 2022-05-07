@@ -597,9 +597,10 @@ def MainFunction():
         # bruker try her for å unngå feil for categorier som ikke er i bruk, og dermed ikke har firstElement
         # find all shared parameters defined for the category
         #try:
-        if(1):
-            for param in FilteredElementCollector(doc).OfCategory(
-                    cat).WhereElementIsNotElementType().FirstElement().Parameters:
+
+        catel = FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().FirstElement()
+        if catel is not None:
+            for param in catel.Parameters:
                 if param.Definition.Name.lower() in parametre_project_name:
                     i = parametre_project_name.index(param.Definition.Name.lower())
                     if param.IsShared == True and param.GUID == parametre_project_guid[i]:
