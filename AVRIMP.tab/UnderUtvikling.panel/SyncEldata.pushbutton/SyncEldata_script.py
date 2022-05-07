@@ -231,6 +231,10 @@ def OppdaterEldata(IO_liste_row, k, n_elements, p_s_IO_cat_kol, p_s_IO_cat_guid,
 
 def MainFunction():
 
+    global presync_top_row
+    global presync_3d_row
+    global presync_skjema_row
+
     #kritiske feil:
     errorReport = ""
     #ikke-kritiske feil og generell info:
@@ -1020,5 +1024,9 @@ def MainFunction():
     UI.TaskDialog.Show('Synkronisering eldata ferdig', summaryReport, button)
     DebugPrint(str(time.time() - start))
     return
+
+presync_top_row = []
+presync_3d_row = []
+presync_skjema_row = []
 
 MainFunction()
