@@ -431,9 +431,9 @@ def MainFunction():
     DebugPrint(' Finne excel-fil og riktig worksheet ' + str(time.time() - start))
 
     IOliste = []
-    for i in range(1, rows + 1):
+    for i in range(0, rows):
         rad = []
-        for j in range(1, cols + 1):
+        for j in range(0, cols):
 
             try:
                 rad.append(ws_IO_liste.Range[n2a(j) + str(i)].Text)
@@ -443,7 +443,7 @@ def MainFunction():
                 DebugPrint("Feil ved innlesing av IO-liste rad " + str(i) + " og kolonne " + str(j))
 
         IOliste.append(rad)
-
+    DebugPrint(IOliste)
     DebugPrint('Lese inn IO liste fra excel ' + str(time.time() - start))
 
     DebugPrint('Tag parameter: ' + str(tag_param))
