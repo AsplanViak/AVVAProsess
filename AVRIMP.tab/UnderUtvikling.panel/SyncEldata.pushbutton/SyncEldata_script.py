@@ -433,7 +433,7 @@ def MainFunction():
     IOliste = []
     for i in range(1, rows+1):
         rad = []
-        for j in range(1, cols+1):
+        for j in range(0, cols):
 
             try:
                 rad.append(ws_IO_liste.Range[n2a(j) + str(i)].Text)
@@ -760,10 +760,10 @@ def MainFunction():
                 presync_skjema_row = [tag]
 
             # oppdater_eldata(IO_liste_row, k)
-            try:
-                OppdaterEldata(IO_liste_row, k, n_elements)
-            except:
-                DebugPrint("feil for rad:" + str(IO_liste_row))
+            #try:
+            OppdaterEldata(IO_liste_row, k, n_elements)
+            #except:
+            #    DebugPrint("feil for rad:" + str(IO_liste_row))
             #kod under if(0)-et for å ikke kommentere ue
             if(0):
                 # loop shared params
