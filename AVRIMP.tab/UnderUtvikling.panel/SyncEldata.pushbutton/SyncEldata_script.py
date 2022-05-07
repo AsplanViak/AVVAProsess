@@ -149,6 +149,8 @@ def OppdaterEldata(IO_liste_row, k, n_elements):
 
     for i, kol in enumerate(p_s_IO_cat_kol):
         # DebugPrint('Looping shared params')
+        if n_elements == 1:
+            DebugPrint('i: ' + str(i) + ', kol: ' + str(kol))
         # presync header
         if n_elements == 1:
             # DebugPrint('presync header')
@@ -189,7 +191,7 @@ def OppdaterEldata(IO_liste_row, k, n_elements):
                 DebugPrint(ex.message)
 
     # loop remaining params
-    for j, kol in enumerate(p_r_IO_cat_kol):
+    for j, kol2 in enumerate(p_r_IO_cat_kol):
         # presync header
         if n_elements == 1:
             presync_top_row.append(p_r_IO_cat_name[j])
@@ -206,7 +208,7 @@ def OppdaterEldata(IO_liste_row, k, n_elements):
                 presync_skjema_row.append('')
         if IO_liste_row != (-1):
             # sync
-            IOliste_tekst = IOliste[IO_liste_row][kol]
+            IOliste_tekst = IOliste[IO_liste_row][kol2]
             if IOliste_tekst is None:
                 IOliste_tekst = ' '
             # DebugPrint('IOliste_tekst: ' + str(IOliste_tekst))
@@ -485,24 +487,29 @@ def MainFunction():
             # if celle.lower() == tag_param.lower():
             if celle.lower() == 'tag':  # Bruker tag her og ikke tag_param.lower(), siden det alltid er TAG som brukes i eksport fra database.
                 # Kan evt. splitte dette opp i to forskjellige parametre i ark med parametre.
-
                 tag_kol = j
             if celle.lower() == 'guid':
                 GUID_kol = j
-            #Fjern linje under
-            #if celle.lower() not in parametre_shared_name_lc:
-                if celle.lower() not in parametre_signalinfo_lc and celle.lower() not in parametre_ikke_sync_lc:
-                    parametre_project_name.append(celle)
-                    DebugPrint('project param lagt til: ' + celle.lower())
-                    #Sjekk om finnes i parametre_shared. Dersom den gjør det, legg til i array for GUId. Hvis ikke, legg til [null] for guid.
-                    #Legg til kolonne
-
-            DebugPrint('j, celle, try: ' + str(j) + ' ' + celle)
+            if celle.lower() not in parametre_signalinfo_lc and celle.lower() not in parametre_ikke_sync_lc:
+                parametre_project_name.append(celle.lower())
+                parametre_project_IO_liste_kolonne.append(j)
+                    if celle.lower() in parametre_shared_name_lc:
+                        p_index = parametre_shared_name_lc.index(celle.lower())
+                        parametre_project_guid.append(parametre_guid[p_index])
+                    else:
+                        parametre_project_guid.append(None)
+                DebugPrint('project param lagt til: ' + celle.lower())
+                DebugPrint('IO liste headers, j, celle, try: ' + str(j) + ' ' + celle)
 
         except:
-            DebugPrint('j, celle, continue: ' + str(j) + ' ' + celle)
+            DebugPrint('IO liste headers, j, celle, continue: ' + str(j) + ' ' + celle)
             # Tidligere stod det break her. Tror continue er bedre.
             continue
+    #Resultat av kode over: tre lister for parametre i prosjektet.
+    # parametre_project_name
+    # parametre_project_IO_liste_kolonne
+    # parametre_project_guid    (denne er satt til "None") for parametre som ikke er med i standard parameteromfang)
+    # Disse blir brukt ved looping av categories
 
     # sjekk om det ble funnet kolonne med tag/tfm
     if tag_kol == (-1):
@@ -515,33 +522,33 @@ def MainFunction():
         return
 
     # Finn alle parametre som brukes i IO_liste
-    parametre_shared_IO_liste_kolonne = []
-    parametre_shared_IO_liste_name = []
-    parametre_shared_IO_liste_guid = []
-    parametre_project_IO_liste_kolonne = []
-    parametre_project_IO_liste_name = []
+    #parametre_shared_IO_liste_kolonne = []
+    #parametre_shared_IO_liste_name = []
+    #parametre_shared_IO_liste_guid = []
+    #parametre_project_IO_liste_kolonne = []
+    #parametre_project_IO_liste_name = []
 
     # shared
-    for i, navn in enumerate(parametre_shared_name):
-        for j, celle in enumerate(IOliste[0]):
-            try:
-                if celle.lower() == navn.lower():
-                    parametre_shared_IO_liste_kolonne.append(j)
-                    parametre_shared_IO_liste_name.append(navn)
-                    parametre_shared_IO_liste_guid.append(parametre_guid[i])
-                    break
-            except:
-                break
+    #for i, navn in enumerate(parametre_shared_name):
+    #    for j, celle in enumerate(IOliste[0]):
+    #        try:
+    #            if celle.lower() == navn.lower():
+    #                parametre_shared_IO_liste_kolonne.append(j)
+    #                parametre_shared_IO_liste_name.append(navn)
+    #                parametre_shared_IO_liste_guid.append(parametre_guid[i])
+    #               break
+    #        except:
+    #            break
     # project
-    for i, navn in enumerate(parametre_project_name):
-        for j, celle in enumerate(IOliste[0]):
-            try:
-                if celle.lower() == navn.lower():
-                    parametre_project_IO_liste_kolonne.append(j)
-                    parametre_project_IO_liste_name.append(navn)
-                    break
-            except:
-                break
+    #for i, navn in enumerate(parametre_project_name):
+    #    for j, celle in enumerate(IOliste[0]):
+    #        try:
+    #            if celle.lower() == navn.lower():
+    #                parametre_project_IO_liste_kolonne.append(j)
+    #                parametre_project_IO_liste_name.append(navn)
+    #                break
+    #        except:
+    #            break
 
     cat_list = [BuiltInCategory.OST_PipeAccessory, BuiltInCategory.OST_MechanicalEquipment,
                 BuiltInCategory.OST_GenericModel, BuiltInCategory.OST_DuctAccessory, BuiltInCategory.OST_Sprinklers,
@@ -577,61 +584,70 @@ def MainFunction():
         try:
             for param in FilteredElementCollector(doc).OfCategory(
                     cat).WhereElementIsNotElementType().FirstElement().Parameters:
-                if param.IsShared == True:
-                    for i, guid in enumerate(parametre_shared_IO_liste_guid):
-                        if param.GUID == guid:
-                            p_s_IO_cat_kol.append(parametre_shared_IO_liste_kolonne[i])
-                            p_s_IO_cat_name.append(parametre_shared_IO_liste_name[i])
-                            p_s_IO_cat_guid.append(parametre_shared_IO_liste_guid[i])
-                        if param.GUID == tguid:
-                            tag_cat_status = 1  # status 1 betyr at den finnes som shared parameter, og at definisjonen stemmer overens med offisiel AV standard.
+                if param.Definition.Name.lower() in parametre_project_name:
+                    i = parametre_project_name.index(param.Definition.Name.lower())
+                    if param.IsShared == True and param.GUID = parametre_project_guid[i]:
+                        p_s_IO_cat_kol.append(parametre_project_IO_liste_kolonne[i])    # s = shared
+                        p_s_IO_cat_name.append(parametre_project_IO_liste_name[i])
+                        p_s_IO_cat_guid.append(parametre_project_IO_liste_guid[i])
+                    else:
+                        p_r_IO_cat_kol.append(parametre_project_IO_liste_kolonne[i])  # r = remaining (dvs. not shared)
+                        p_r_IO_cat_name.append(parametre_project_IO_liste_name[i])
+                if param.GUID == tguid:
+                    tag_cat_status = 1  # status 1 betyr at den finnes som shared parameter, og at definisjonen stemmer overens med offisiel AV standard.
+                elif param.Definition.Name == tag_param:
+                    if tag_cat_status == -1:
+                        tag_cat_status = 0  # status 0 betyr at den finnes, men at man ikke kan bruke GUID (enten fordi tag_param er ulik både tfm og tag, eller fordi det ikke er brukt shared parameter for denne)
+
         except:
             # bør legge inn en advarsel her
             DebugPrint('failed parameter testing')
             continue
 
         DebugPrint('Size p_s_IO_cat_name: ' + str(len(p_s_IO_cat_name)))
-
+        DebugPrint(p_s_IO_cat_name)
+        DebugPrint(p_s_IO_cat_kol)
+        DebugPrint('Size p_r_IO_cat_name: ' + str(len(p_r_IO_cat_name)))
+        DebugPrint(p_r_IO_cat_name)
+        DebugPrint(p_r_IO_cat_kol)
         # sorting params
-        p_s_IO_cat_name = [x for (y, x) in sorted(zip(p_s_IO_cat_kol, p_s_IO_cat_name), key=lambda pair: pair[0])]
-        p_s_IO_cat_guid = [x for (y, x) in sorted(zip(p_s_IO_cat_kol, p_s_IO_cat_guid), key=lambda pair: pair[0])]
-        p_s_IO_cat_kol = sorted(p_s_IO_cat_kol)
+        #p_s_IO_cat_name = [x for (y, x) in sorted(zip(p_s_IO_cat_kol, p_s_IO_cat_name), key=lambda pair: pair[0])]
+        #p_s_IO_cat_guid = [x for (y, x) in sorted(zip(p_s_IO_cat_kol, p_s_IO_cat_guid), key=lambda pair: pair[0])]
+        #p_s_IO_cat_kol = sorted(p_s_IO_cat_kol)
 
         # find all shared parameters not defined for category
-        p_s_IO_cat_unused_kol = list(set(parametre_shared_IO_liste_kolonne) - set(p_s_IO_cat_kol))
-        p_s_IO_cat_unused_name = list(set(parametre_shared_IO_liste_name) - set(p_s_IO_cat_name))
+        #p_s_IO_cat_unused_kol = list(set(parametre_shared_IO_liste_kolonne) - set(p_s_IO_cat_kol))
+        #p_s_IO_cat_unused_name = list(set(parametre_shared_IO_liste_name) - set(p_s_IO_cat_name))
 
-        DebugPrint('Size p_s_IO_cat_unused_kol : ' + str(len(p_s_IO_cat_unused_kol)))
-        DebugPrint('p_s_IO_cat_unused_name : ')
-        DebugPrint(p_s_IO_cat_unused_name)
+        #DebugPrint('Size p_s_IO_cat_unused_kol : ' + str(len(p_s_IO_cat_unused_kol)))
+        #DebugPrint('p_s_IO_cat_unused_name : ')
+        #DebugPrint(p_s_IO_cat_unused_name)
 
         # merge project params and unused shared params
-        p_IO_cat_uandp_kol = p_s_IO_cat_unused_kol + parametre_project_IO_liste_kolonne  # unused and project parameters
-        p_IO_cat_uandp_name = p_s_IO_cat_unused_name + parametre_project_IO_liste_name  # unused and project parameters
+        #p_IO_cat_uandp_kol = p_s_IO_cat_unused_kol + parametre_project_IO_liste_kolonne  # unused and project parameters
+        #p_IO_cat_uandp_name = p_s_IO_cat_unused_name + parametre_project_IO_liste_name  # unused and project parameters
 
-        DebugPrint('parametre_project_IO_liste_name')
-        DebugPrint(parametre_project_IO_liste_name)
+        #DebugPrint('parametre_project_IO_liste_name')
+        #DebugPrint(parametre_project_IO_liste_name)
 
-        DebugPrint('Size p_IO_cat_uandp_name: ' + str(len(p_IO_cat_uandp_name)))
+        #DebugPrint('Size p_IO_cat_uandp_name: ' + str(len(p_IO_cat_uandp_name)))
 
         # find remaining parameters by name
-        for param in FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().FirstElement().Parameters:
+        #for param in FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().FirstElement().Parameters:
             # SummaryPrint('param.Definition.Name : ' + param.Definition.Name)
-            for i, name in enumerate(p_IO_cat_uandp_name):
+        #    for i, name in enumerate(p_IO_cat_uandp_name):
                 # SummaryPrint('name in p_IO_cat_uandp_name: ' + name)
-                if param.Definition.Name == name:
-                    p_r_IO_cat_kol.append(p_IO_cat_uandp_kol[i])  # r = remaining
-                    p_r_IO_cat_name.append(p_IO_cat_uandp_name[i])
-                if param.Definition.Name == tag_param:
-                    if tag_cat_status == -1:
-                        tag_cat_status = 0  # status 0 betyr at den finnes, men at man ikke kan bruke GUID (enten fordi tag_param er ulik både tfm og tag, eller fordi det ikke er brukt shared parameter for denne)
+        #        if param.Definition.Name == name:
+        #            p_r_IO_cat_kol.append(p_IO_cat_uandp_kol[i])  # r = remaining
+        #            p_r_IO_cat_name.append(p_IO_cat_uandp_name[i])
+        #        if param.Definition.Name == tag_param:
+        #            if tag_cat_status == -1:
+        #                tag_cat_status = 0  # status 0 betyr at den finnes, men at man ikke kan bruke GUID (enten fordi tag_param er ulik både tfm og tag, eller fordi det ikke er brukt shared parameter for denne)
 
         if tag_cat_status == -1 and cat == BuiltInCategory.OST_DetailComponents:
             if tag_param == 'TFM11FkSamlet' or tag_param == 'TFM':
                 tag_cat_status = 2  # Betyr at man bruker denne som tag: SystemVar + '-' + TFM11FkKompGruppe + TFM11FkKompLNR
 
-        DebugPrint('Size p_r_IO_cat_name: ' + str(len(p_r_IO_cat_name)))
-        DebugPrint(p_r_IO_cat_name)
 
         DebugPrint('tag_cat_status: ' + str(tag_cat_status))
         if tag_cat_status == (-1):
@@ -722,15 +738,18 @@ def MainFunction():
                 presync_skjema_row = [tag]
 
             # oppdater_eldata(IO_liste_row, k)
-            #try:
-            #    OppdaterEldata(IO_liste_row, k, n_elements)
-            #except:
-            #    DebugPrint("feil for rad:" + str(IO_liste_row))
+            try:
+                OppdaterEldata(IO_liste_row, k, n_elements)
+            except:
+                DebugPrint("feil for rad:" + str(IO_liste_row))
             #kod under if(0)-et for å ikke kommentere ue
-            if(1):
+            if(0):
                 # loop shared params
                 for i, kol in enumerate(p_s_IO_cat_kol):
                     #DebugPrint('Looping shared params')
+                    #Debug help
+                    if n_elements == 1:
+                        DebugPrint('i: '+ str(i) + ', kol: ' + str(i))
                     # presync header
                     if n_elements == 1:
                         #DebugPrint('presync header')
