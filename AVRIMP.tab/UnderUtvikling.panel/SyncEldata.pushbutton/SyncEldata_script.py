@@ -403,7 +403,7 @@ def MainFunction():
         rooms = []
         summaryReport += "Feil : Kan ikke lese romdata fra link. Kan skyldes at ARK/RIB link ikke er lastet inn, eller er i lukket workset."
 
-    DebugPrint(' Lese inn romdata' +  str(time.time() - start))
+    DebugPrint(' Lese inn romdata ' +  str(time.time() - start))
 
     #################################################
     # LES INN IO-LISTE FRA EXCEL
@@ -427,6 +427,8 @@ def MainFunction():
             # used = ws_IO_liste.UsedRange
     cols = ws_IO_liste.UsedRange.Columns.Count
     rows = ws_IO_liste.UsedRange.Rows.Count
+
+    DebugPrint(' Finne excel-fil og riktig worksheet ' + str(time.time() - start))
 
     IOliste = []
     for i in range(1, rows + 1):
@@ -607,7 +609,7 @@ def MainFunction():
                     else:
                         p_r_IO_cat_kol.append(parametre_project_IO_liste_kolonne[i])  # r = remaining (dvs. not shared)
                         p_r_IO_cat_name.append(parametre_project_name[i])
-                if param.GUID == tguid:
+                if param.IsShared == True and param.GUID == tguid:
                     tag_cat_status = 1  # status 1 betyr at den finnes som shared parameter, og at definisjonen stemmer overens med offisiel AV standard.
                 elif param.Definition.Name == tag_param:
                     if tag_cat_status == -1:
