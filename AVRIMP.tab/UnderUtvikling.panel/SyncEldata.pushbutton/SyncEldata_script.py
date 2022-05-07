@@ -431,9 +431,9 @@ def MainFunction():
     DebugPrint(' Finne excel-fil og riktig worksheet ' + str(time.time() - start))
 
     IOliste = []
-    for i in range(0, rows):
+    for i in range(1, rows+1):
         rad = []
-        for j in range(0, cols):
+        for j in range(1, cols+1):
 
             try:
                 rad.append(ws_IO_liste.Range[n2a(j) + str(i)].Text)
@@ -493,8 +493,10 @@ def MainFunction():
     # finn kolonne i Io liste med tag/tfm, og finn project parametre
     tag_kol = -1
 
+    DebugPrint(IOliste[0])
+
     for j, celle in enumerate(IOliste[0]):
-        #try:
+        DebugPrint('j: ' + str(j) + ', ' + celle.lower() )
         if(1):
             # if celle.lower() == tag_param.lower():
             if celle.lower() == 'tag':  # Bruker tag her og ikke tag_param.lower(), siden det alltid er TAG som brukes i eksport fra database.
@@ -510,8 +512,8 @@ def MainFunction():
                     parametre_project_guid.append(parametre_guid[p_index])
                 else:
                     parametre_project_guid.append(None)
-                DebugPrint('project param lagt til: ' + celle.lower())
-                DebugPrint('IO liste headers, j, celle, try: ' + str(j) + ' ' + celle)
+                DebugPrint('project param lagt til: ' + celle.lower() + '. Kolonne: ' + str(j))
+                #DebugPrint('IO liste headers, j, celle, try: ' + str(j) + ' ' + celle)
 
         #except:
         if(0):
@@ -533,7 +535,7 @@ def MainFunction():
         result = UI.TaskDialogResult.Ok
         UI.TaskDialog.Show('Synkronisering avbrutt', errorReport, button)
         return
-
+    DebugPrint('tag_kol: ' + str(tag_kol))
     DebugPrint('Behandle parameternavn i første rad IO liste '+ str(time.time() - start))
     # Finn alle parametre som brukes i IO_liste
     #parametre_shared_IO_liste_kolonne = []
