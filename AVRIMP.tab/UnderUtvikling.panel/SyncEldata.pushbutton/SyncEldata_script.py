@@ -493,11 +493,11 @@ def MainFunction():
             if celle.lower() not in parametre_signalinfo_lc and celle.lower() not in parametre_ikke_sync_lc:
                 parametre_project_name.append(celle.lower())
                 parametre_project_IO_liste_kolonne.append(j)
-                    if celle.lower() in parametre_shared_name_lc:
-                        p_index = parametre_shared_name_lc.index(celle.lower())
-                        parametre_project_guid.append(parametre_guid[p_index])
-                    else:
-                        parametre_project_guid.append(None)
+                if celle.lower() in parametre_shared_name_lc:
+                    p_index = parametre_shared_name_lc.index(celle.lower())
+                    parametre_project_guid.append(parametre_guid[p_index])
+                else:
+                    parametre_project_guid.append(None)
                 DebugPrint('project param lagt til: ' + celle.lower())
                 DebugPrint('IO liste headers, j, celle, try: ' + str(j) + ' ' + celle)
 
