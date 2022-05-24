@@ -119,7 +119,7 @@ def SaveListToExcel(filePath, exportData):
     try:
         wb = xl.Workbooks.Add()
         ws = wb.Worksheets[1]
-        ws.title = 'komp'
+        ws.name = 'komp'
         rows = len(exportData)
         cols = max(len(i) for i in exportData)
         a = Array.CreateInstance(object, rows, cols)  # row and column
