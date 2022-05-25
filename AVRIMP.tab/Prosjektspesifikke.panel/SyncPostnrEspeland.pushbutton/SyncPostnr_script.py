@@ -583,7 +583,8 @@ def MainFunction():
 
         for k in EQ:
             # Tag reset
-            tag = k.LookupParameter("System Type").AsString()
+            #tag = k.LookupParameter("System Type").AsString()
+            tag = k.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
             DebugPrint('tag/systemtype: ' + tag)
 
             # tag/tfm-sync
