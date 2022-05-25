@@ -501,9 +501,9 @@ def MainFunction():
     DebugPrint('Behandle parameternavn i første rad IO liste '+ str(time.time() - start))
 
     #cat_list = [BuiltInCategory.OST_PipeAccessory, BuiltInCategory.OST_MechanicalEquipment,
-                BuiltInCategory.OST_GenericModel, BuiltInCategory.OST_DuctAccessory, BuiltInCategory.OST_Sprinklers,
-                BuiltInCategory.OST_PlumbingFixtures, BuiltInCategory.OST_DuctTerminal,
-                BuiltInCategory.OST_DetailComponents]
+        #        BuiltInCategory.OST_GenericModel, BuiltInCategory.OST_DuctAccessory, BuiltInCategory.OST_Sprinklers,
+        #        BuiltInCategory.OST_PlumbingFixtures, BuiltInCategory.OST_DuctTerminal,
+        #        BuiltInCategory.OST_DetailComponents]
     cat_list = [BuiltInCategory.OST_PipeFitting, BuiltInCategory.OST_PipeSegments]
 
     transaction = DB.Transaction(doc)
