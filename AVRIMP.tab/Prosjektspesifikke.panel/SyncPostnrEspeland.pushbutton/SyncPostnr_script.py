@@ -504,7 +504,7 @@ def MainFunction():
         #        BuiltInCategory.OST_GenericModel, BuiltInCategory.OST_DuctAccessory, BuiltInCategory.OST_Sprinklers,
         #        BuiltInCategory.OST_PlumbingFixtures, BuiltInCategory.OST_DuctTerminal,
         #        BuiltInCategory.OST_DetailComponents]
-    cat_list = [BuiltInCategory.OST_PipeFitting, BuiltInCategory.OST_PipeSegments]
+    cat_list = [BuiltInCategory.OST_PipeFitting, BuiltInCategory.OST_PipeSegments, BuiltInCategory.OST_PipeCurves]
 
     transaction = DB.Transaction(doc)
     transaction.Start("Sync eldata")
