@@ -586,21 +586,23 @@ def MainFunction():
             #tag = k.LookupParameter("System Type").AsString()
             tag = k.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
             DebugPrint('tag/systemtype: ' + tag)
-
+            IO_liste_row = -1
             # tag/tfm-sync
             for b in range(1, len(IOliste)):
                 # if k.LookupParameter('TAG').AsString() == IOliste[l][tag_kol]:
                 #tag = k.LookupParameter(tag_param).AsString()
 
+                #bruker "in" siden tag/system type har ekstra benevnelser som PN16 etc.
+                if IOliste[b][tag_kol] in tag:
 
-                if tag == IOliste[b][tag_kol]:
                     IO_liste_row = b
                     break
             DebugPrint('IO_liste_row :' + str(IO_liste_row))
-
-            OppdaterEldata(cat, IO_liste_row, k, 3, p_s_IO_cat_kol, p_s_IO_cat_guid, p_s_IO_cat_name,
+            if IO_liste_row <> -1:
+                OppdaterEldata(cat, IO_liste_row, k, 3, p_s_IO_cat_kol, p_s_IO_cat_guid, p_s_IO_cat_name,
                            p_r_IO_cat_name, p_r_IO_cat_kol)
-
+            else:
+                DebugPrint('Fant ikke rad i IO-liste for system type: ' + tag)
 
 
         DebugPrint('n_elements: ' + str(n_elements))
