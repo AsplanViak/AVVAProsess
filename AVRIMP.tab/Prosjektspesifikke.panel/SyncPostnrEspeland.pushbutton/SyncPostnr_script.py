@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 #  Headeren over må du ha om scriptet inneholder æøå.
 
 """
@@ -572,7 +573,7 @@ def MainFunction():
             # category mangler definert tag-parameter
             DebugPrint('category mangler definert tag-parameter')
             # går til neste category
-            continue
+            #continue
 
         # loop elements in category
         EQ = FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().ToElements()
