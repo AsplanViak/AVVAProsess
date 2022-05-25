@@ -504,7 +504,8 @@ def MainFunction():
         #        BuiltInCategory.OST_GenericModel, BuiltInCategory.OST_DuctAccessory, BuiltInCategory.OST_Sprinklers,
         #        BuiltInCategory.OST_PlumbingFixtures, BuiltInCategory.OST_DuctTerminal,
         #        BuiltInCategory.OST_DetailComponents]
-    cat_list = [BuiltInCategory.OST_PipeFitting, BuiltInCategory.OST_PipeSegments, BuiltInCategory.OST_PipeCurves]
+    cat_list = [BuiltInCategory.OST_PipeFitting,BuiltInCategory.OST_PipeCurves]
+    # BuiltInCategory.OST_PipeSegments, 
 
     transaction = DB.Transaction(doc)
     transaction.Start("Sync eldata")
@@ -589,7 +590,7 @@ def MainFunction():
             except:
                 DebugPrint('Finner ikke system type. Skipper til neste')
                 continue
-            DebugPrint('tag/systemtype: ' + tag)
+            #DebugPrint('tag/systemtype: ' + tag)
             IO_liste_row = -1
             # tag/tfm-sync
             for b in range(1, len(IOliste)):
@@ -601,7 +602,7 @@ def MainFunction():
 
                     IO_liste_row = b
                     break
-            DebugPrint('IO_liste_row :' + str(IO_liste_row))
+            #DebugPrint('IO_liste_row :' + str(IO_liste_row))
             if IO_liste_row <> -1:
                 OppdaterEldata(cat, IO_liste_row, k, 3, p_s_IO_cat_kol, p_s_IO_cat_guid, p_s_IO_cat_name,
                            p_r_IO_cat_name, p_r_IO_cat_kol)
