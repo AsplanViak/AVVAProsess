@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# -*- coding: utf-8 -*-
 #  Headeren over må du ha om scriptet inneholder æøå.
 
 """
