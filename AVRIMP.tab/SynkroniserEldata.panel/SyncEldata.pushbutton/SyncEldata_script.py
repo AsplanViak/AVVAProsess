@@ -691,6 +691,8 @@ def MainFunction():
                         break
             DebugPrint('IO_liste_row :' + str(IO_liste_row))
 
+
+
             # Presync data
             # lag tom header list for denne category (antall parametre kan variere mellom categories)
             if n_elements == 1:
