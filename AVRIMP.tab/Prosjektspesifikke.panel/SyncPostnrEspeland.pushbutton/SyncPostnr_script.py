@@ -589,7 +589,7 @@ def MainFunction():
             #tag = k.LookupParameter("System Type").AsString()
             if 1:
             #try:
-                if(cat==BuilInCategory.OST_PipingSystem):
+                if(cat==BuiltInCategory.OST_PipingSystem):
                     tag = k.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
                 else:
                     #'llinje under på fikses-------------------------------------------------------------------------------------------'
