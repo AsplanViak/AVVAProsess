@@ -505,7 +505,7 @@ def MainFunction():
         #        BuiltInCategory.OST_PlumbingFixtures, BuiltInCategory.OST_DuctTerminal,
         #        BuiltInCategory.OST_DetailComponents]
     #cat_list = [BuiltInCategory.OST_PipeFitting,BuiltInCategory.OST_PipeCurves]
-    cat_list = [BuiltInCategory.OST_PipeFitting,BuiltInCategory.OST_PipeCurves,BuiltInCategory.OST_PipingSystem]
+    cat_list = [BuiltInCategory.OST_PipingSystem,BuiltInCategory.OST_PipeFitting,BuiltInCategory.OST_PipeCurves]
 
     # BuiltInCategory.OST_PipeSegments,
 
@@ -590,11 +590,12 @@ def MainFunction():
             if 1:
             #try:
                 if(cat==BuiltInCategory.OST_PipingSystem):
-                    tag = k.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
+                    tag = k.Name
                 else:
                     #'llinje under på fikses-------------------------------------------------------------------------------------------'
                     #tag = k.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
-                    tag = k.Name
+                    tag = k.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
+
             #except:
             else:
                 DebugPrint('Finner ikke system type. Skipper til neste')
