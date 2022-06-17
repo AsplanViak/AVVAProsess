@@ -603,7 +603,7 @@ def MainFunction():
             if 1:
             #try:
                 if(cat==BuiltInCategory.OST_PipingSystem):
-                    tag = k.Name
+                    tag = Element.Name.GetValue(k)
                 else:
                     tag = k.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
 
