@@ -504,7 +504,9 @@ def MainFunction():
         #        BuiltInCategory.OST_GenericModel, BuiltInCategory.OST_DuctAccessory, BuiltInCategory.OST_Sprinklers,
         #        BuiltInCategory.OST_PlumbingFixtures, BuiltInCategory.OST_DuctTerminal,
         #        BuiltInCategory.OST_DetailComponents]
-    cat_list = [BuiltInCategory.OST_PipeFitting,BuiltInCategory.OST_PipeCurves]
+    #cat_list = [BuiltInCategory.OST_PipeFitting,BuiltInCategory.OST_PipeCurves]
+    cat_list = [BuiltInCategory.OST_PipeFitting,BuiltInCategory.OST_PipeCurves,BuilInCategory.OST_PipingSystem]
+
     # BuiltInCategory.OST_PipeSegments,
 
     transaction = DB.Transaction(doc)
@@ -586,7 +588,12 @@ def MainFunction():
             # Tag reset
             #tag = k.LookupParameter("System Type").AsString()
             try:
-                tag = k.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
+                if(cat==BuilInCategory.OST_PipingSystem):
+                    tag = k.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
+                else:
+                    'llinje under på fikses-------------------------------------------------------------------------------------------'
+                    #tag = k.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
+                    tag = k.Name
             except:
                 DebugPrint('Finner ikke system type. Skipper til neste')
                 continue
