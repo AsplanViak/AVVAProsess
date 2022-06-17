@@ -505,7 +505,7 @@ def MainFunction():
         #        BuiltInCategory.OST_PlumbingFixtures, BuiltInCategory.OST_DuctTerminal,
         #        BuiltInCategory.OST_DetailComponents]
     #cat_list = [BuiltInCategory.OST_PipeFitting,BuiltInCategory.OST_PipeCurves]
-    cat_list = [BuiltInCategory.OST_PipeFitting,BuiltInCategory.OST_PipeCurves,BuilInCategory.OST_PipingSystem]
+    cat_list = [BuiltInCategory.OST_PipeFitting,BuiltInCategory.OST_PipeCurves,BuiltInCategory.OST_PipingSystem]
 
     # BuiltInCategory.OST_PipeSegments,
 
