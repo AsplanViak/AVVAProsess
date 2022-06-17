@@ -506,7 +506,7 @@ def MainFunction():
         #        BuiltInCategory.OST_DetailComponents]
     #cat_list = [BuiltInCategory.OST_PipeFitting,BuiltInCategory.OST_PipeCurves]
     #cat_list = [BuiltInCategory.OST_PipingSystem,BuiltInCategory.OST_PipeFitting,BuiltInCategory.OST_PipeCurves]
-    cat_list = [BuiltInCategory.OST_PipingSystem_Reference,BuiltInCategory.OST_PipingSystem]
+    cat_list = [BuiltInCategory.OST_PipingSystem_Reference,PipingSystemType]
 
     # BuiltInCategory.OST_PipeSegments,
 
@@ -531,7 +531,10 @@ def MainFunction():
         # bruker try her for å unngå feil for categorier som ikke er i bruk, og dermed ikke har firstElement
         # find all parameters defined for the category
         try:
-            catel = FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().FirstElement()
+            if(cat == PipingSystemType):
+                catel = FilteredElementCollector(doc).OfClass(PipingSystemType).FirstElement()
+            else:
+                catel = FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().FirstElement()
             if catel is not None:
                 for param in catel.Parameters:
                     if param.Definition.Name in parametre_project_name:
@@ -579,7 +582,10 @@ def MainFunction():
             #continue
 
         # loop elements in category
-        EQ = FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().ToElements()
+        if (cat == PipingSystemType):
+            EQ = FilteredElementCollector(doc).OfClass(PipingSystemType).ToElements()
+        else:
+            EQ = FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().ToElements()
         n_elements = 0
 
         DebugPrint('parameteromfang klarert')
@@ -590,7 +596,7 @@ def MainFunction():
             #tag = k.LookupParameter("System Type").AsString()
             if 1:
             #try:
-                if(cat==BuiltInCategory.OST_PipingSystem):
+                if(cat==PipingSystemType):
                     tag = k.Name
                 else:
                     #'llinje under på fikses-------------------------------------------------------------------------------------------'
