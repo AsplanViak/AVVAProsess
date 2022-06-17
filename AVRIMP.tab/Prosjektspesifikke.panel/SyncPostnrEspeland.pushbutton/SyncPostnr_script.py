@@ -443,6 +443,7 @@ def MainFunction():
 
 
 
+
     if tag_param.upper() == 'TAG':
         tguid = Guid(TAG_guid)
     elif tag_param == 'TFM11FkSamlet':
@@ -456,6 +457,7 @@ def MainFunction():
     tag_kol = -1
 
     DebugPrint(IOliste[0])
+
 
     for j, celle in enumerate(IOliste[0]):
         DebugPrint('j: ' + str(j) + ', ' + celle )
