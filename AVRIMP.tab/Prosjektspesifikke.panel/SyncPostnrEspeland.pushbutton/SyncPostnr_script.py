@@ -591,7 +591,7 @@ def MainFunction():
                 if(cat==BuilInCategory.OST_PipingSystem):
                     tag = k.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
                 else:
-                    'llinje under på fikses-------------------------------------------------------------------------------------------'
+                    #'llinje under på fikses-------------------------------------------------------------------------------------------'
                     #tag = k.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
                     tag = k.Name
             except:
