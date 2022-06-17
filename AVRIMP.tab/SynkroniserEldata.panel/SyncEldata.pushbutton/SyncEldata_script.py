@@ -176,7 +176,6 @@ def OppdaterEldata(cat, IO_liste_row, k, n_elements, p_s_IO_cat_kol, p_s_IO_cat_
             # DebugPrint('IOliste_tekst: ' + str(IOliste_tekst))
             try:
                 #rad under er den som utfører selve endringen av parameter-verdi i Revit
-                ############SKAL TROLIG STÅ kol ISTEDET FOR i PÅ RAD UNDER!!!!!!!!!!!!!!!!!!!!!
 
                 res = k.get_Parameter(p_s_IO_cat_guid[i]).Set(IOliste_tekst)
                 if (res):

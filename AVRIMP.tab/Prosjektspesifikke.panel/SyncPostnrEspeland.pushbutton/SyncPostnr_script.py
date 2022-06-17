@@ -176,7 +176,7 @@ def OppdaterEldata(cat, IO_liste_row, k, n_elements, p_s_IO_cat_kol, p_s_IO_cat_
             # DebugPrint('IOliste_tekst: ' + str(IOliste_tekst))
             try:
                 #rad under er den som utfører selve endringen av parameter-verdi i Revit
-                ############SKAL TROLIG STÅ kol ISTEDET FOR i PÅ RAD UNDER!!!!!!!!!!!!!!!!!!!!!
+
 
                 res = k.get_Parameter(p_s_IO_cat_guid[i]).Set(IOliste_tekst)
                 if (res):
@@ -508,7 +508,7 @@ def MainFunction():
         #        BuiltInCategory.OST_DetailComponents]
     #cat_list = [BuiltInCategory.OST_PipeFitting,BuiltInCategory.OST_PipeCurves]
     #cat_list = [BuiltInCategory.OST_PipingSystem,BuiltInCategory.OST_PipeFitting,BuiltInCategory.OST_PipeCurves]
-    cat_list = [BuiltInCategory.OST_PipingSystem_Reference,PipingSystemType]
+    cat_list = [BuiltInCategory.OST_PipingSystem_Reference,BuiltInCategory.OST_PipingSystem]
 
     # BuiltInCategory.OST_PipeSegments,
 
@@ -533,7 +533,7 @@ def MainFunction():
         # bruker try her for å unngå feil for categorier som ikke er i bruk, og dermed ikke har firstElement
         # find all parameters defined for the category
         try:
-            if(cat == PipingSystemType):
+            if(cat == BuiltInCategory.OST_PipingSystem):
                 catel = FilteredElementCollector(doc).OfClass(PipingSystemType).FirstElement()
             else:
                 catel = FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().FirstElement()
@@ -584,7 +584,7 @@ def MainFunction():
             #continue
 
         # loop elements in category
-        if (cat == PipingSystemType):
+        if (cat == BuiltInCategory.OST_PipingSystem):
             EQ = FilteredElementCollector(doc).OfClass(PipingSystemType).ToElements()
         else:
             EQ = FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().ToElements()
@@ -598,11 +598,9 @@ def MainFunction():
             #tag = k.LookupParameter("System Type").AsString()
             if 1:
             #try:
-                if(cat==PipingSystemType):
+                if(cat==BuiltInCategory.OST_PipingSystem):
                     tag = k.Name
                 else:
-                    #'llinje under på fikses-------------------------------------------------------------------------------------------'
-                    #tag = k.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
                     tag = k.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
 
             #except:
