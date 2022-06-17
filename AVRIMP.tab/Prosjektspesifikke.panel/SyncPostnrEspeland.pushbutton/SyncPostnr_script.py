@@ -597,7 +597,8 @@ def MainFunction():
             except:
                 DebugPrint('Finner ikke system type. Skipper til neste')
                 continue
-            #DebugPrint('tag/systemtype: ' + tag)
+            DebugPrint('tag/systemtype: ' + tag)
+
             IO_liste_row = -1
             # tag/tfm-sync
             for b in range(1, len(IOliste)):
