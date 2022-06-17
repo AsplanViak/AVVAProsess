@@ -587,14 +587,16 @@ def MainFunction():
         for k in EQ:
             # Tag reset
             #tag = k.LookupParameter("System Type").AsString()
-            try:
+            if 1:
+            #try:
                 if(cat==BuilInCategory.OST_PipingSystem):
                     tag = k.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
                 else:
                     #'llinje under på fikses-------------------------------------------------------------------------------------------'
                     #tag = k.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
                     tag = k.Name
-            except:
+            #except:
+            else:
                 DebugPrint('Finner ikke system type. Skipper til neste')
                 continue
             DebugPrint('tag/systemtype: ' + tag)
