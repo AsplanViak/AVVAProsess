@@ -532,7 +532,8 @@ def MainFunction():
 
         # bruker try her for å unngå feil for categorier som ikke er i bruk, og dermed ikke har firstElement
         # find all parameters defined for the category
-        try:
+        #try:
+        if(1):
             if(cat == BuiltInCategory.OST_PipingSystem):
                 catel = FilteredElementCollector(doc).OfClass(PipingSystemType).FirstElement()
             else:
@@ -556,7 +557,8 @@ def MainFunction():
             else:
                 DebugPrint('Ingen elementer i cat. Ingen parameter testing')
                 continue
-        except:
+        #except:
+        else:
             # bør legge inn en advarsel her
             DebugPrint('failed parameter testing')
             continue
