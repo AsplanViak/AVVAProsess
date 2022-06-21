@@ -620,10 +620,13 @@ def MainFunction():
                 #tag = k.LookupParameter(tag_param).AsString()
 
                 #bruker "in" siden tag/system type har ekstra benevnelser som PN16 etc.
+                #men dette kan gi feil siden kan forveksles med komponenter som ikke er rørsystemer
                 if IOliste[b][tag_kol] in tag:
-
-                    IO_liste_row = b
-                    break
+                    if 'L_' in IOliste[b][tag_kol]:
+                        IO_liste_row = b
+                        #Fortsetter søk til finner eksakt match.
+                        if IOliste[b][tag_kol] == tag:
+                            break
             #DebugPrint('IO_liste_row :' + str(IO_liste_row))
             if IO_liste_row <> -1:
                 OppdaterEldata(cat, IO_liste_row, k, 3, p_s_IO_cat_kol, p_s_IO_cat_guid, p_s_IO_cat_name,
