@@ -625,8 +625,8 @@ def MainFunction():
                     if 'L_' in IOliste[b][tag_kol]:
                         IO_liste_row = b
                         #Fortsetter søk til finner eksakt match.
-                        if IOliste[b][tag_kol] == tag:
-                            break
+                        #if IOliste[b][tag_kol] == tag:
+                        break
             #DebugPrint('IO_liste_row :' + str(IO_liste_row))
             if IO_liste_row <> -1:
                 OppdaterEldata(cat, IO_liste_row, k, 3, p_s_IO_cat_kol, p_s_IO_cat_guid, p_s_IO_cat_name,
