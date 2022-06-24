@@ -663,7 +663,7 @@ def MainFunction():
                     # DebugPrint('k.get_Parameter(tguid).AsString() : ' + k.get_Parameter(tguid).AsString())
                     # DebugPrint('k.LookupParameter(TAG).AsString() : ' + k.LookupParameter('TAG').AsString())
                 except:
-                    errorReport += 'Feil. Skyldes trolig at parameter TAG ikke er lagt til som project parameter for Detail Item. Skipper element"
+                    errorReport += "Feil. Skyldes trolig at parameter TAG ikke er lagt til som project parameter for Detail Item. Skipper element"
                     continue
             elif tag_cat_status == 0:
                 if k.LookupParameter(tag_param).AsString() == 'null' or k.LookupParameter(
