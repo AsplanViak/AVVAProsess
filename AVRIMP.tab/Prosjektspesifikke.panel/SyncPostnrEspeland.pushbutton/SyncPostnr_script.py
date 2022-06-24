@@ -624,7 +624,7 @@ def MainFunction():
                 if IOliste[b][tag_kol] in tag:
                     if 'L_' in IOliste[b][tag_kol]:
                         IO_liste_row = b
-                        #Fortsetter søk til finner eksakt match.
+
                         #if IOliste[b][tag_kol] == tag:
                         break
             #DebugPrint('IO_liste_row :' + str(IO_liste_row))
