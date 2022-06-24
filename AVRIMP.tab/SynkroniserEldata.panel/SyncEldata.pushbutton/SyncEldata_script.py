@@ -442,7 +442,7 @@ def MainFunction():
 
             DebugPrint('Lese inn IO liste fra excel ' + str(time.time() - start))
         except:
-            errorReport += 'Fant ikke excel-dokument med IO-liste på plassering angitt i ark "kobling mot IO-liste" '
+            errorReport += "Fant ikke excel-dokument med IO-liste på plassering angitt i ark 'kobling mot IO-liste' \n Sync avbrutt"
             button = UI.TaskDialogCommonButtons.None
             result = UI.TaskDialogResult.Ok
             UI.TaskDialog.Show('Synkronisering avbrutt', errorReport, button)
@@ -453,21 +453,21 @@ def MainFunction():
             IOliste = list(csv.reader(open(IO_liste_filplassering), delimiter  =";"))
             DebugPrint('Lese inn IO liste fra csv fil ' + str(time.time() - start))
         except:
-            summaryReport += "Fant ikke csv-fil med IO-liste på plassering angitt i ark 'kobling mot IO-liste'."
+            summaryReport += "Fant ikke csv-fil med IO-liste på plassering angitt i ark 'kobling mot IO-liste' \n Sync avbrutt."
             button = UI.TaskDialogCommonButtons.None
             result = UI.TaskDialogResult.Ok
             UI.TaskDialog.Show('Synkronisering avbrutt', errorReport, button)
             return
 
     elif IO_liste_filplassering =="":
-        errorReport +=  "Ingen fil med IO-liste angitt i ark 'kobling mot IO-liste'."
+        errorReport +=  "Ingen fil med IO-liste angitt i ark 'kobling mot IO-liste'. \n Sync avbrutt."
         button = UI.TaskDialogCommonButtons.None
         result = UI.TaskDialogResult.Ok
         UI.TaskDialog.Show('Synkronisering avbrutt', errorReport, button)
         return
 
     else:
-        errorReport +=  "Ingen gyldig fil med IO-liste angitt i ark 'kobling mot IO-liste'. Mangler kanskje filtype i filnavn."
+        errorReport +=  "Ingen gyldig fil med IO-liste angitt i ark 'kobling mot IO-liste'. Mangler kanskje filtype i filnavn. \n Sync avbrutt"
         button = UI.TaskDialogCommonButtons.None
         result = UI.TaskDialogResult.Ok
         UI.TaskDialog.Show('Synkronisering avbrutt', errorReport, button)
@@ -652,15 +652,19 @@ def MainFunction():
 
             # sjekk om tag/tfm er blank, og finn tekstverdi på tag i revit
             if tag_cat_status == 1:
-                if k.get_Parameter(tguid).AsString() == 'null' or k.get_Parameter(
-                        tguid).AsString() == '=-' or k.get_Parameter(tguid).AsString() == '' or k.get_Parameter(
-                    tguid).AsString() is None:
-                    # gå til neste element dersom blank tag/tfm
-                    SummaryPrint('blank tag/tfm (shared param):')
+                try:
+                    if k.get_Parameter(tguid).AsString() == 'null' or k.get_Parameter(
+                            tguid).AsString() == '=-' or k.get_Parameter(tguid).AsString() == '' or k.get_Parameter(
+                        tguid).AsString() is None:
+                        # gå til neste element dersom blank tag/tfm
+                        SummaryPrint('blank tag/tfm (shared param):')
+                        continue
+                    tag = k.get_Parameter(tguid).AsString()
+                    # DebugPrint('k.get_Parameter(tguid).AsString() : ' + k.get_Parameter(tguid).AsString())
+                    # DebugPrint('k.LookupParameter(TAG).AsString() : ' + k.LookupParameter('TAG').AsString())
+                except:
+                    errorReport += 'Feil. Skyldes trolig at parameter TAG ikke er lagt til som project parameter for Detail Item. Skipper element"
                     continue
-                tag = k.get_Parameter(tguid).AsString()
-                # DebugPrint('k.get_Parameter(tguid).AsString() : ' + k.get_Parameter(tguid).AsString())
-                # DebugPrint('k.LookupParameter(TAG).AsString() : ' + k.LookupParameter('TAG').AsString())
             elif tag_cat_status == 0:
                 if k.LookupParameter(tag_param).AsString() == 'null' or k.LookupParameter(
                         tag_param).AsString() == '=-' or k.LookupParameter(tag_param).AsString() == '' or k.LookupParameter(
