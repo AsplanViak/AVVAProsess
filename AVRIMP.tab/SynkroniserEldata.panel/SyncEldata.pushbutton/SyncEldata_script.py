@@ -446,6 +446,7 @@ def MainFunction():
             button = UI.TaskDialogCommonButtons.None
             result = UI.TaskDialogResult.Ok
             UI.TaskDialog.Show('Synkronisering avbrutt', errorReport, button)
+            return
 
     elif 'csv' in IO_liste_filplassering:
         try:
@@ -456,18 +457,21 @@ def MainFunction():
             button = UI.TaskDialogCommonButtons.None
             result = UI.TaskDialogResult.Ok
             UI.TaskDialog.Show('Synkronisering avbrutt', errorReport, button)
+            return
 
     elif IO_liste_filplassering =="":
         errorReport +=  "Ingen fil med IO-liste angitt i ark 'kobling mot IO-liste'."
         button = UI.TaskDialogCommonButtons.None
         result = UI.TaskDialogResult.Ok
         UI.TaskDialog.Show('Synkronisering avbrutt', errorReport, button)
+        return
 
     else:
         errorReport +=  "Ingen gyldig fil med IO-liste angitt i ark 'kobling mot IO-liste'. Mangler kanskje filtype i filnavn."
         button = UI.TaskDialogCommonButtons.None
         result = UI.TaskDialogResult.Ok
         UI.TaskDialog.Show('Synkronisering avbrutt', errorReport, button)
+        return
 
 
     DebugPrint('Tag parameter: ' + str(tag_param))
