@@ -442,33 +442,32 @@ def MainFunction():
 
             DebugPrint('Lese inn IO liste fra excel ' + str(time.time() - start))
         except:
-            #errorReport += 'Fant ikke excel-dokument med IO-liste på plassering angitt i ark "kobling mot IO-liste" '
-            #button = UI.TaskDialogCommonButtons.None
-            #result = UI.TaskDialogResult.Ok
-            #UI.TaskDialog.Show('Synkronisering avbrutt', errorReport, button)
-            summaryReport += "Fant ikke excel-dokument med IO-liste på plassering angitt i ark 'kobling mot IO-liste'. \n"
-            summaryReport += "Ingen import av eldata gjennomført, kun eksport til database. \n"
-            IOliste = ['0']
+            errorReport += 'Fant ikke excel-dokument med IO-liste på plassering angitt i ark "kobling mot IO-liste" '
+            button = UI.TaskDialogCommonButtons.None
+            result = UI.TaskDialogResult.Ok
+            UI.TaskDialog.Show('Synkronisering avbrutt', errorReport, button)
 
     elif 'csv' in IO_liste_filplassering:
         try:
             IOliste = list(csv.reader(open(IO_liste_filplassering), delimiter  =";"))
             DebugPrint('Lese inn IO liste fra csv fil ' + str(time.time() - start))
         except:
-            summaryReport += "Fant ikke csv-fil med IO-liste på plassering angitt i ark 'kobling mot IO-liste'. \n"
-            summaryReport += "Ingen import av eldata gjennomført, kun eksport til database. \n"
-            DebugPrint("Feil ved innlesing av IO-liste fra csv fil")
-            IOliste = ['0']
+            summaryReport += "Fant ikke csv-fil med IO-liste på plassering angitt i ark 'kobling mot IO-liste'."
+            button = UI.TaskDialogCommonButtons.None
+            result = UI.TaskDialogResult.Ok
+            UI.TaskDialog.Show('Synkronisering avbrutt', errorReport, button)
+
     elif IO_liste_filplassering =="":
-        summaryReport += "Ingen fil med IO-liste angitt i ark 'kobling mot IO-liste'. \n"
-        summaryReport += "Ingen import av eldata gjennomført, kun eksport til database. \n"
-        DebugPrint("Ingen fil med IO-liste angitt i ark 'kobling mot IO-liste")
-        IOliste = ['0']
+        errorReport +=  "Ingen fil med IO-liste angitt i ark 'kobling mot IO-liste'."
+        button = UI.TaskDialogCommonButtons.None
+        result = UI.TaskDialogResult.Ok
+        UI.TaskDialog.Show('Synkronisering avbrutt', errorReport, button)
+
     else:
-        summaryReport += "Ingen gyldig fil med IO-liste angitt i ark 'kobling mot IO-liste'. Mangler kanskje filtype i filnavn.\n"
-        summaryReport += "Ingen import av eldata gjennomført, kun eksport til database. \n"
-        DebugPrint("Ingen fil med IO-liste angitt i ark 'kobling mot IO-liste. Mangler kanskje filtype i filnavn.")
-        IOliste = ['0']
+        errorReport +=  "Ingen gyldig fil med IO-liste angitt i ark 'kobling mot IO-liste'. Mangler kanskje filtype i filnavn."
+        button = UI.TaskDialogCommonButtons.None
+        result = UI.TaskDialogResult.Ok
+        UI.TaskDialog.Show('Synkronisering avbrutt', errorReport, button)
 
 
     DebugPrint('Tag parameter: ' + str(tag_param))
