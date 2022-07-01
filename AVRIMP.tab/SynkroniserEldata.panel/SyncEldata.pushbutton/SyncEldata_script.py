@@ -170,7 +170,7 @@ def OppdaterEldata(cat, IO_liste_row, k, n_elements, p_s_IO_cat_kol, p_s_IO_cat_
         if IO_liste_row != (-1):
             # sync
             # DebugPrint('Syncing')
-            if p_s_IO_cat_name == 'TrengerSignalKabel' or p_s_IO_cat_name == 'TrengerStrømKabel':
+            if p_s_IO_cat_name[i] == 'TrengerSignalKabel' or p_s_IO_cat_name[i] == 'TrengerStrømKabel':
                 print (p_s_IO_cat_name)
                 if IOliste[IO_liste_row][kol] == 'Yes':
                     IOliste_tekst = 1
@@ -213,7 +213,7 @@ def OppdaterEldata(cat, IO_liste_row, k, n_elements, p_s_IO_cat_kol, p_s_IO_cat_
                 presync_skjema_row.append('')
         if IO_liste_row != (-1):
             # sync
-            if p_r_IO_cat_name == 'TrengerSignalKabel' or p_r_IO_cat_name == 'TrengerStrømKabel':
+            if p_r_IO_cat_name[j] == 'TrengerSignalKabel' or p_r_IO_cat_name[j] == 'TrengerStrømKabel':
                 print(p_r_IO_cat_name )
                 if IOliste[IO_liste_row][kol2] == 'Yes':
                     IOliste_tekst = 1
