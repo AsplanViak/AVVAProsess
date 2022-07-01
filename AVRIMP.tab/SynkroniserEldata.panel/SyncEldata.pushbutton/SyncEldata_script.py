@@ -170,13 +170,20 @@ def OppdaterEldata(cat, IO_liste_row, k, n_elements, p_s_IO_cat_kol, p_s_IO_cat_
         if IO_liste_row != (-1):
             # sync
             # DebugPrint('Syncing')
-            IOliste_tekst = IOliste[IO_liste_row][kol]
+            if p_s_IO_cat_name == 'TrengerSignalKabel' or p_s_IO_cat_name == 'TrengerStrømKabel':
+                if IOliste[IO_liste_row][kol] == 'Yes':
+                    IOliste_tekst = 1
+                elif IOliste[IO_liste_row][kol] == 'No':
+                    IOliste_tekst = 0
+            else:
+                IOliste_tekst = IOliste[IO_liste_row][kol]
+
             if IOliste_tekst is None:
                 IOliste_tekst = ' '
             # DebugPrint('IOliste_tekst: ' + str(IOliste_tekst))
             try:
-                #rad under er den som utfører selve endringen av parameter-verdi i Revit
 
+                #rad under er den som utfører selve endringen av parameter-verdi i Revit
                 res = k.get_Parameter(p_s_IO_cat_guid[i]).Set(IOliste_tekst)
                 if (res):
                     SummaryPrint('shared parameter ' + p_s_IO_cat_name[i] + ': ok')
@@ -205,7 +212,13 @@ def OppdaterEldata(cat, IO_liste_row, k, n_elements, p_s_IO_cat_kol, p_s_IO_cat_
                 presync_skjema_row.append('')
         if IO_liste_row != (-1):
             # sync
-            IOliste_tekst = IOliste[IO_liste_row][kol2]
+            if p_r_IO_cat_name == 'TrengerSignalKabel' or p_r_IO_cat_name == 'TrengerStrømKabel':
+                if IOliste[IO_liste_row][kol2] == 'Yes':
+                    IOliste_tekst = 1
+                elif IOliste[IO_liste_row][kol2] == 'No':
+                    IOliste_tekst = 0
+            else:
+                IOliste_tekst = IOliste[IO_liste_row][kol2]
             if IOliste_tekst is None:
                 IOliste_tekst = ' '
             # DebugPrint('IOliste_tekst: ' + str(IOliste_tekst))
@@ -663,7 +676,7 @@ def MainFunction():
                     # DebugPrint('k.get_Parameter(tguid).AsString() : ' + k.get_Parameter(tguid).AsString())
                     # DebugPrint('k.LookupParameter(TAG).AsString() : ' + k.LookupParameter('TAG').AsString())
                 except:
-                    summaryReport +=  "Feil. Skyldes trolig at parameter TAG ikke er lagt til som project parameter for Detail Item. Skipper element"
+                    summaryReport +=  "Feil. Skyldes trolig at parameter TAG ikke er lagt til som project parameter for Detail Item. Skipper element\n"
                     SummaryPrint("Feil. Skyldes trolig at parameter TAG ikke er lagt til som project parameter for Detail Item. Skipper element")
                     continue
             elif tag_cat_status == 0:
