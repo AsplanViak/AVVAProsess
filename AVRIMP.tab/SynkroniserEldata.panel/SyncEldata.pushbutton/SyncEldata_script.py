@@ -214,7 +214,7 @@ def OppdaterEldata(cat, IO_liste_row, k, n_elements, p_s_IO_cat_kol, p_s_IO_cat_
         if IO_liste_row != (-1):
             # sync
             if p_r_IO_cat_name[j] == 'TrengerSignalKabel' or p_r_IO_cat_name[j] == 'TrengerStrømKabel':
-                
+
                 if IOliste[IO_liste_row][kol2] == 'Yes':
                     IOliste_tekst = 1
                 elif IOliste[IO_liste_row][kol2] == 'No':
