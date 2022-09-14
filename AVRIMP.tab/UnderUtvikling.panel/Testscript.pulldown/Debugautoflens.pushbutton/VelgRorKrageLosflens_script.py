@@ -136,9 +136,10 @@ def placeFitting(duct, point, familytype, lineDirection):
             break
     print('point.Z :' + str(point.Z))
     #point = DB.XYZ(point.X,point.Y,point.Z-level.Elevation)
-    point = DB.XYZ(point.X, point.Y, point.Z - level.Origin.Z)
+    point = DB.XYZ(point.X, point.Y, point.Z - level.ProjectElevation)
     print('ny point.Z :' + str(point.Z))
-    print('level.Origin.Z :' +str(level.Origin.Z))
+    print('level.ProjectElevation :' +str(level.ProjectElevation))
+    print('level.Elevation :' + str(level.Elevation))
     #point = DB.XYZ(point.X, point.Y, point.Z)
 
     ## THIS LINE IS DEPENDENT ON UNITS AND PROJECT SETTINGS. LINE BELOW IS FOR PROEJCT USING MM AS UNIT, AND THERE IS NOT ADDED FLANGES FOR DN<45 MM
