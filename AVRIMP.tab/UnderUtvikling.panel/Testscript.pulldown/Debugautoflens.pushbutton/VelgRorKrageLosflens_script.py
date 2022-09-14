@@ -134,9 +134,9 @@ def placeFitting(duct, point, familytype, lineDirection):
             width = c.Width
             height = c.Height
             break
-
-    point = DB.XYZ(point.X,point.Y,point.Z-level.Elevation)
     print('point.Z :' + str(point.Z))
+    point = DB.XYZ(point.X,point.Y,point.Z-level.Elevation)
+    print('ny point.Z :' + str(point.Z))
     print('level.Elevation :' +str(level.Elevation))
     #point = DB.XYZ(point.X, point.Y, point.Z)
 
