@@ -538,15 +538,20 @@ for i in EQ:
                         flange_a_con_position = f_cons[0].Origin
                         flange_b_con_position = f_cons[1].Origin
 
-                        if valve_number_of_connectors == 2:
+                        #if valve_number_of_connectors == 2:
+                        if 1:
                             # fungerer best for ventiler etc med 2 stk connectors
                             flange_a_dist = flange_a_con_position.DistanceTo(opposite_valve_connector.Origin)
+                            print('flange_a_dist :' + str(flange_a_dist))
                             flange_b_dist = flange_b_con_position.DistanceTo(opposite_valve_connector.Origin)
+                            print('flange_b_dist :' + str(flange_b_dist))
                             if flange_a_dist < flange_b_dist:
                                 need_to_flip = f_cons[0].GetMEPConnectorInfo().IsPrimary
                             else:
                                 need_to_flip = f_cons[1].GetMEPConnectorInfo().IsPrimary
-                        else:
+                            print ('need_to_flip 2 connectors:' + str(need_to_flip))
+                        #else:
+                        if 1:
                             # fungerer for ventiler etc med 1 eller mer enn 2 connectors. Bruker bounding box location
                             try:
                                 bb = valve.get_BoundingBox(None)
@@ -559,6 +564,7 @@ for i in EQ:
                                 need_to_flip = f_cons[0].GetMEPConnectorInfo().IsPrimary
                             else:
                                 need_to_flip = f_cons[1].GetMEPConnectorInfo().IsPrimary
+                            print ('need_to_flip 1 eller mer enn 2 :' + str(need_to_flip))
 
                         #Flip
                         if need_to_flip:
@@ -579,7 +585,8 @@ for i in EQ:
                         # Move flange
                         ###################################
 
-                        try:
+                        if 0:
+                        #try:
                             if f_cons[0].GetMEPConnectorInfo().IsPrimary:
                                 #primary
                                 primary_con_id = 0
@@ -590,7 +597,8 @@ for i in EQ:
                                 secondary_con_id = 0
                             new_flange.Location.Move((valve_connector.Origin - f_cons[secondary_con_id].Origin))
 
-                        except:
+                        if 0:
+                        #except:
                             status = ' Årsak: Feil ved flytting av flens.'
                             doc.Delete(new_flange.Id)
                             output_report_errors.append(report(duct_piping_system_type, pipe_connector, status))
