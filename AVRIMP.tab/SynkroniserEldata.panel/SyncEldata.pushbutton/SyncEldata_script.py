@@ -585,6 +585,7 @@ def MainFunction():
     cat_list = [BuiltInCategory.OST_PipeAccessory, BuiltInCategory.OST_MechanicalEquipment,
                 BuiltInCategory.OST_GenericModel, BuiltInCategory.OST_DuctAccessory, BuiltInCategory.OST_Sprinklers,
                 BuiltInCategory.OST_PlumbingFixtures, BuiltInCategory.OST_DuctTerminal,
+                BuiltInCategory.OST_ElectricalEquipment, BuiltInCategory.OST_ElectricalFixtures,
                 BuiltInCategory.OST_DetailComponents]
 
     transaction = DB.Transaction(doc)
