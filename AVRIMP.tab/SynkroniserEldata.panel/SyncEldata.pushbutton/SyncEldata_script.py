@@ -301,7 +301,10 @@ def MainFunction():
     if "BIM 360://" in filename:
         sentralfil = filename
     else:
-        sentralfil = BasicFileInfo.Extract(doc.PathName).CentralPath
+        try:
+            sentralfil = BasicFileInfo.Extract(doc.PathName).CentralPath
+        except:
+            sentralfil = filename
     if not sentralfil:
         prosjektnavn = 'testprosjekt'
     else:
