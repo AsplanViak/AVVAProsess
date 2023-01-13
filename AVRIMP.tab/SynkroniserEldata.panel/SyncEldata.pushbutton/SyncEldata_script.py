@@ -309,7 +309,7 @@ def MainFunction():
         prosjektnavn = 'testprosjekt'
     else:
         sentralfil = sentralfil.replace('_Sentralfil','')
-        sentralfil = sentralfil.replace('sentralfil', '')
+        sentralfil = sentralfil.replace(' sentralfil', '')
         sentralfil = sentralfil.replace('\\', '/').replace('.', '/')
         sentralfil = sentralfil.split('/')
         prosjektnavn = sentralfil[-2]
