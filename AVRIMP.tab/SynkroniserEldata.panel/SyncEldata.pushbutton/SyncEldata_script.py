@@ -281,7 +281,7 @@ def MainFunction():
             try:
                 AV_room_link_str = sheet.LookupParameter('AV_room_link_str').AsString()
             except:
-                AV_room_link_str = 'RIB'
+                AV_room_link_str = ''
             DebugPrint('AV_room_link_str: ' + AV_room_link_str)
             break
 
