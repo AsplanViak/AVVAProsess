@@ -401,6 +401,8 @@ def MainFunction():
                 DebugPrint("fant link med RIB/ARK: " + i.Name)
                 DebugPrint("link_score: " + str(link_score))
                 linkDoc = i.GetLinkDocument()
+        else:
+            DebugPrint("No match found for link "  + i.Name)
 
     DebugPrint('Loope linker ' + str(time.time() - start))
     cat_list = [BuiltInCategory.OST_Rooms]
