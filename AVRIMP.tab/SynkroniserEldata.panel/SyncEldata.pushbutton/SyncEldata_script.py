@@ -866,8 +866,11 @@ def MainFunction():
 
     # Liste/collector over alle viewports
     paramvalue = DB.ParameterValueProvider(DB.ElementId(DB.BuiltInParameter.VIEWPORT_SHEET_NUMBER))
-    ruleval = DB.FilterStringGreater()
-    filterrule = DB.FilterStringRule(paramvalue, ruleval, "", False)
+        ruleval = DB.FilterStringGreater()
+    #Old code. Last parameter is case-sensitivity:
+    #filterrule = DB.FilterStringRule(paramvalue, ruleval, "", False)
+    #New code, 2023 compatible
+    filterrule = DB.FilterStringRule(paramvalue, ruleval, "")
     paramfi = DB.ElementParameterFilter(filterrule)
     viewscollector = DB.FilteredElementCollector(doc).OfClass(DB.View).WherePasses(paramfi)
 
