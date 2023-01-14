@@ -866,7 +866,7 @@ def MainFunction():
 
     # Liste/collector over alle viewports
     paramvalue = DB.ParameterValueProvider(DB.ElementId(DB.BuiltInParameter.VIEWPORT_SHEET_NUMBER))
-        ruleval = DB.FilterStringGreater()
+    ruleval = DB.FilterStringGreater()
     #Old code. Last parameter is case-sensitivity:
     #filterrule = DB.FilterStringRule(paramvalue, ruleval, "", False)
     #New code, 2023 compatible
