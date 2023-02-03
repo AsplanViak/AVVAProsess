@@ -870,7 +870,11 @@ def MainFunction():
     #Old code. Last parameter is case-sensitivity:
     #filterrule = DB.FilterStringRule(paramvalue, ruleval, "", False)
     #New code, 2023 compatible
-    filterrule = DB.FilterStringRule(paramvalue, ruleval, "")
+    try:
+        filterrule = DB.FilterStringRule(paramvalue, ruleval, "")
+    except:
+        filterrule = DB.FilterStringRule(paramvalue, ruleval, "", False)
+
     paramfi = DB.ElementParameterFilter(filterrule)
     viewscollector = DB.FilteredElementCollector(doc).OfClass(DB.View).WherePasses(paramfi)
 
