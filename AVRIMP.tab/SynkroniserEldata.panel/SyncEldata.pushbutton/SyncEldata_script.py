@@ -859,7 +859,7 @@ def MainFunction():
 
                 # Sjekk om tag er vist på tegning. Dersom ikke: Stor sannsynlighet for at kopiert fra annet prosjekt med feil tag. Fjernes derfor fra eksport
                 try:
-                    tag_label = k.LookupParameter('Tag label').AsString()
+                    tag_label = k.LookupParameter('Tag label').AsInteger()
                     DebugPrint('tag_label: ' + tag_label)
                     if tag_label == 1:
                         komp_skjema.append([k.Id, tag, family, familytype, ''])
