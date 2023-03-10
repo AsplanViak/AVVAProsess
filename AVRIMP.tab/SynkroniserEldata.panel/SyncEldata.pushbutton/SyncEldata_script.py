@@ -856,7 +856,17 @@ def MainFunction():
                 except:
                     familytype = 'udefinert familietype'
                     # header : komp_skjema.append(['element_id', 'TAG', 'Family', 'FamilyType', 'Tegning'])
-                komp_skjema.append([k.Id, tag, family, familytype, ''])
+
+                # Sjekk om tag er vist på tegning. Dersom ikke: Stor sannsynlighet for at kopiert fra annet prosjekt med feil tag. Fjernes derfor fra eksport
+                try:
+                    tag_label = k.LookupParameter('Tag label').AsString()
+                    DebugPrint('tag_label: ' + tag_label)
+                    if tag_label == 1:
+                        komp_skjema.append([k.Id, tag, family, familytype, ''])
+                except:
+                # Blir med på eksport dersom tag_label parameter ikke definert
+                    DebugPrint('tag_label undefined')
+                    komp_skjema.append([k.Id, tag, family, familytype, ''])
 
         DebugPrint('n_elements: ' + str(n_elements))
 
