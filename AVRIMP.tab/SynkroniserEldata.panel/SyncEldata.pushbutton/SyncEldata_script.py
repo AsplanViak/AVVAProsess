@@ -930,18 +930,22 @@ def MainFunction():
     #####
 
     finnes = []
+    komp_skjema_ny = []
     for n, e in enumerate(komp_skjema):
         if n == 0:
-            # må hoppe over tabell headers
+            # tabell headers
+            finnes.append(komp_skjema[n][1])
+            komp_skjema_ny.append(e)
             continue
         if e[1] in finnes:
             i = finnes.index(e[1])
-            #komp_skjema[i][0] += ', ' + e[0]       #element_id
-            komp_skjema[i][2] += ', ' + e[2]       #Family
-            komp_skjema[i][3] += ', ' + e[3]       #FamilyType
-            komp_skjema[i][4] += ', ' + e[4]       #Tegning            DETTE ER DEN VIKTIGSTE HER
+            #komp_skjema_ny[i][0] += ', ' + e[0]       #element_id
+            komp_skjema_ny[i][2] += ', ' + e[2]       #Family
+            komp_skjema_ny[i][3] += ', ' + e[3]       #FamilyType
+            komp_skjema_ny[i][4] += ', ' + e[4]       #Tegning            DETTE ER DEN VIKTIGSTE HER
         else:
             finnes.append(komp_skjema[n][1])
+            komp_skjema_ny.append(e)
 
     #####################################################
     ############Eksporter til excel
