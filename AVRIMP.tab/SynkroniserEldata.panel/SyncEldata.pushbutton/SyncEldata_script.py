@@ -936,7 +936,7 @@ def MainFunction():
             continue
         if e[1] in finnes:
             i = finnes.index(e[1])
-            komp_skjema[i][0] += ', ' + e[0]       #element_id
+            #komp_skjema[i][0] += ', ' + e[0]       #element_id
             komp_skjema[i][2] += ', ' + e[2]       #Family
             komp_skjema[i][3] += ', ' + e[3]       #FamilyType
             komp_skjema[i][4] += ', ' + e[4]       #Tegning            DETTE ER DEN VIKTIGSTE HER
