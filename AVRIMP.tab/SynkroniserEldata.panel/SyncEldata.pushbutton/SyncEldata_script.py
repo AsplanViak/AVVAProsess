@@ -869,13 +869,13 @@ def MainFunction():
                 try:
                     tag_label = k.LookupParameter('Tag label').AsBoolean()
                     DebugPrint('tag_label: ' + tag_label)
-                    Print('tag_label: ' + tag_label)
+                    summaryReport = summaryReport + (' \n tag_label: ' + tag_label)
                     if tag_label == 1:
                         komp_skjema.append([k.Id, tag, family, familytype, ''])
                 except:
                 # Blir med på eksport dersom tag_label parameter ikke definert
                     DebugPrint('tag_label undefined')
-                    Print('tag_label undefined')
+                    summaryReport = summaryReport + (' \n tag_label undefined')
                     komp_skjema.append([k.Id, tag, family, familytype, ''])
 
         DebugPrint('n_elements: ' + str(n_elements))
