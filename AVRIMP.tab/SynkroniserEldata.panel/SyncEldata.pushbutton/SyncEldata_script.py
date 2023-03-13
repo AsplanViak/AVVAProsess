@@ -607,6 +607,11 @@ def MainFunction():
         # sjekk om tag/tfm parameter finnes, og om den er shared, og om den er definert med samme GUID som den riktige shared parameteren
         tag_cat_status = (-1)
 
+        # tag_cat_status -1 betyr at mangler tag/tfm parameter for caategory. Skipper category
+        # tag_cat_status 0 betyr at den finnes, men at man ikke kan bruke GUID (enten fordi tag_param er ulik både tfm og tag, eller fordi det ikke er brukt shared parameter for denne)
+        # tag_cat_status 1 betyr at den finnes som shared parameter, og at definisjonen stemmer overens med offisiel AV standard.
+        # tag_cat_status 2 betyr at aktuell komponent er skjemakomponent, og man bruker TFM: SystemVar + '-' + TFM11FkKompGruppe + TFM11FkKompLNR
+
         # lag lister over parametre som finnes for category
         p_s_IO_cat_kol = []  # parametre_shared_IO_liste_category_kolonne
         p_s_IO_cat_name = []
@@ -655,6 +660,7 @@ def MainFunction():
 
         if tag_cat_status == -1 and cat == BuiltInCategory.OST_DetailComponents:
             if tag_param == 'TFM11FkSamlet' or tag_param == 'TFM':
+                 # summaryReport += "Advarsel. Skyldes trolig at tag-parameter ikke er lagt til som project parameter for Detail Item. \n"
                 tag_cat_status = 2  # Betyr at man bruker denne som tag: SystemVar + '-' + TFM11FkKompGruppe + TFM11FkKompLNR
 
         DebugPrint('tag_cat_status: ' + str(tag_cat_status))
@@ -688,7 +694,7 @@ def MainFunction():
                     # DebugPrint('k.get_Parameter(tguid).AsString() : ' + k.get_Parameter(tguid).AsString())
                     # DebugPrint('k.LookupParameter(TAG).AsString() : ' + k.LookupParameter('TAG').AsString())
                 except:
-                    summaryReport +=  "Feil. Skyldes trolig at parameter TAG ikke er lagt til som project parameter for Detail Item. Skipper element\n"
+
                     SummaryPrint("Feil. Skyldes trolig at parameter TAG ikke er lagt til som project parameter for Detail Item. Skipper element")
                     continue
             elif tag_cat_status == 0:
