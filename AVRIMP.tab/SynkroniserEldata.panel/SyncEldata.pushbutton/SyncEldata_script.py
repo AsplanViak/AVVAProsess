@@ -866,13 +866,15 @@ def MainFunction():
                     # header : komp_skjema.append(['element_id', 'TAG', 'Family', 'FamilyType', 'Tegning'])
 
                 # Sjekk om tag er vist på tegning. Dersom ikke: Stor sannsynlighet for at kopiert fra annet prosjekt med feil tag. Fjernes derfor fra eksport
-                try:
+                if 1:
+                #try:
                     tag_label = k.LookupParameter('Tag label').AsInteger()
                     DebugPrint('tag_label: ' + tag_label)
                     summaryReport = summaryReport + (' \n tag_label: ' + tag_label)
                     if tag_label == 1:
                         komp_skjema.append([k.Id, tag, family, familytype, ''])
-                except:
+                #except:
+                else:
                 # Blir med på eksport dersom tag_label parameter ikke definert
                     DebugPrint('tag_label undefined')
                     summaryReport = summaryReport + (' \n tag_label undefined')
