@@ -922,7 +922,6 @@ def MainFunction():
 
     excel_eksport = [komp_3d, komp_skjema, presync_3d, presync_skjema]
 
-
     DebugPrint('presync skjema')
     DebugPrint(presync_skjema)
     DebugPrint(' Før excel-eksport ' +str(time.time() - start))
