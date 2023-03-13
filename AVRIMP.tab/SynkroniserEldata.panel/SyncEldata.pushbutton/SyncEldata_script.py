@@ -865,7 +865,7 @@ def MainFunction():
                     familytype = 'udefinert familietype'
                     # header : komp_skjema.append(['element_id', 'TAG', 'Family', 'FamilyType', 'Tegning'])
 
-                # Sjekk om tag er vist på tegning. Dersom ikke: Stor sannsynlighet for at kopiert fra annet prosjekt med feil tag. Fjernes derfor fra eksport
+                # Sjekk om tag_label er vist på tegning. Dersom ikke: Stor sannsynlighet for at feil tag. Fjernes derfor fra eksport
                 try:
                     tag_label = k.LookupParameter('Tag label').AsInteger()
                     DebugPrint('tag_label: ' + str(tag_label))
@@ -925,6 +925,23 @@ def MainFunction():
                     komp_skjema[n][4] = vparam.AsString()
                 else:
                     komp_skjema[n][4] += ', ' + vparam.AsString()
+    #####
+    #Slå samme duplikater flytskjemasymboler
+    #####
+
+    finnes = []
+    for n, e in enumerate(komp_skjema):
+        if n == 0:
+            # må hoppe over tabell headers
+            continue
+        if e[1] in finnes:
+            i = finnes.index(e[1])
+            komp_skjema[i][0] += ', ' + e[0]       #element_id
+            komp_skjema[i][2] += ', ' + e[2]       #Family
+            komp_skjema[i][3] += ', ' + e[3]       #FamilyType
+            komp_skjema[i][4] += ', ' + e[4]       #Tegning            DETTE ER DEN VIKTIGSTE HER
+        else:
+            finnes.append(komp_skjema[n][1])
 
     #####################################################
     ############Eksporter til excel
@@ -944,8 +961,6 @@ def MainFunction():
                 DebugPrint('Fileksport failed ' + str(i))
                 DebugPrint(excel_filenames[i])
                 summaryReport += 'Kunne ikke eksportere fil ' + excel_filenames[i] + '. Sjekk om fil allerede er åpen, og lukk den, og prøv på ny.'
-
-
 
     xl.DisplayAlerts = True
     xl.Visible = True
