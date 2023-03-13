@@ -947,6 +947,8 @@ def MainFunction():
             finnes.append(komp_skjema[n][1])
             komp_skjema_ny.append(e)
 
+    komp_skjema = komp_skjema_ny
+
     #####################################################
     ############Eksporter til excel
     #####################################################
