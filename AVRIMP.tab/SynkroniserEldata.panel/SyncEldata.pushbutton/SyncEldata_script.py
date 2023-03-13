@@ -870,7 +870,7 @@ def MainFunction():
                 #try:
                     tag_label = k.LookupParameter('Tag label').AsInteger()
                     DebugPrint('tag_label: ' + str(tag_label))
-                    summaryReport = summaryReport + (' \n tag_label: ' + tag_label)
+                    summaryReport = summaryReport + (' \n tag_label: ' + str(tag_label))
                     if tag_label == 1:
                         komp_skjema.append([k.Id, tag, family, familytype, ''])
                 #except:
