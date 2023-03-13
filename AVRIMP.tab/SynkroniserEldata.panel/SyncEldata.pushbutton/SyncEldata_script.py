@@ -605,9 +605,11 @@ def MainFunction():
         DebugPrint(cat)
 
         # sjekk om tag/tfm parameter finnes, og om den er shared, og om den er definert med samme GUID som den riktige shared parameteren
+        # OBS: Finnes en svakhet med script. Kan risikere at det er litt tilfeldig om finner parametre siden det går ann å ha parametre som er definert i family og ikke som category parameter
+        # Dette gjelder spesielt for Detail Items der parameter TAG tidligere kun var definert i family og ikke som category parameter. Dette er riktig i nyere malfiler.
         tag_cat_status = (-1)
 
-        # tag_cat_status -1 betyr at mangler tag/tfm parameter for caategory. Skipper category
+        # tag_cat_status -1 betyr at mangler tag/tfm parameter for category. Skipper category
         # tag_cat_status 0 betyr at den finnes, men at man ikke kan bruke GUID (enten fordi tag_param er ulik både tfm og tag, eller fordi det ikke er brukt shared parameter for denne)
         # tag_cat_status 1 betyr at den finnes som shared parameter, og at definisjonen stemmer overens med offisiel AV standard.
         # tag_cat_status 2 betyr at aktuell komponent er skjemakomponent, og man bruker TFM: SystemVar + '-' + TFM11FkKompGruppe + TFM11FkKompLNR
@@ -867,11 +869,13 @@ def MainFunction():
                 try:
                     tag_label = k.LookupParameter('Tag label').AsBoolean()
                     DebugPrint('tag_label: ' + tag_label)
+                    Print('tag_label: ' + tag_label)
                     if tag_label == 1:
                         komp_skjema.append([k.Id, tag, family, familytype, ''])
                 except:
                 # Blir med på eksport dersom tag_label parameter ikke definert
                     DebugPrint('tag_label undefined')
+                    Print('tag_label undefined')
                     komp_skjema.append([k.Id, tag, family, familytype, ''])
 
         DebugPrint('n_elements: ' + str(n_elements))
