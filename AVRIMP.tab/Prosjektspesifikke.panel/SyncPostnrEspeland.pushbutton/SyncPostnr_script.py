@@ -18,7 +18,7 @@ Fungerende autocomplete i pycharm.
 # Start MÅ ha
 __title__ = 'Synkroniser postnr'  # Denne overstyrer navnet på scriptfilen
 __author__ = 'Asplan Viak'  # Dette kommer opp som navnet på utvikler av knappen
-__doc__ = "Klikk for å legge til flenser i prosjektet."  # Dette blir hjelp teksten som kommer opp når man holder musepekeren over knappen.
+__doc__ = "Klikk for å synkronisere postnr på rørsystemer med beskrivelsen."  # Dette blir hjelp teksten som kommer opp når man holder musepekeren over knappen.
 # End MÅ ha
 
 # Kan sløyfes
