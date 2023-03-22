@@ -149,6 +149,9 @@ prosjekter = []
 for k in range(1,len(prisbank_prosjekter)):
     prosjekter.append(['Prisstigningsfaktor ' + prisbank_prosjekter[k][1], '', prisbank_prosjekter[k][2]])
 
+print prisbank
+print prosjekter
+
 PA = FilteredElementCollector(doc).OfCategory(
     BuiltInCategory.OST_PipeAccessory).WhereElementIsNotElementType().ToElements()
 PI = FilteredElementCollector(doc).OfCategory(
@@ -408,6 +411,8 @@ for i in range(len(a1)):
         #[a1[i][1] + ' ' + a1[i][2], a1[i][4], '', '', '', a1[i][3], '', '', '', a1[i][0], '', '', ''])
         #DN             + Beskrivelse, vinkel bend, -, -, -, MEngde, -, -, -, Entreprise(utgår), -, -, -,
         a_entreprise.append([a1[i][2] + ' ' + a1[i][1], '', '', '', '', a1[i][3]])
+
+        print('pr0')
     else:
         a_entreprise.append([a1[i][1] + ' ' + a1[i][2], a1[i][4], '', '', prisbank[pr][2], a1[i][3],
                    '=' + str(prisbank[pr][5]) + '*R' + str(int(prisbank[pr][3])) + 'C3', '', '', a1[i][0], '', prisbank[pr][4],
@@ -417,6 +422,7 @@ for i in range(len(a1)):
         #                     b1[pr][11]])
         # DN             + Beskrivelse, vinkel bend, -, -, Enhet, MEngde, enhetspris, kostnad, -, Entreprise(utgår), -, pris fra prosjekt, Kommentar
         #a_entreprise.append([a1[i][4], a1[i][1], a1[i][2], a1[i][3], ''])
+        print('pr:' + pr)
 
 # Legg subdataset for entreprise til hoved-dataset for siste entreprise
 a2.append(a_entreprise)
