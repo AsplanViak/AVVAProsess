@@ -381,8 +381,6 @@ for i in range(len(a1)):
             entrepriser.append(a1[i][4])
             entreprise_index = entreprise_index + 1
 
-
-
         a_entreprise = []
         for k in range(1, len(prisbank_prosjekter)):
             a_entreprise.append(['Prisstigningsfaktor ' + prisbank_prosjekter[k][1], '', prisbank_prosjekter[k][2], '', '', ''])
@@ -394,11 +392,21 @@ for i in range(len(a1)):
         #a_entreprise.append(['Beskrivelse', '', '', '', 'Enhet', 'Mengde'])
 
     pr = 0
-    # finn rad i prisbank som stemmer
 
+    print(a1[5])
+    print(prisbank[6])
+
+    # finn rad i prisbank som stemmer
     for j in range(len(prisbank)):
-        print('Sammenligner '+a1[i][1]+' med '+ prisbank[j][1] +' og ' +prisbank[j][2] + ' med '+ prisbank[j][0] )
-        if a1[i][1] == prisbank[j][1] and a1[i][2] == prisbank[j][0]:
+        # a1[i][0]:         entreprise
+        # a1[i][1]:         family
+        # a1[i][2]:         DN?
+        # a1[i][3]:         mengde
+        # a1[i][4]:         entreprise
+        # prisbank[j][0]:   family
+        # prisbank[j][1]:   DN
+        # prisbank[j][2]:   enhet
+        if a1[i][1] == prisbank[j][0] and a1[i][2] == prisbank[j][1]:
             # senere: if a1[i][1] == b1[j][0] and a1[i][2] == b1[j][1] and materiale = materiale:
             pr = j
             break
@@ -409,7 +417,7 @@ for i in range(len(a1)):
 
         print('pr0')
     else:
-        a_entreprise.append([a1[i][1] + ' ' + a1[i][2], '', '', '', '', prisbank[pr][2], a1[i][3],
+        a_entreprise.append([a1[i][2] + ' ' + a1[i][1], '', '', '', '', prisbank[pr][2], a1[i][3],
                    '=' + str(prisbank[pr][5]) + '*R' + str(int(prisbank[pr][3])) + 'C3', '', '', '', prisbank[pr][4],
                    prisbank[pr][11]])
         # DN             + Beskrivelse, vinkel bend, -, -, Enhet, MEngde, enhetspris, kostnad, -, Entreprise(utgår), -, pris fra prosjekt, Kommentar
