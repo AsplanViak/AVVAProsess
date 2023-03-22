@@ -149,9 +149,9 @@ def unicode_csv_reader(utf8_data, dialect=csv.excel):
 ##############Last inn prisbank fra excel
 
 #prisbank = list(csv.reader(open("S:\Felles\_AVstandard\Revit\Dynamo\VA-prosess\Prisbank.csv"), delimiter  =";"))
-prisbank = unicode_csv_reader(open("S:\Felles\_AVstandard\Revit\Dynamo\VA-prosess\Prisbank.csv"))
+prisbank = list(unicode_csv_reader(open("S:\Felles\_AVstandard\Revit\Dynamo\VA-prosess\Prisbank.csv")))
 #prisbank_prosjekter = list(csv.reader(open("S:\Felles\_AVstandard\Revit\Dynamo\VA-prosess\Prisbank_prosjekter.csv"), delimiter  =";"))
-prisbank_prosjekter = unicode_csv_reader(open("S:\Felles\_AVstandard\Revit\Dynamo\VA-prosess\Prisbank_prosjekter.csv"))
+prisbank_prosjekter = list(unicode_csv_reader(open("S:\Felles\_AVstandard\Revit\Dynamo\VA-prosess\Prisbank_prosjekter.csv")))
 
 print(prisbank_prosjekter)
 
