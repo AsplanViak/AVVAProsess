@@ -73,6 +73,9 @@ from System import Array
 
 import datetime
 
+import csv
+
+
 #import sys
 
 #sys.path.append("C:\Program Files (x86)\IronPython 2.7\Lib")
@@ -139,8 +142,14 @@ def keyn(k):
 ########################
 ##############Last inn prisbank fra excel
 
+prisbank = list(csv.reader(open("S:\Felles\_AVstandard\Revit\Dynamo\VA-prosess\Prisbank.csv"), delimiter  =";"))
+prisbank_prosjekter = list(csv.reader(open("S:\Felles\_AVstandard\Revit\Dynamo\VA-prosess\Prisbank_prosjekter.csv"), delimiter  =";"))
+prosjekter = []
 
+for k in range(1,len(prisbank_prosjekter)):
+    prosjekter.append(['Prisstigningsfaktor ' + c1[k][1], '', c1[k][2]])
 
+#################
 
 # Place your code below this line
 
@@ -299,7 +308,7 @@ for i in PF:
 main_list = [x + ['Udefinert'] for x in main_list]
 
 PS = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_PipingSystem).WhereElementIsElementType().ToElements()
-b1 = []
+entrepriseliste = []
 for s in PS:
 
     ps_name = Element.Name.GetValue(s)
@@ -317,15 +326,14 @@ for s in PS:
         else:
             entreprise = 'Udefinert'
 
-    b1.append(list([ps_name, entreprise]))
+    entrepriseliste.append(list([ps_name, entreprise]))
 
 
 #Legg til entreprise
 for g in range(len(main_list)):
-    for h in range(len(b1)):
-        if b1[h][0] == main_list[g][0]:
-            #main_list_compressed[g][4] = b1[h][1]
-            main_list[g][4] = b1[h][1]
+    for h in range(len(entrepriseliste)):
+        if entrepriseliste[h][0] == main_list[g][0]:
+            main_list[g][4] = entrepriseliste[h][1]
             break
 
 #########################
@@ -340,6 +348,7 @@ for item in main_list:
 	item[0], item[1], item[2], item[3] = item[4], item[1], item[2], item[3]
 
 #Komprimerer liste
+# slår sammen rader dersom entreprise, DN, family etc er likt.
 main_list_compressed = []
 main_list_compressed.append(main_list[0])  # første rad
 for n in range(1, len(main_list)):
@@ -361,7 +370,7 @@ for m in range(0, len(main_list_compressed)):
 #a1 = sorted(main_list_compressed, key=lambda x: keyn(x[4]))
 a1 = main_list_compressed
 
-a2 = []             #hoveddataset
+a2 = []             #hoveddataset til output. Med overskrifter etc.
 a_entreprise = []   #subdataset entreprise
 #a2.append(['System type', 'Komponent', 'Dimensjon', 'Lengde (m) / \n Antall (stk)', 'sort'])
 #a_entreprise.append([a1[i][0], a1[i][1], a1[i][2], a1[i][3], ''])
@@ -381,46 +390,37 @@ for i in range(len(a1)):
             entreprise_index = entreprise_index + 1
 
 
+
         a_entreprise = []
+        a_entrepreise.append(prosjekter)
+        a_entreprise.append(['', '', '', '', '', ''])
         a_entreprise.append(['Entreprise: ', a1[i][4], '','','',''])
         a_entreprise.append(['','','','','',''])
         #a_entreprise.append(['Beskrivelse', '', '', '', 'Enhet', 'Mengde', 'enhetspris', 'kostnad', '', 'Entreprise', '',
         #           'Pris fra prosjekt', 'Kommentar'])
         a_entreprise.append(['Beskrivelse', '', '', '', 'Enhet', 'Mengde'])
 
-
-        #a2.append(['', '', '', '', ''])
-        #p = ''
-        #for k in range(len(b1)):
-        #    if b1[k][0] == a1[i][0]:
-        #        p = b1[k][1]
-        #a2.append([a1[i][0], 'Post: ' + p, '', '', 1])
     pr = 0
     # finn rad i prisbank som stemmer
-    if (0):
-    #for j in range(len(b1)):
-        if a1[i][1] == b1[j][0] and a1[i][2] == b1[j][1]:
+
+    for j in range(len(prisbank)):
+        if a1[i][1] == prisbank[j][0] and a1[i][2] == prisbank[j][1]:
             # senere: if a1[i][1] == b1[j][0] and a1[i][2] == b1[j][1] and materiale = materiale:
             pr = j
             break
-    #usikkert hva a1[i][4] skal være
-    #if pr == 0:
-    if (1):
-
+    if pr == 0:
         #[a1[i][1] + ' ' + a1[i][2], a1[i][4], '', '', '', a1[i][3], '', '', '', a1[i][0], '', '', ''])
         #DN             + Beskrivelse, vinkel bend, -, -, -, MEngde, -, -, -, Entreprise(utgår), -, -, -,
         a_entreprise.append([a1[i][2] + ' ' + a1[i][1], '', '', '', '', a1[i][3]])
-
     else:
-        a_entreprise.append([a1[i][1] + ' ' + a1[i][2], a1[i][4], '', '', b1[pr][2], a1[i][3],
-                   '=' + str(b1[pr][5]) + '*R' + str(int(b1[pr][3])) + 'C3', '', '', a1[i][0], '', b1[pr][4],
-                   b1[pr][11]])
+        a_entreprise.append([a1[i][1] + ' ' + a1[i][2], a1[i][4], '', '', prisbank[pr][2], a1[i][3],
+                   '=' + str(b1[pr][5]) + '*R' + str(int(prisbank[pr][3])) + 'C3', '', '', a1[i][0], '', prisbank[pr][4],
+                   prisbank[pr][11]])
         #a_entreprise.append([a1[i][2] + ' ' + a1[i][1], a1[i][4], '', '', b1[pr][2], a1[i][3],
         #                     '=' + str(b1[pr][5]) + '*R' + str(int(b1[pr][3])) + 'C3', '', '', a1[i][0], '', b1[pr][4],
         #                     b1[pr][11]])
         # DN             + Beskrivelse, vinkel bend, -, -, Enhet, MEngde, enhetspris, kostnad, -, Entreprise(utgår), -, pris fra prosjekt, Kommentar
         #a_entreprise.append([a1[i][4], a1[i][1], a1[i][2], a1[i][3], ''])
-
 
 # Legg subdataset for entreprise til hoved-dataset for siste entreprise
 a2.append(a_entreprise)
