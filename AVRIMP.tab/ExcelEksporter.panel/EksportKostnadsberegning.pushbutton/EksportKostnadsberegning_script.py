@@ -406,6 +406,17 @@ for i in range(len(a1)):
         # prisbank[j][0]:   family
         # prisbank[j][1]:   DN
         # prisbank[j][2]:   enhet
+        # prisbank[j][3]:   prosjekt index
+        # prisbank[j][4]:   prosjekt
+        if i = 5:
+            print(a1[i][1])
+            print(prisbank[j][0])
+            print(a1[i][2])
+            print(prisbank[j][1])
+            if (a1[i][1] == prisbank[j][0]):
+                print('treff på faamily')
+            if (a1[i][2] == prisbank[j][1):
+                print('treff på DN')
         if a1[i][1] == prisbank[j][0] and a1[i][2] == prisbank[j][1]:
             # senere: if a1[i][1] == b1[j][0] and a1[i][2] == b1[j][1] and materiale = materiale:
             pr = j
@@ -419,7 +430,7 @@ for i in range(len(a1)):
     else:
         a_entreprise.append([a1[i][2] + ' ' + a1[i][1], '', '', '', '', prisbank[pr][2], a1[i][3],
                    '=' + str(prisbank[pr][5]) + '*R' + str(int(prisbank[pr][3])) + 'C3', '', '', '', prisbank[pr][4],
-                   prisbank[pr][11]])
+                   prisbank[pr][15]])
         # DN             + Beskrivelse, vinkel bend, -, -, Enhet, MEngde, enhetspris, kostnad, -, Entreprise(utgår), -, pris fra prosjekt, Kommentar
         #a_entreprise.append([a1[i][4], a1[i][1], a1[i][2], a1[i][3], ''])
         print('pr:' + str(pr))
