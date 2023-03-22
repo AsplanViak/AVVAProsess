@@ -388,7 +388,7 @@ for i in range(len(a1)):
 
 
         a_entreprise = []
-        a_entrepreise.append(prosjekter)
+        a_entreprise.append(prosjekter)
         a_entreprise.append(['', '', '', '', '', ''])
         a_entreprise.append(['Entreprise: ', a1[i][4], '','','',''])
         a_entreprise.append(['','','','','',''])
