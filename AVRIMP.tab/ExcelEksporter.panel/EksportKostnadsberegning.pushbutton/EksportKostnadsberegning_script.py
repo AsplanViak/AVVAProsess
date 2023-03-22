@@ -380,7 +380,7 @@ a_entreprise = []   #subdataset entreprise
 
 entreprise_index = 0
 entrepriser = [a1[0][4]]        #Legger til første entreprise i entrepriser-list
-eq = '=RC[-2]*RC[-1]'
+eq = "=RC[-2]*RC[-1]"
 
 for i in range(len(a1)):
     #Sjekk ny entreprise
