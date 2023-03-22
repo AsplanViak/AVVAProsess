@@ -153,7 +153,6 @@ prisbank = list(unicode_csv_reader(open("S:\Felles\_AVstandard\Revit\Dynamo\VA-p
 #prisbank_prosjekter = list(csv.reader(open("S:\Felles\_AVstandard\Revit\Dynamo\VA-prosess\Prisbank_prosjekter.csv"), delimiter  =";"))
 prisbank_prosjekter = list(unicode_csv_reader(open("S:\Felles\_AVstandard\Revit\Dynamo\VA-prosess\Prisbank_prosjekter.csv")))
 
-print(prisbank_prosjekter)
 
 PA = FilteredElementCollector(doc).OfCategory(
     BuiltInCategory.OST_PipeAccessory).WhereElementIsNotElementType().ToElements()
@@ -400,7 +399,7 @@ for i in range(len(a1)):
         a_entreprise.append(['Entreprise: ', a1[i][4], '','','',''])
         a_entreprise.append(['','','','','',''])
         a_entreprise.append(['Beskrivelse', '', '', '', 'Enhet', 'Mengde', 'enhetspris', 'kostnad', '', '',
-                   'Pris fra prosjekt', 'Kommentar'])
+                   'Pris fra prosjekt', 'Opprinnelig enhetspris'])
         #a_entreprise.append(['Beskrivelse', '', '', '', 'Enhet', 'Mengde'])
 
     pr = 0
@@ -417,15 +416,7 @@ for i in range(len(a1)):
         # prisbank[j][2]:   enhet
         # prisbank[j][3]:   prosjekt index
         # prisbank[j][4]:   prosjekt
-        #if i == 5:
-        #    print(a1[i][1])
-        #    print(prisbank[j][0])
-        #    print(a1[i][2])
-        #    print(prisbank[j][1])
-        #    if (a1[i][1] == prisbank[j][0]):
-        #        print('treff på faamily')
-        #    if (a1[i][2] == prisbank[j][1]):
-        #        print('treff på DN')
+
         if a1[i][1] == prisbank[j][0] and a1[i][2] == prisbank[j][1]:
             # senere: if a1[i][1] == b1[j][0] and a1[i][2] == b1[j][1] and materiale = materiale:
             pr = j
@@ -433,24 +424,16 @@ for i in range(len(a1)):
     if pr == 0:
         #[a1[i][1] + ' ' + a1[i][2], a1[i][4], '', '', '', a1[i][3], '', '', '', a1[i][0], '', '', ''])
         #DN             + Beskrivelse, vinkel bend, -, -, -, MEngde, -, -, -, Entreprise(utgår), -, -, -,
-        a_entreprise.append([a1[i][2] + ' ' + a1[i][1], '', '', '', '', a1[i][3]])
-
-        print('pr0')
+        a_entreprise.append([a1[i][2] + ' ' + a1[i][1], '', '', '', '', a1[i][3]],'','=RC[-2]*RC[-1]')
     else:
-        a_entreprise.append([a1[i][2] + ' ' + a1[i][1], '', '', '', '', prisbank[pr][2], a1[i][3],
-                   '=' + str(prisbank[pr][5]) + '*R' + str(int(prisbank[pr][3])) + 'C3', '', '', '', prisbank[pr][4],
-                   prisbank[pr][15]])
-        # DN             + Beskrivelse, vinkel bend, -, -, Enhet, MEngde, enhetspris, kostnad, -, Entreprise(utgår), -, pris fra prosjekt, Kommentar
+        a_entreprise.append([a1[i][2] + ' ' + a1[i][1], '', '', '', prisbank[pr][2], a1[i][3],
+                   '=' + str(prisbank[pr][5]) + '*R' + str(int(prisbank[pr][3])) + 'C3', '=RC[-2]*RC[-1]', '', '', prisbank[pr][4],
+                   prisbank[pr][5]])
+        # DN             + Beskrivelse, vinkel bend, -, -, Enhet, MEngde, enhetspris, kostnad, -, Entreprise(utgår), -, pris fra prosjekt, Enhetspris uregulert
         #a_entreprise.append([a1[i][4], a1[i][1], a1[i][2], a1[i][3], ''])
-        print('pr:' + str(pr))
 
 # Legg subdataset for entreprise til hoved-dataset for siste entreprise
 a2.append(a_entreprise)
-#print(a2)
-#print('entrepriser')
-#print(entrepriser)
-#print('entreprise_index:')
-#print(entreprise_index)
 
 # Assign your output to the OUT variable.
 #OUT = a2
