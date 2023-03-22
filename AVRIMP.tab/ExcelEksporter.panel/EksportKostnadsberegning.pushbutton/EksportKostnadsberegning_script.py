@@ -147,7 +147,7 @@ prisbank_prosjekter = list(csv.reader(open("S:\Felles\_AVstandard\Revit\Dynamo\V
 prosjekter = []
 
 for k in range(1,len(prisbank_prosjekter)):
-    prosjekter.append(['Prisstigningsfaktor ' + prisbank_prosjekter[k][1], '', prisbank_prosjekter[k][2]])
+    prosjekter.append(['Prisstigningsfaktor ' + prisbank_prosjekter[k][1], '', prisbank_prosjekter[k][2]], '', '', '')
 
 print prisbank
 print prosjekter
@@ -414,9 +414,11 @@ for i in range(len(a1)):
 
         print('pr0')
     else:
-        a_entreprise.append([a1[i][1] + ' ' + a1[i][2], a1[i][4], '', '', prisbank[pr][2], a1[i][3],
-                   '=' + str(prisbank[pr][5]) + '*R' + str(int(prisbank[pr][3])) + 'C3', '', '', a1[i][0], '', prisbank[pr][4],
-                   prisbank[pr][11]])
+        a_entreprise.append([a1[i][2] + ' ' + a1[i][1], '', '', '', '', a1[i][3]])
+        #a_entreprise.append([a1[i][1] + ' ' + a1[i][2], a1[i][4], '', '', prisbank[pr][2], a1[i][3],
+        #           '=' + str(prisbank[pr][5]) + '*R' + str(int(prisbank[pr][3])) + 'C3', '', '', a1[i][0], '', prisbank[pr][4],
+        #           prisbank[pr][11]])
+
         #a_entreprise.append([a1[i][2] + ' ' + a1[i][1], a1[i][4], '', '', b1[pr][2], a1[i][3],
         #                     '=' + str(b1[pr][5]) + '*R' + str(int(b1[pr][3])) + 'C3', '', '', a1[i][0], '', b1[pr][4],
         #                     b1[pr][11]])
