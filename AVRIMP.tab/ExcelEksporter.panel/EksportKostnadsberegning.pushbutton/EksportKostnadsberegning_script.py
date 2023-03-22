@@ -397,6 +397,7 @@ for i in range(len(a1)):
     # finn rad i prisbank som stemmer
 
     for j in range(len(prisbank)):
+        print('Sammenligner '+a1[i][1]+' med '+ prisbank[j][1] +' og ' +prisbank[j][2] + ' med '+ prisbank[j][0] )
         if a1[i][1] == prisbank[j][1] and a1[i][2] == prisbank[j][0]:
             # senere: if a1[i][1] == b1[j][0] and a1[i][2] == b1[j][1] and materiale = materiale:
             pr = j
