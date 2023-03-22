@@ -380,7 +380,6 @@ a_entreprise = []   #subdataset entreprise
 
 entreprise_index = 0
 entrepriser = [a1[0][4]]        #Legger til første entreprise i entrepriser-list
-eq = str("=RC[-2]*RC[-1]")
 
 for i in range(len(a1)):
     #Sjekk ny entreprise
@@ -425,10 +424,10 @@ for i in range(len(a1)):
     if pr == 0:
         #[a1[i][1] + ' ' + a1[i][2], a1[i][4], '', '', '', a1[i][3], '', '', '', a1[i][0], '', '', ''])
         #DN             + Beskrivelse, vinkel bend, -, -, -, MEngde, -, -, -, Entreprise(utgår), -, -, -,
-        a_entreprise.append([a1[i][2] + ' ' + a1[i][1], '', '', '', '', a1[i][3]],'', eq)
+        a_entreprise.append([a1[i][2] + ' ' + a1[i][1], '', '', '', '', a1[i][3],'', '=RC[-2]*RC[-1]'])
     else:
         a_entreprise.append([a1[i][2] + ' ' + a1[i][1], '', '', '', prisbank[pr][2], a1[i][3],
-                   '=' + str(prisbank[pr][5]) + '*R' + str(int(prisbank[pr][3])) + 'C3', eq, '', '', prisbank[pr][4],
+                   '=' + str(prisbank[pr][5]) + '*R' + str(int(prisbank[pr][3])) + 'C3', '=RC[-2]*RC[-1]', '', '', prisbank[pr][4],
                    prisbank[pr][5]])
         # DN             + Beskrivelse, vinkel bend, -, -, Enhet, MEngde, enhetspris, kostnad, -, Entreprise(utgår), -, pris fra prosjekt, Enhetspris uregulert
         #a_entreprise.append([a1[i][4], a1[i][1], a1[i][2], a1[i][3], ''])
