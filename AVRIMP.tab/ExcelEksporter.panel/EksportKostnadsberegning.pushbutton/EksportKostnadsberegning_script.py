@@ -410,7 +410,7 @@ for i in range(len(a1)):
         a_entreprise.append([a1[i][2] + ' ' + a1[i][1], '', '', '', '', a1[i][3]])
     else:
         a_entreprise.append([a1[i][1] + ' ' + a1[i][2], a1[i][4], '', '', prisbank[pr][2], a1[i][3],
-                   '=' + str(b1[pr][5]) + '*R' + str(int(prisbank[pr][3])) + 'C3', '', '', a1[i][0], '', prisbank[pr][4],
+                   '=' + str(prisbank[pr][5]) + '*R' + str(int(prisbank[pr][3])) + 'C3', '', '', a1[i][0], '', prisbank[pr][4],
                    prisbank[pr][11]])
         #a_entreprise.append([a1[i][2] + ' ' + a1[i][1], a1[i][4], '', '', b1[pr][2], a1[i][3],
         #                     '=' + str(b1[pr][5]) + '*R' + str(int(b1[pr][3])) + 'C3', '', '', a1[i][0], '', b1[pr][4],
