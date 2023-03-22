@@ -426,7 +426,7 @@ for i in range(len(a1)):
 
 # Legg subdataset for entreprise til hoved-dataset for siste entreprise
 a2.append(a_entreprise)
-#print(a2)
+print(a2)
 #print('entrepriser')
 #print(entrepriser)
 #print('entreprise_index:')
