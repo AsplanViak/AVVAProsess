@@ -389,15 +389,15 @@ for i in range(len(a1)):
         a_entreprise.append(['', '', '', '', '', ''])
         a_entreprise.append(['Entreprise: ', a1[i][4], '','','',''])
         a_entreprise.append(['','','','','',''])
-        #a_entreprise.append(['Beskrivelse', '', '', '', 'Enhet', 'Mengde', 'enhetspris', 'kostnad', '', 'Entreprise', '',
-        #           'Pris fra prosjekt', 'Kommentar'])
-        a_entreprise.append(['Beskrivelse', '', '', '', 'Enhet', 'Mengde'])
+        a_entreprise.append(['Beskrivelse', '', '', '', 'Enhet', 'Mengde', 'enhetspris', 'kostnad', '', '',
+                   'Pris fra prosjekt', 'Kommentar'])
+        #a_entreprise.append(['Beskrivelse', '', '', '', 'Enhet', 'Mengde'])
 
     pr = 0
     # finn rad i prisbank som stemmer
 
     for j in range(len(prisbank)):
-        if a1[i][1] == prisbank[j][0] and a1[i][2] == prisbank[j][1]:
+        if a1[i][1] == prisbank[j][1] and a1[i][2] == prisbank[j][0]:
             # senere: if a1[i][1] == b1[j][0] and a1[i][2] == b1[j][1] and materiale = materiale:
             pr = j
             break
@@ -408,21 +408,16 @@ for i in range(len(a1)):
 
         print('pr0')
     else:
-        #a_entreprise.append([a1[i][2] + ' ' + a1[i][1], '', '', '', '', a1[i][3]])
-        a_entreprise.append([a1[i][1] + ' ' + a1[i][2], a1[i][4], '', '', prisbank[pr][2], a1[i][3],
-                   '=' + str(prisbank[pr][5]) + '*R' + str(int(prisbank[pr][3])) + 'C3', '', '', a1[i][0], '', prisbank[pr][4],
+        a_entreprise.append([a1[i][1] + ' ' + a1[i][2], '', '', '', '', prisbank[pr][2], a1[i][3],
+                   '=' + str(prisbank[pr][5]) + '*R' + str(int(prisbank[pr][3])) + 'C3', '', '', '', prisbank[pr][4],
                    prisbank[pr][11]])
-
-        #a_entreprise.append([a1[i][2] + ' ' + a1[i][1], a1[i][4], '', '', b1[pr][2], a1[i][3],
-        #                     '=' + str(b1[pr][5]) + '*R' + str(int(b1[pr][3])) + 'C3', '', '', a1[i][0], '', b1[pr][4],
-        #                     b1[pr][11]])
         # DN             + Beskrivelse, vinkel bend, -, -, Enhet, MEngde, enhetspris, kostnad, -, Entreprise(utgår), -, pris fra prosjekt, Kommentar
         #a_entreprise.append([a1[i][4], a1[i][1], a1[i][2], a1[i][3], ''])
         print('pr:' + str(pr))
 
 # Legg subdataset for entreprise til hoved-dataset for siste entreprise
 a2.append(a_entreprise)
-print(a2)
+#print(a2)
 #print('entrepriser')
 #print(entrepriser)
 #print('entreprise_index:')
