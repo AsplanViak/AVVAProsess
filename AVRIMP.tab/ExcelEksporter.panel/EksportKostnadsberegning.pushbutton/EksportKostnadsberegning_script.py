@@ -147,7 +147,7 @@ prisbank_prosjekter = list(csv.reader(open("S:\Felles\_AVstandard\Revit\Dynamo\V
 prosjekter = []
 
 for k in range(1,len(prisbank_prosjekter)):
-    prosjekter.append(['Prisstigningsfaktor ' + prisbank_prosjekter[k][1], '', prisbank_prosjekter[k][2]], '', '', '')
+    prosjekter.append(['Prisstigningsfaktor ' + prisbank_prosjekter[k][1], '', prisbank_prosjekter[k][2], '', '', ''])
 
 print prisbank
 print prosjekter
