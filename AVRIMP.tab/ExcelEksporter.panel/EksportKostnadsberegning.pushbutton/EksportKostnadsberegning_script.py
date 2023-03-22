@@ -422,7 +422,7 @@ for i in range(len(a1)):
         #                     b1[pr][11]])
         # DN             + Beskrivelse, vinkel bend, -, -, Enhet, MEngde, enhetspris, kostnad, -, Entreprise(utgår), -, pris fra prosjekt, Kommentar
         #a_entreprise.append([a1[i][4], a1[i][1], a1[i][2], a1[i][3], ''])
-        print('pr:' + pr)
+        print('pr:' + str(pr))
 
 # Legg subdataset for entreprise til hoved-dataset for siste entreprise
 a2.append(a_entreprise)
