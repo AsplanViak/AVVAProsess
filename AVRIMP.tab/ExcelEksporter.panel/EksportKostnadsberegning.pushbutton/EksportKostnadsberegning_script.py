@@ -238,7 +238,7 @@ for i in PI:
         family = "Rette rørlengder " + i.Name
     # Finn DN
     try:
-        DN = 'DN' + (i.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString()[:-2])
+        DN = 'DN' + (i.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM).AsValueString()[:-3])
     except:
         DN = 'udefinert DN PI'
 
@@ -424,9 +424,9 @@ for i in range(len(a1)):
     if pr == 0:
         #[a1[i][1] + ' ' + a1[i][2], a1[i][4], '', '', '', a1[i][3], '', '', '', a1[i][0], '', '', ''])
         #DN             + Beskrivelse, vinkel bend, -, -, -, MEngde, -, -, -, Entreprise(utgår), -, -, -,
-        a_entreprise.append([a1[i][2] + ' -' + a1[i][1], '', '', '', '', a1[i][3],'', '=RC[-2]*RC[-1]'])
+        a_entreprise.append([a1[i][2] + ' ' + a1[i][1], '', '', '', '', a1[i][3],'', '=RC[-2]*RC[-1]'])
     else:
-        a_entreprise.append([a1[i][2] + ' -' + a1[i][1], '', '', '', prisbank[pr][2], a1[i][3],
+        a_entreprise.append([a1[i][2] + ' ' + a1[i][1], '', '', '', prisbank[pr][2], a1[i][3],
                    '=' + str(prisbank[pr][5]) + '*R' + str(int(prisbank[pr][3])) + 'C3', '=RC[-2]*RC[-1]', '', '', prisbank[pr][4],
                    prisbank[pr][5]])
         # DN             + Beskrivelse, vinkel bend, -, -, Enhet, MEngde, enhetspris, kostnad, -, Entreprise(utgår), -, pris fra prosjekt, Enhetspris uregulert
