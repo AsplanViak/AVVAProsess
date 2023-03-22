@@ -144,13 +144,6 @@ def keyn(k):
 
 prisbank = list(csv.reader(open("S:\Felles\_AVstandard\Revit\Dynamo\VA-prosess\Prisbank.csv"), delimiter  =";"))
 prisbank_prosjekter = list(csv.reader(open("S:\Felles\_AVstandard\Revit\Dynamo\VA-prosess\Prisbank_prosjekter.csv"), delimiter  =";"))
-prosjekter = []
-
-for k in range(1,len(prisbank_prosjekter)):
-    prosjekter.append(['Prisstigningsfaktor ' + prisbank_prosjekter[k][1], '', prisbank_prosjekter[k][2], '', '', ''])
-
-print prisbank
-print prosjekter
 
 PA = FilteredElementCollector(doc).OfCategory(
     BuiltInCategory.OST_PipeAccessory).WhereElementIsNotElementType().ToElements()
@@ -391,7 +384,8 @@ for i in range(len(a1)):
 
 
         a_entreprise = []
-        a_entreprise.append(prosjekter)
+        for k in range(1, len(prisbank_prosjekter)):
+            a_entreprise.append(['Prisstigningsfaktor ' + prisbank_prosjekter[k][1], '', prisbank_prosjekter[k][2], '', '', ''])
         a_entreprise.append(['', '', '', '', '', ''])
         a_entreprise.append(['Entreprise: ', a1[i][4], '','','',''])
         a_entreprise.append(['','','','','',''])
