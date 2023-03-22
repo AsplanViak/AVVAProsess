@@ -139,13 +139,20 @@ def keyn(k):
     # print l
     return l
 
+def unicode_csv_reader(utf8_data, dialect=csv.excel):
+    csv_reader = csv.reader(utf8_data, dialect=dialect, delimiter =";")
+    for row in csv_reader:
+        yield [unicode(cell, 'utf-8') for cell in row]
+
+
 ########################
 ##############Last inn prisbank fra excel
 
-prisbank = list(csv.reader(open("S:\Felles\_AVstandard\Revit\Dynamo\VA-prosess\Prisbank.csv"), delimiter  =";"))
-prisbank_prosjekter = list(csv.reader(open("S:\Felles\_AVstandard\Revit\Dynamo\VA-prosess\Prisbank_prosjekter.csv"), delimiter  =";"))
-print(prisbank_prosjekter)
-prisbank_prosjekter = prisbank_prosjekter.encode().decode('utf-8')
+#prisbank = list(csv.reader(open("S:\Felles\_AVstandard\Revit\Dynamo\VA-prosess\Prisbank.csv"), delimiter  =";"))
+prisbank = unicode_csv_reader(open("S:\Felles\_AVstandard\Revit\Dynamo\VA-prosess\Prisbank.csv"))
+#prisbank_prosjekter = list(csv.reader(open("S:\Felles\_AVstandard\Revit\Dynamo\VA-prosess\Prisbank_prosjekter.csv"), delimiter  =";"))
+prisbank_prosjekter = unicode_csv_reader(open("S:\Felles\_AVstandard\Revit\Dynamo\VA-prosess\Prisbank_prosjekter.csv"))
+
 print(prisbank_prosjekter)
 
 PA = FilteredElementCollector(doc).OfCategory(
