@@ -408,7 +408,7 @@ for i in range(len(a1)):
         # prisbank[j][2]:   enhet
         # prisbank[j][3]:   prosjekt index
         # prisbank[j][4]:   prosjekt
-        if i = 5:
+        if i == 5:
             print(a1[i][1])
             print(prisbank[j][0])
             print(a1[i][2])
