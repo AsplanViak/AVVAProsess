@@ -171,6 +171,8 @@ for i in PA:
         # Generaliser tekst
         if 'Krage-Løsflens' in family:
             family = 'Krage-løsflens'
+        if 'Sveiseflens' in family:
+                family = 'Sveiseflens'
         if 'Sluseventil' in family:
             family = 'Sluseventil'
         if 'Mengdemaaler' in family:
@@ -408,15 +410,15 @@ for i in range(len(a1)):
         # prisbank[j][2]:   enhet
         # prisbank[j][3]:   prosjekt index
         # prisbank[j][4]:   prosjekt
-        if i == 5:
-            print(a1[i][1])
-            print(prisbank[j][0])
-            print(a1[i][2])
-            print(prisbank[j][1])
-            if (a1[i][1] == prisbank[j][0]):
-                print('treff på faamily')
-            if (a1[i][2] == prisbank[j][1]):
-                print('treff på DN')
+        #if i == 5:
+        #    print(a1[i][1])
+        #    print(prisbank[j][0])
+        #    print(a1[i][2])
+        #    print(prisbank[j][1])
+        #    if (a1[i][1] == prisbank[j][0]):
+        #        print('treff på faamily')
+        #    if (a1[i][2] == prisbank[j][1]):
+        #        print('treff på DN')
         if a1[i][1] == prisbank[j][0] and a1[i][2] == prisbank[j][1]:
             # senere: if a1[i][1] == b1[j][0] and a1[i][2] == b1[j][1] and materiale = materiale:
             pr = j
