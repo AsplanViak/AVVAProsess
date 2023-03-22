@@ -415,7 +415,7 @@ for i in range(len(a1)):
             print(prisbank[j][1])
             if (a1[i][1] == prisbank[j][0]):
                 print('treff på faamily')
-            if (a1[i][2] == prisbank[j][1):
+            if (a1[i][2] == prisbank[j][1]):
                 print('treff på DN')
         if a1[i][1] == prisbank[j][0] and a1[i][2] == prisbank[j][1]:
             # senere: if a1[i][1] == b1[j][0] and a1[i][2] == b1[j][1] and materiale = materiale:
