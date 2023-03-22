@@ -144,6 +144,9 @@ def keyn(k):
 
 prisbank = list(csv.reader(open("S:\Felles\_AVstandard\Revit\Dynamo\VA-prosess\Prisbank.csv"), delimiter  =";"))
 prisbank_prosjekter = list(csv.reader(open("S:\Felles\_AVstandard\Revit\Dynamo\VA-prosess\Prisbank_prosjekter.csv"), delimiter  =";"))
+print(prisbank_prosjekter)
+prisbank_prosjekter = prisbank_prosjekter.encode().decode('utf-8')
+print(prisbank_prosjekter)
 
 PA = FilteredElementCollector(doc).OfCategory(
     BuiltInCategory.OST_PipeAccessory).WhereElementIsNotElementType().ToElements()
@@ -172,7 +175,7 @@ for i in PA:
         if 'Krage-Løsflens' in family:
             family = 'Krage-løsflens'
         if 'Sveiseflens' in family:
-                family = 'Sveiseflens'
+            family = 'Sveiseflens'
         if 'Sluseventil' in family:
             family = 'Sluseventil'
         if 'Mengdemaaler' in family:
@@ -394,9 +397,6 @@ for i in range(len(a1)):
         #a_entreprise.append(['Beskrivelse', '', '', '', 'Enhet', 'Mengde'])
 
     pr = 0
-
-    print(a1[5])
-    print(prisbank[6])
 
     # finn rad i prisbank som stemmer
     for j in range(len(prisbank)):
