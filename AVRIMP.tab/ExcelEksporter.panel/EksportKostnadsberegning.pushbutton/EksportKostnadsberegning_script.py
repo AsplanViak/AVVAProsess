@@ -147,11 +147,7 @@ prisbank_prosjekter = list(csv.reader(open("S:\Felles\_AVstandard\Revit\Dynamo\V
 prosjekter = []
 
 for k in range(1,len(prisbank_prosjekter)):
-    prosjekter.append(['Prisstigningsfaktor ' + c1[k][1], '', c1[k][2]])
-
-#################
-
-# Place your code below this line
+    prosjekter.append(['Prisstigningsfaktor ' + prisbank_prosjekter[k][1], '', prisbank_prosjekter[k][2]])
 
 PA = FilteredElementCollector(doc).OfCategory(
     BuiltInCategory.OST_PipeAccessory).WhereElementIsNotElementType().ToElements()
