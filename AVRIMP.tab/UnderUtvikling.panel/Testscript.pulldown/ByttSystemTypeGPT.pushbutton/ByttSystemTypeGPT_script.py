@@ -131,6 +131,9 @@ def RunSystemTypeSelection(eventArgs):
 # Register the add-in with Revit
 #__revit__.Application.Idling += RunSystemTypeSelection
 
+RunSystemTypeSelection()
+
+
 
 
 #UI.TaskDialog.Show('Ferdig', report_tekst, button)
