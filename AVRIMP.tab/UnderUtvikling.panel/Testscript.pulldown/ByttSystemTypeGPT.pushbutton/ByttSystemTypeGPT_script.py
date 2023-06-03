@@ -55,6 +55,10 @@ from Autodesk.Revit.DB import Plumbing, IFamilyLoadOptions
 clr.AddReference("RevitAPIUI")
 from Autodesk.Revit.UI import *
 
+clr.AddReference("System.Windows.Forms")
+from System.Windows.Forms import Form, Button, ComboBox, ComboBoxStyle, DialogResult
+
+
 class SystemTypeForm(IExternalEventHandler):
     def __init__(self):
         self.system_types = None
