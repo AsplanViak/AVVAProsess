@@ -57,6 +57,10 @@ from System.Windows.Forms import Form, Button, ComboBox, ComboBoxStyle, DialogRe
 clr.AddReference("RevitAPIUI")
 from Autodesk.Revit.UI import *
 
+# Import the necessary symbol_name function from pyrevit
+from pyrevit import script
+symbol_name = script.get_env().symbol_name
+
 class SystemTypeForm(IExternalEventHandler):
     def __init__(self):
         self.system_types = None
@@ -121,6 +125,9 @@ class SystemTypeSelectionForm(Form):
 
 # Custom ExternalCommand class
 class SystemTypeSelectionCommand(IExternalCommand):
+    def __init__(self):
+        pass
+
     def Execute(self, commandData):
         form = SystemTypeForm()
         uiapp = commandData.Application
@@ -129,16 +136,17 @@ class SystemTypeSelectionCommand(IExternalCommand):
         return Result.Succeeded
 
 # Register the command with PyRevit
-from pyrevit import revit, DB
-from pyrevit import script
-
-def push_button():
-    command = SystemTypeSelectionCommand()
-    script.start_command(command)
-
-#SystemTypeSelectionCommand()
+from pyrevit import revit
+from pyrevit import forms
 
 # Register the button
-button = revit.FamilyPushButton(push_button, __title__, __doc__)
-button.toolip = 'Select System Type'
+@revit.transaction
+def push_button():
+    command = SystemTypeSelectionCommand()
+    revit.doc.Application.PostCommand(command)
 
+# Create a PyRevit button
+button = forms.CommandButton(label="System Type Selection",
+                             description="Select System Type",
+                             icon='icons\\system_type_selection.png',
+                             command=push_button)
