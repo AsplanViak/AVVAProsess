@@ -133,8 +133,10 @@ from pyrevit import revit, DB
 from pyrevit import script
 
 #def push_button():
-command = SystemTypeSelectionCommand()
-script.start_command(command)
+#command = SystemTypeSelectionCommand()
+#script.start_command(command)
+
+SystemTypeSelectionCommand()
 
 # Register the button
 #button = revit.FamilyPushButton(push_button, __title__, __doc__)
