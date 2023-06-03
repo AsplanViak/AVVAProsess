@@ -132,13 +132,13 @@ class SystemTypeSelectionCommand(IExternalCommand):
 from pyrevit import revit, DB
 from pyrevit import script
 
-#def push_button():
-#command = SystemTypeSelectionCommand()
-#script.start_command(command)
+def push_button():
+    command = SystemTypeSelectionCommand()
+    script.start_command(command)
 
-SystemTypeSelectionCommand()
+#SystemTypeSelectionCommand()
 
 # Register the button
-#button = revit.FamilyPushButton(push_button, __title__, __doc__)
-#button.toolip = 'Select System Type'
+button = revit.FamilyPushButton(push_button, __title__, __doc__)
+button.toolip = 'Select System Type'
 
