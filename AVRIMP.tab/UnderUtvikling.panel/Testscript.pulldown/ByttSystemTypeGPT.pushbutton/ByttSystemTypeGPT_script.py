@@ -134,7 +134,7 @@ class SystemTypeSelectionCommand(IExternalCommand):
 
 #def push_button():
 command = SystemTypeSelectionCommand()
-script.start_command(command)
+#script.start_command(command)
 
 # Register the button
 #button = revit.FamilyPushButton(push_button, __title__, __doc__)
