@@ -51,13 +51,8 @@ from System.Collections.Generic import List
 
 from Autodesk.Revit.DB import Plumbing, IFamilyLoadOptions
 
-#import clr
 clr.AddReference("RevitAPIUI")
 from Autodesk.Revit.UI import *
-
-clr.AddReference("System.Windows.Forms")
-from System.Windows.Forms import Form, Button, ComboBox, ComboBoxStyle, DialogResult
-
 
 class SystemTypeForm(IExternalEventHandler):
     def __init__(self):
@@ -96,19 +91,19 @@ class SystemTypeSelectionForm(Form):
         self.Height = 150
 
         self.combo_box = ComboBox()
-        self.combo_box.Location = Point(20, 20)
+        self.combo_box.Location = System.Drawing.Point(20, 20)
         self.combo_box.Width = 260
         self.combo_box.DropDownStyle = ComboBoxStyle.DropDownList
 
         self.ok_button = Button()
         self.ok_button.Text = "OK"
         self.ok_button.DialogResult = DialogResult.OK
-        self.ok_button.Location = Point(100, 70)
+        self.ok_button.Location = System.Drawing.Point(100, 70)
 
         self.cancel_button = Button()
         self.cancel_button.Text = "Cancel"
         self.cancel_button.DialogResult = DialogResult.Cancel
-        self.cancel_button.Location = Point(180, 70)
+        self.cancel_button.Location = System.Drawing.Point(180, 70)
 
         for system_type in self.system_types:
             self.combo_box.Items.Add(system_type.Name)
@@ -121,19 +116,24 @@ class SystemTypeSelectionForm(Form):
         self.selected_type = self.system_types[self.combo_box.SelectedIndex]
         self.Close()
 
-# Entry point for the add-in
-def RunSystemTypeSelection(eventArgs):
-    form = SystemTypeForm()
-    uiapp = eventArgs.GetAddInUIContext().Application
-    uiapp.RegisterExternalEventHandler(form)
-    form.Execute(uiapp)
+# Custom ExternalCommand class
+class SystemTypeSelectionCommand(IExternalCommand):
+    def Execute(self, commandData):
+        form = SystemTypeForm()
+        uiapp = commandData.Application
+        uiapp.RegisterExternalEventHandler(form)
+        form.Execute(uiapp)
+        return Result.Succeeded
 
-# Register the add-in with Revit
-#__revit__.Application.Idling += RunSystemTypeSelection
+# Register the command with PyRevit
+#from pyrevit import revit, DB
+#from pyrevit import script
 
-RunSystemTypeSelection()
+#def push_button():
+command = SystemTypeSelectionCommand()
+script.start_command(command)
 
+# Register the button
+#button = revit.FamilyPushButton(push_button, __title__, __doc__)
+#button.toolip = 'Select System Type'
 
-
-
-#UI.TaskDialog.Show('Ferdig', report_tekst, button)
