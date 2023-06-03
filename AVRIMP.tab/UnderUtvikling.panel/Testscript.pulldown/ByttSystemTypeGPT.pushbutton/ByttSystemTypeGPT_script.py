@@ -51,6 +51,9 @@ from System.Collections.Generic import List
 
 from Autodesk.Revit.DB import Plumbing, IFamilyLoadOptions
 
+clr.AddReference("System.Windows.Forms")
+from System.Windows.Forms import Form, Button, ComboBox, ComboBoxStyle, DialogResult
+
 clr.AddReference("RevitAPIUI")
 from Autodesk.Revit.UI import *
 
