@@ -133,4 +133,4 @@ def RunSystemTypeSelection(eventArgs):
 
 
 
-UI.TaskDialog.Show('Autoflens ferdig', report_tekst, button)
+#UI.TaskDialog.Show('Ferdig', report_tekst, button)
