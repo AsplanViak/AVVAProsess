@@ -51,6 +51,24 @@ from System.Collections.Generic import List
 
 from Autodesk.Revit.DB import Plumbing, IFamilyLoadOptions
 
+from Autodesk.Revit.DB import *
+
+import os
+
+
+clr.AddReferenceByName('Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')
+
+from Microsoft.Office.Interop import Excel
+from Microsoft.Office.Interop.Excel import XlListObjectSourceType, Worksheet, Range, XlYesNoGuess
+
+from System.Collections.Generic import List
+from System.Collections.Generic import *
+from System import Guid
+from System import Array
+
+import datetime
+
+
 
 def measure(startpoint, point):
     return startpoint.DistanceTo(point)
@@ -84,6 +102,9 @@ def GetClosestDirection(faminstance, lineDirection):
 # global variables for rotating new families
 tempfamtype = None
 xAxis = DB.XYZ(1, 0, 0)
+
+transaction = DB.Transaction(doc)
+transaction.Start("Bytt System Type")
 
 def report(duct_piping_system_type, pipe_connector, status):
     try:
@@ -285,22 +306,29 @@ output_report = []
 output_report_errors = []
 
 #lag liste over alle piping systems
-pipingSystem = DB.FilteredElementCollector(doc).OfClass(Plumbing.PipingSystemType).ToElements()
+#pipingSystem = DB.FilteredElementCollector(doc).OfClass(Plumbing.PipingSystemType).ToElements()
+#pipingSystem = DB.FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_PipingSystem).WhereElementIsElementType().ToElements()
+
+pipingSystem = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_PipingSystem).WhereElementIsElementType().ToElements()
 
 list_piping_system = []
+list_piping_system_id_lesbar = []
 list_piping_system_id = []
 for i in pipingSystem:
-    list_piping_system.append(i)
+    #list_piping_system.append(i)
+    #list_piping_system.append(i.AsString())
+    #list_piping_system.append(i.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsString())
+    list_piping_system.append(Element.Name.GetValue(i))
+    list_piping_system_id_lesbar.append(i.Id.IntegerValue.ToString())
     list_piping_system_id.append(i.Id)
-
+    #list_piping_system_id.append(i.Id.AsInteger())
+print list_piping_system
+print list_piping_system_id_lesbar
 ###########################################################
 ## start algorithm for changing systemt type
 ###########################################################
-
-
 #cat_list = ['Pipe Accessories', 'Mechanical Equipment', 'Generic Model']
 cat_list = ['Pipes']
-
 picked = []
 try:
     picked = uidoc.Selection.PickObjects(ObjectType.Element)
@@ -316,405 +344,29 @@ for k in picked:
 checked_valve_families = []
 
 for i in EQ:
+    systemtype = (i.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString())
+    print systemtype
+    systemid = (i.Id.IntegerValue.ToString())
+    print systemid
     try:
         # PI_systemtype.append(i.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()).ToDSType(True).Name
         # systemtypeparam = (i.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString())
         # systemtype = systemtypeparam.ToDSType(True).Name
-        systemtype = (i.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString())
-        res = k.LookupParameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).Set("")
+
+        #res = i.LookupParameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).Set(list_piping_system_id[30])
+        res = i.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).Set(list_piping_system_id[30])
+        #res = i.MEPSystem.GetTypeId()).SetType(new_system_type
         if res:
             print("solid")
+        else:
+            print("Njet")
     except:
-        systemtype = 'udefinert system type PF'
-    # Finn family
+        systemtype = 'udefinert system type'
+        print ("gikk ikke så bra")
 
-
-
-# prepare connection filter for later collector within family editor
-con_cat_list = [DB.BuiltInCategory.OST_ConnectorElem]
-con_typed_list = List[DB.BuiltInCategory](con_cat_list)
-con_filter = DB.ElementMulticategoryFilter(con_typed_list)
-
-# collect all mechanical equipment and pipe accessories in project
-if modus == 'alle':
-    cat_list = [DB.BuiltInCategory.OST_PipeAccessory, DB.BuiltInCategory.OST_MechanicalEquipment,
-                DB.BuiltInCategory.OST_GenericModel]
-    typed_list = List[DB.BuiltInCategory](cat_list)
-    filter = DB.ElementMulticategoryFilter(typed_list)
-    EQ = DB.FilteredElementCollector(doc).WherePasses(filter).WhereElementIsNotElementType().ToElements()
-else:
-    # make selection in UI for selecting pipe accessories and mech eq ++
-    cat_list = ['Pipe Accessories', 'Mechanical Equipment', 'Generic Model']
-    picked = []
-    try:
-        picked = uidoc.Selection.PickObjects(ObjectType.Element)
-    except:
-        pass
-    EQ = []
-    for k in picked:
-        el = doc.GetElement(k.ElementId)
-        if el.Category.Name in cat_list:
-            EQ.append(el)
-
-# list containing all family names where connectors has been checked and potentially modified
-checked_valve_families = []
-
-for i in EQ:
-    # Filter out flanges and other parts where type-name i "Standard"
-    if i.Name != 'Standard':
-        # Filter out equipment without connectors
-        # Find connectors
-        try:
-            connectors = i.MEPModel.ConnectorManager.Connectors
-        except:
-            try:
-                connectors = i.ConnectorManager.Connectors
-            except:
-                connectors = []
-        # modify connectorset to be subscriptable
-        cons = []
-        for kk in connectors:
-            cons.append(kk)
-        if len(cons) == 0:
-            continue
-
-        # Checking the connector-types of the family
-        valve_type_id = i.GetTypeId()
-        valve_element_type = doc.GetElement(valve_type_id)
-        valve_family = valve_element_type.Family
-        valve_family_name = valve_family.Name
-        if valve_family.Name not in checked_valve_families:
-            CheckConnectors(valve_family, 20)
-            checked_valve_families.append(valve_family_name)
-
-#transaction = DB.Transaction(doc)
-#transaction.Start("Autoflens")
-
-# ACTIVATE FLANGE TYPES TO BE USED
-PA1 = DB.FilteredElementCollector(doc).OfCategory(DB.BuiltInCategory.OST_PipeAccessory).WhereElementIsElementType()
-
-flange_family_type = [0, 0, 0, 0]
-n = 0
-
-for i in PA1:
-    if flensetype == 'kragelosflens':
-
-        if 'Krage-Løsflens_med pakning' in i.Family.Name:
-
-            flange_family_type[0] = i
-            #sjekk connector type flens her
-            CheckConnectors(i.Family, 28)
-            n = n + 1
-            continue
-        if 'Krage-Løsflens_uten pakning' in i.Family.Name:
-
-            flange_family_type[1] = i
-            #sjekk connector type flens her
-            CheckConnectors(i.Family, 28)
-            n = n + 1
-            continue
-    else:
-
-        if 'Sveiseflens_med pakning' in i.Family.Name:
-
-            flange_family_type[2] = i
-            n = n + 1
-            #sjekk connector type flens her
-            CheckConnectors(i.Family, 28)
-            continue
-        if 'Sveiseflens_uten pakning' in i.Family.Name:
-
-            flange_family_type[3] = i
-            #sjekk connector type flens her
-            CheckConnectors(i.Family, 28)
-            n = n + 1
-            continue
-
-    if n == 2:
-        break
-
-transaction = DB.Transaction(doc)
-transaction.Start("Autoflens")
-
-for typ in flange_family_type:
-    if typ != 0:
-        if typ.IsActive == False:
-            typ.Activate()
-            doc.Regenerate()
-
-
-for i in EQ:
-    # Filter out flanges and other parts where type-name i "Standard"
-    if i.Name != 'Standard':
-        # find connectors to valve
-        try:
-            connectors = i.MEPModel.ConnectorManager.Connectors
-        except:
-            try:
-                connectors = i.ConnectorManager.Connectors
-            except:
-                connectors = []
-        # modify connectorset to be subscriptable
-        cons = []
-        for kk in connectors:
-            cons.append(kk)
-
-        # check what type of parts the connectors are connected to
-        # from node "connector.connectedElements from MEPover
-        for n, j in enumerate(cons):
-            refs = None
-            try:
-                refs = [doc.GetElement(x.Owner.Id) for x in j.AllRefs if
-                        x.Owner.Id != j.Owner.Id and x.ConnectorType != DB.ConnectorType.Logical]
-            except:
-                refs = None
-            if type(refs) == list:
-                if refs == []:
-                    reft = None
-                else:
-                    refs = refs[0]
-
-            for y in j.AllRefs:
-                if y.Owner.Id != j.Owner.Id and y.ConnectorType != DB.ConnectorType.Logical:
-                    pipe_connector = y
-
-            # check if connected to straight pipe
-            if refs is not None:
-                cat_name = None
-                try:
-                    cat_name = refs.Category.Name
-                except:
-                    continue
-
-
-                if cat_name == 'Pipe Fittings':
-
-                    status = ' Årsak: Utstyr er koblet direkte mot rørdel "' + refs.Symbol.FamilyName + '"'
-                    duct_piping_system_type = refs.get_Parameter(DB.BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
-                    output_report_errors.append(report(duct_piping_system_type, pipe_connector, status))
-                    continue
-
-                if cat_name == 'Pipes':
-                    pipe = refs
-                    duct_piping_system_type = pipe.get_Parameter(
-                        DB.BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
-
-                    # checking if pipe is longer than 20mm. don't want to add flanges on very short pipes which should not be there, stuck between valves.
-                    # LINE BELOW IS ONLY FOR PROJECTS USING MM AS UNIT
-                    if pipe.Location.Curve.GetEndPoint(0).DistanceTo(pipe.Location.Curve.GetEndPoint(1)) < 20 / 304.8:
-                        status = ' Årsak: For kort rørstrekk til å få plass til flens.'
-                        output_report_errors.append(report(duct_piping_system_type, pipe_connector, status))
-                        continue
-                    else:
-                        # Preparing lists with corresponding indexes:
-                        ##pipe.append(refs) ##moved
-                        # pipe_endpoints.append([refs.Location.Curve.GetEndPoint(0), refs.Location.Curve.GetEndPoint(1)])
-                        pipe_endpoints = [refs.Location.Curve.GetEndPoint(0), refs.Location.Curve.GetEndPoint(1)]
-                        # pipe_connector.append(pipeconnector) ##OBS like navn.
-                        # valve_connector.append(j)
-                        valve_connector = j
-                        ##problem with this line for equipment with only 1, or 3 or more connections
-                        if len(cons) == 2:
-                            # opposite_valve_connector.append(cons[1 - n])
-                            opposite_valve_connector = cons[1 - n]
-                        else:
-                            # opposite_valve_connector.append(-1)
-                            opposite_valve_connector = -1
-                        # valve_number_of_connectors.append(len(cons))
-                        valve_number_of_connectors = len(cons)
-                        # valve_location.append(i.Location)
-                        valve_location = i.Location
-                        valve = i
-                        if pipe.Location.Curve.GetEndPoint(0).DistanceTo(j.Origin) < pipe.Location.Curve.GetEndPoint(
-                                1).DistanceTo(j.Origin):
-                            # pipe_endpoint_id.append(0)
-                            pipe_endpoint_id = 0
-                        else:
-                            pipe_endpoint_id = 1
-
-                        # pakning eller ikke
-                        if 'innspent' in i.Symbol.FamilyName or 'kyvespjeldsventil' in i.Symbol.FamilyName:
-                            gasket = False
-                        else:
-                            gasket = True
-
-                        #####################
-                        # add flange
-                        ####################
-                        new_flange = AddFlange(pipe, valve_connector, gasket)
-                        # check if flange was created. If not, probably due to too small DN
-                        if new_flange == 0:
-                            output_report_errors.append(report(duct_piping_system_type, pipe_connector, 'Aktuell flens er ikke lastet inn i prosjektet'))
-                            continue
-                        elif new_flange == 1:
-                            continue
-
-                        doc.Regenerate()
-
-                        #########################
-                        # check if flange need to be flipped
-                        ########################
-                        try:
-                            flange_connectors = new_flange.MEPModel.ConnectorManager.Connectors
-                        except:
-                            try:
-                                flange_connectors = new_flange.ConnectorManager.Connectors
-                            except:
-                                flange_connectors = []
-                                cons = []
-
-                        # make subscriptable
-                        f_cons = []
-                        for a in flange_connectors:
-                            f_cons.append(a)
-                        # valve_cons.append([x for x in connectors])
-                        flange_a_con_position = f_cons[0].Origin
-                        flange_b_con_position = f_cons[1].Origin
-
-                        #if valve_number_of_connectors == 2:
-                        if 1:
-                            # fungerer best for ventiler etc med 2 stk connectors
-                            flange_a_dist = flange_a_con_position.DistanceTo(opposite_valve_connector.Origin)
-                            print('flange_a_dist :' + str(flange_a_dist))
-                            flange_b_dist = flange_b_con_position.DistanceTo(opposite_valve_connector.Origin)
-                            print('flange_b_dist :' + str(flange_b_dist))
-                            if flange_a_dist < flange_b_dist:
-                                need_to_flip = f_cons[0].GetMEPConnectorInfo().IsPrimary
-                            else:
-                                need_to_flip = f_cons[1].GetMEPConnectorInfo().IsPrimary
-                            print ('need_to_flip 2 connectors:' + str(need_to_flip))
-                        #else:
-                        if 1:
-                            # fungerer for ventiler etc med 1 eller mer enn 2 connectors. Bruker bounding box location
-                            try:
-                                bb = valve.get_BoundingBox(None)
-                                if not bb is None:
-                                    centre = bb.Min + (bb.Max - bb.Min) / 2
-                            except:
-                                pass
-                            if flange_a_con_position.DistanceTo(centre) < flange_b_con_position.DistanceTo(centre):
-                                # flange side a is facing the valve
-                                need_to_flip = f_cons[0].GetMEPConnectorInfo().IsPrimary
-                            else:
-                                need_to_flip = f_cons[1].GetMEPConnectorInfo().IsPrimary
-                            print ('need_to_flip 1 eller mer enn 2 :' + str(need_to_flip))
-
-                        #Flip
-                        if need_to_flip:
-                            try:
-                                vector = valve_connector.CoordinateSystem.BasisY
-                                line = DB.Line.CreateBound(valve_connector.Origin,
-                                                           valve_connector.Origin + vector)
-                                flipped = new_flange.Location.Rotate(line, math.pi)
-                            except:
-                                status = ' Årsak: Feil ved flipping av flens.'
-                                doc.Delete(new_flange.Id)
-                                output_report_errors.append(report(duct_piping_system_type, pipe_connector, status))
-                                continue
-
-                        doc.Regenerate()
-
-                        ###################################
-                        # Move flange
-                        ###################################
-
-                        if 0:
-                        #try:
-                            if f_cons[0].GetMEPConnectorInfo().IsPrimary:
-                                #primary
-                                primary_con_id = 0
-                                secondary_con_id = 1
-                            else:
-                                #secondary
-                                primary_con_id = 1
-                                secondary_con_id = 0
-                            new_flange.Location.Move((valve_connector.Origin - f_cons[secondary_con_id].Origin))
-
-                        if 0:
-                        #except:
-                            status = ' Årsak: Feil ved flytting av flens.'
-                            doc.Delete(new_flange.Id)
-                            output_report_errors.append(report(duct_piping_system_type, pipe_connector, status))
-                            continue
-
-                        ########################
-                        # Modify pipe endpoints and connect to flange
-                        ########################
-
-                        doc.Regenerate()
-                        if 0 :
-                        #try:
-                            # modify pipe endpoints
-                            if pipe_endpoint_id == 0:
-                                new_pipeline = DB.Line.CreateBound(f_cons[primary_con_id].Origin,
-                                                                   pipe.Location.Curve.GetEndPoint(1))
-                                pipe.Location.Curve = new_pipeline
-                                #a modify pipe endpoints
-                            else:
-                                new_pipeline = DB.Line.CreateBound(pipe.Location.Curve.GetEndPoint(0),
-                                                                   f_cons[primary_con_id].Origin)
-                                pipe.Location.Curve = new_pipeline
-                                #b modify pipe endpoints
-                            doc.Regenerate()
-
-                            # disconnect
-                            valve_connector.DisconnectFrom(pipe_connector)
-                            # doc.Regenerate()
-
-                            # make new connections
-                            pipe_connector.ConnectTo(f_cons[primary_con_id])
-                            f_cons[secondary_con_id].ConnectTo(valve_connector)
-                            doc.Regenerate()
-
-                        if 0:
-                        #except:
-                            status = ' Feil ved justering/tilkobling av rør.'
-                            doc.Delete(new_flange.Id)
-                            output_report_errors.append(report(duct_piping_system_type, pipe_connector, status))
-                            continue
-
-                        # add to output report
-                        output_report.append(report(duct_piping_system_type,pipe_connector, ''))
-
-
-report_tekst = ''
-
-if not len(output_report) and not len(output_report_errors):
-    report_tekst = 'Ingen flenser ble lagt til. Det fantes ingen koblinger mellom rør og utstyr som mangler flens. \r\n'
-
-if len(output_report):
-    report_compressed = []
-    for i in output_report:
-        funnet = 0
-        for a in report_compressed:
-            if i == a[0]:
-                a[1] = a[1] + 1
-                funnet = 1
-        if funnet == 0:
-            report_compressed.append(list([i, 1]))
-
-    report_tekst = report_tekst + 'Følgende flenser ble lagt til: \r\n \r\n'
-    for j in report_compressed:
-        report_tekst = report_tekst + ' - ' + j[0][0] + ' ' + str(j[0][1]) + ': ' + str(j[1]) + ' stk \r\n'
-
-if len(output_report_errors):
-    report_errors_compressed = []
-    for i in output_report_errors:
-        funnet = 0
-        for a in report_errors_compressed:
-            if i == a[0]:
-                a[1] = a[1] + 1
-                funnet = 1
-        if funnet == 0:
-            report_errors_compressed.append(list([i, 1]))
-
-    report_tekst = report_tekst + '\r\nFølgende flenser ble IKKE lagt til: \r\n \r\n'
-    for j in report_errors_compressed:
-        report_tekst = report_tekst + ' - ' + j[0][0] + ' ' + str(j[0][1]) + ': ' + str(j[1]) + ' stk ' + str(
-            j[0][2]) + '\r\n'
 
 transaction.Commit()
 
 button = UI.TaskDialogCommonButtons.None
 result = UI.TaskDialogResult.Ok
-UI.TaskDialog.Show('Autoflens ferdig', report_tekst, button)
+UI.TaskDialog.Show('Autoflens ferdig', 'bla blad', button)

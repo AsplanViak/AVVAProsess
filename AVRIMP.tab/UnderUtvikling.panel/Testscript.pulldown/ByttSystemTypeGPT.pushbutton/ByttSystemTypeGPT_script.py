@@ -140,13 +140,12 @@ from pyrevit import revit
 from pyrevit import forms
 
 # Register the button
-@revit.transaction
-def push_button():
-    command = SystemTypeSelectionCommand()
-    revit.doc.Application.PostCommand(command)
+#@revit.transaction
+command = SystemTypeSelectionCommand()
+revit.doc.Application.PostCommand(command)
 
 # Create a PyRevit button
-button = forms.CommandButton(label="System Type Selection",
-                             description="Select System Type",
-                             icon='icons\\system_type_selection.png',
-                             command=push_button)
+#button = forms.CommandButton(label="System Type Selection",
+#                             description="Select System Type",
+#                             icon='icons\\system_type_selection.png',
+#                             command=push_button)
