@@ -61,20 +61,17 @@ from System.Collections.Generic import List
 from Autodesk.Revit.DB import Plumbing, IFamilyLoadOptions
 
 
+import clr
 clr.AddReference('RevitAPI')
 from Autodesk.Revit.DB import *
+from Autodesk.Revit.DB.IFC import *
 
 def import_ifc_geometry(ifc_file_path, family_document):
-    options_handler = IFCImportOptionsHandler()
-    options_handler.ResetOptions()
-
-    options_handler.CreateTemporaryView(family_document)
-
-    options_handler.UpdateOptionsFromView(family_document.ActiveView)
-    options_handler.UpdateOptionsFromIFCFile(ifc_file_path)
+    options = IFCImportOptions()
+    options.FilePath = ifc_file_path
 
     importer = IFCSATImporter()
-    import_result = importer.Import(family_document, options_handler.GetOptions())
+    import_result = importer.Import(family_document, options)
     if import_result:
         return True
     else:
@@ -94,3 +91,7 @@ if __name__ == '__main__':
             print("Failed to import IFC geometry.")
     else:
         print("Please open a family document in Family Editor mode.")
+
+
+
+
