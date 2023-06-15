@@ -16,7 +16,7 @@ Fungerende autocomplete i pycharm.
 """
 
 # Start MÅ ha
-__title__ = 'ElektroScript'  # Denne overstyrer navnet på scriptfilen
+__title__ = 'Tugger'  # Denne overstyrer navnet på scriptfilen
 __author__ = 'Asplan Viak'  # Dette kommer opp som navnet på utvikler av knappen
 __doc__ = "Klikk for å legge til flenser i prosjektet."  # Dette blir hjelp teksten som kommer opp når man holder musepekeren over knappen.
 # End MÅ ha
@@ -60,30 +60,37 @@ from System.Collections.Generic import List
 
 from Autodesk.Revit.DB import Plumbing, IFamilyLoadOptions
 
+
 clr.AddReference('RevitAPI')
+from Autodesk.Revit.DB import *
 
 def import_ifc_geometry(ifc_file_path, family_document):
-    options = IFCImportOptions()
-    options.FilePath = ifc_file_path
+    options_handler = IFCImportOptionsHandler()
+    options_handler.ResetOptions()
+
+    options_handler.CreateTemporaryView(family_document)
+
+    options_handler.UpdateOptionsFromView(family_document.ActiveView)
+    options_handler.UpdateOptionsFromIFCFile(ifc_file_path)
 
     importer = IFCSATImporter()
-    import_result = importer.Import(family_document, options)
+    import_result = importer.Import(family_document, options_handler.GetOptions())
     if import_result:
         return True
     else:
         return False
 
 # Usage example
-#ifc_file_path = r'C:\path\to\your\ifc_file.ifc'
-ifc_file_path = r'C:\Users\jorgen.fidjeland\Tugger.ifc'
+if __name__ == '__main__':
+    ifc_file_path = input("Enter the path to the IFC file: ")
 
-# Open the family document in Family Editor mode
-doc = __revit__.ActiveUIDocument.Document
-if doc.IsFamilyDocument:
-    success = import_ifc_geometry(ifc_file_path, doc)
-    if success:
-        print("IFC geometry imported successfully.")
+    # Open the family document in Family Editor mode
+    doc = __revit__.ActiveUIDocument.Document
+    if doc.IsFamilyDocument:
+        success = import_ifc_geometry(ifc_file_path, doc)
+        if success:
+            print("IFC geometry imported successfully.")
+        else:
+            print("Failed to import IFC geometry.")
     else:
-        print("Failed to import IFC geometry.")
-else:
-    print("Please open a family document in Family Editor mode.")
+        print("Please open a family document in Family Editor mode.")
