@@ -89,6 +89,14 @@ def SortedPoints(fittingspoints, ductStartPoint):
     sortedpoints = sorted(fittingspoints, key=lambda x: measure(ductStartPoint, x))
     return sortedpoints
 
+
+def convert_radius_in_feet_to_DN_and_round_to_nearest_five_if_off_by_one(value_in_feet):
+    DN = (value_in_feet * 304.8 * 2)
+    nearest_DN = round(DN/5)*5
+    if abs(DN - nearest_DN) <= 1:
+        DN = nearest_DN
+    return 'DN' + str(int(DN))
+
 xl = Excel.ApplicationClass()
 xl.Visible = True
 xl.DisplayAlerts = True
@@ -174,26 +182,33 @@ names = []
 
 
 for i in PA:
-    # Finn family
+    #Legger inn parameter for sortering. Default er PA1. I Praksis vil denne brukes mest til instrumentering. Mengdemålere vil ha PA0.
+    #Ventiler får PA2. Flenser PA3.
     sortering = 'PA1'
+    # Finn family
     try:
         family = i.Symbol.FamilyName
         # Generaliser tekst
         if 'Krage-Løsflens' in family:
             family = 'Krage-løsflens'
             #Plassere disse sist ved sortering
-            sortering = 'PA2'
+            sortering = 'PA3'
         if 'Sveiseflens' in family:
             family = 'Sveiseflens'
             #Plassere disse sist ved sortering
-            sortering = 'PA2'
+            sortering = 'PA3'
         if 'Sluseventil' in family:
             family = 'Sluseventil'
         if 'Mengdemaaler' in family:
             family = 'Mengdemåler'
             #Plassere disse først ved sortering
             sortering = 'PA0'
-
+        if 'Dreiespjeldsventil innspent manuell' in family:
+            family = 'Dreiespjeldsventil innspent manuell'
+        if  'ventil' in family:
+            sortering = 'PA22'
+        if 'uleventil' in family:
+            sortering = 'PA21'
         if 'PF-stykke' in family:
             family = 'PF-stykke'
 
@@ -208,17 +223,25 @@ for i in PA:
             connectors = i.MEPModel.ConnectorManager.Connectors
             # DN = int(connectors[0]).Radius*2
             for kk in connectors:
-                DN = 'DN' + str(int(math.ceil(kk.Radius * 304.8 * 2)))
+                #DN = 'DN' + str(int(math.ceil(kk.Radius * 304.8 * 2)))
+                DN = convert_radius_in_feet_to_DN_and_round_to_nearest_five_if_off_by_one(kk.Radius)
                 break
         except:
             try:
                 connectors = i.ConnectorManager.Connectors
                 for kk in connectors:
-                    DN = 'DN' + str(int(math.ceil(kk.Radius * 304.8 * 2)))
+                    #DN = 'DN' + str(int(math.ceil(kk.Radius * 304.8 * 2)))
+                    DN = convert_radius_in_feet_to_DN_and_round_to_nearest_five_if_off_by_one(kk.Radius)
                     break
             except:
-                DN = 'udefinert DN PA'
-        main_list.append(list([systemtype, family, DN, 1,  sortering]))
+                #DN = 'udefinert DN PA'
+                DN = ''
+
+        #Fjern DN fra familynavn dersom den er identisk med DN
+        if family.startswith(DN) and DN <>'':
+            family = family[len(DN)+1:]
+
+        main_list.append(list([systemtype, family, DN, 1, sortering]))
 
     except:
         continue
@@ -289,7 +312,8 @@ for i in PF:
         connectors = i.MEPModel.ConnectorManager.Connectors
         DNs = []
         for kk in connectors:
-            DNs.append('DN' + str(int(math.ceil(kk.Radius * 304.8 * 2))))
+            #DNs.append('DN' + str(int(math.ceil(kk.Radius * 304.8 * 2))))
+            DNs.append(convert_radius_in_feet_to_DN_and_round_to_nearest_five_if_off_by_one(kk.Radius))
         DN_list = list(set(DNs))
         DN = DN_list[0]
         if len(DN_list) == 2:
@@ -304,7 +328,8 @@ for i in PF:
             connectors = i.ConnectorManager.Connectors
             DN = []
             for kk in connectors:
-                DNs.append('DN' + str(int(math.ceil(kk.Radius * 304.8 * 2))))
+                #DNs.append('DN' + str(int(math.ceil(kk.Radius * 304.8 * 2))))
+                DNs.append(convert_radius_in_feet_to_DN_and_round_to_nearest_five_if_off_by_one(kk.Radius))
             DN_list = list(set(DNs))
             DN = DN_list[0]
             if len(DN_list) > 1:
@@ -433,16 +458,22 @@ for i in range(len(a1)):
         # prisbank[j][2]:   enhet
         # prisbank[j][3]:   prosjekt index
         # prisbank[j][4]:   prosjekt
+        # prisbank[j][5]:   enhetspris uregulert
 
         if a1[i][1] == prisbank[j][0] and a1[i][2] == prisbank[j][1]:
             # senere: if a1[i][1] == b1[j][0] and a1[i][2] == b1[j][1] and materiale = materiale:
             pr = j
             break
-    if pr == 0:
+    if pr == 0 or prisbank[pr][3] == '' or prisbank[pr][4] == '' or prisbank[pr][5] == '':
+        # ledd 2, 3 og 4 i OR-setning over er for å forhindre at script krasjer dersom det er tomme kolonner i prisbank
         #[a1[i][1] + ' ' + a1[i][2], a1[i][4], '', '', '', a1[i][3], '', '', '', a1[i][0], '', '', ''])
         #DN             + Beskrivelse, vinkel bend, -, -, -, MEngde, -, -, -, Entreprise(utgår), -, -, -,
-        a_entreprise.append([a1[i][2] + ' ' + a1[i][1], '', '', '', '', a1[i][3],'', '=RC[-2]*RC[-1]'])
+        if a1[i][2] <> '':
+            a_entreprise.append([a1[i][2] + ' ' + a1[i][1], '', '', '', '', a1[i][3],'', '=RC[-2]*RC[-1]'])
+        else:
+            a_entreprise.append([a1[i][1], '', '', '', '', a1[i][3], '', '=RC[-2]*RC[-1]'])
     else:
+        #rad under krasjet tidligere dersom kolonne D, dvs. "valgt prosjekt", er tom i prisbank.
         a_entreprise.append([a1[i][2] + ' ' + a1[i][1], '', '', '', prisbank[pr][2], a1[i][3],
                    '=' + str(prisbank[pr][5]) + '*R' + str(int(prisbank[pr][3])) + 'C3', '=RC[-2]*RC[-1]', '', '', prisbank[pr][4],
                    prisbank[pr][5]])
