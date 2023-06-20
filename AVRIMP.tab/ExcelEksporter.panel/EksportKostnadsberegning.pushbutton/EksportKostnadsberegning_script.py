@@ -175,17 +175,25 @@ names = []
 
 for i in PA:
     # Finn family
+    sortering = 'PA1'
     try:
         family = i.Symbol.FamilyName
         # Generaliser tekst
         if 'Krage-Løsflens' in family:
             family = 'Krage-løsflens'
+            #Plassere disse sist ved sortering
+            sortering = 'PA2'
         if 'Sveiseflens' in family:
             family = 'Sveiseflens'
+            #Plassere disse sist ved sortering
+            sortering = 'PA2'
         if 'Sluseventil' in family:
             family = 'Sluseventil'
         if 'Mengdemaaler' in family:
             family = 'Mengdemåler'
+            #Plassere disse først ved sortering
+            sortering = 'PA0'
+
         if 'PF-stykke' in family:
             family = 'PF-stykke'
 
@@ -210,7 +218,7 @@ for i in PA:
                     break
             except:
                 DN = 'udefinert DN PA'
-        main_list.append(list([systemtype, family, DN, 1]))
+        main_list.append(list([systemtype, family, DN, 1,  sortering]))
 
     except:
         continue
@@ -242,7 +250,7 @@ for i in PI:
     except:
         DN = 'udefinert DN PI'
 
-    main_list.append(list([systemtype, family, DN, lengde]))
+    main_list.append(list([systemtype, family, DN, lengde, 'PI']))
 
 for i in PF:
     #Resett parameter for å telle deler av bend.
@@ -305,7 +313,7 @@ for i in PF:
         except:
             DN = 'udefinert DN PF'
 
-    main_list.append(list([systemtype, family, DN, n_PF]))
+    main_list.append(list([systemtype, family, DN, n_PF, 'PF']))
 
 # legg til kolonne for entreprise
 main_list = [x + ['Udefinert'] for x in main_list]
@@ -336,19 +344,25 @@ for s in PS:
 for g in range(len(main_list)):
     for h in range(len(entrepriseliste)):
         if entrepriseliste[h][0] == main_list[g][0]:
-            main_list[g][4] = entrepriseliste[h][1]
+            main_list[g][5] = entrepriseliste[h][1]
             break
 
 #########################
 # Sortering og komprimmering av list.
 ###################
-# Sorterer etter entreprise, family, DN.
-main_list = sorted(main_list, key=lambda x: (x[4], x[1], keyn(x[2])))
+# Sorterer etter entreprise, category, family, DN.
+main_list = sorted(main_list, key=lambda x: (x[5], x[4], x[1], keyn(x[2])))
 #a1 = sorted(main_list_compressed, key=lambda x: keyn(x[4]))
 
 #Sletter systemtype-kolonne og setter entreprisekolonne først
 for item in main_list:
-	item[0], item[1], item[2], item[3] = item[4], item[1], item[2], item[3]
+	item[0], item[1], item[2], item[3], item[4] = item[5], item[1], item[2], item[3], item[4]
+
+
+
+#print main_list[1]
+
+#print main_list[2]
 
 #Komprimerer liste
 # slår sammen rader dersom entreprise, DN, family etc er likt.
@@ -366,6 +380,9 @@ for m in range(0, len(main_list_compressed)):
         # rund av til en desimal
         main_list_compressed[m][3] = round(float(main_list_compressed[m][3]), 1)
 
+
+#for item in main_list_compressed:
+#    print item
 # names.append(i.Name)	 # returnerer "Standard", "DN150", eller "rustfritt rør"
 #print(main_list_compressed)
 
@@ -379,24 +396,24 @@ a_entreprise = []   #subdataset entreprise
 #a_entreprise.append([a1[i][0], a1[i][1], a1[i][2], a1[i][3], ''])
 
 entreprise_index = 0
-entrepriser = [a1[0][4]]        #Legger til første entreprise i entrepriser-list
+entrepriser = [a1[0][5]]        #Legger til første entreprise i entrepriser-list
 
 for i in range(len(a1)):
     #Sjekk ny entreprise
     #if i == 0 or a1[i][0] != a1[i - 1][0]:
-    if i == 0 or a1[i][4] != a1[i - 1][4]:
+    if i == 0 or a1[i][5] != a1[i - 1][5]:
 
         #Legg subdataset for entreprise til hoved-dataset
         if i != 0:
             a2.append(a_entreprise)
-            entrepriser.append(a1[i][4])
+            entrepriser.append(a1[i][5])
             entreprise_index = entreprise_index + 1
 
         a_entreprise = []
         for k in range(1, len(prisbank_prosjekter)):
             a_entreprise.append(['Prisstigningsfaktor ' + prisbank_prosjekter[k][1], '', prisbank_prosjekter[k][2], '', '', ''])
         a_entreprise.append(['', '', '', '', '', ''])
-        a_entreprise.append(['Entreprise: ', a1[i][4], '','','',''])
+        a_entreprise.append(['Entreprise: ', a1[i][5], '','','',''])
         a_entreprise.append(['','','','','',''])
         a_entreprise.append(['Beskrivelse', '', '', '', 'Enhet', 'Mengde', 'enhetspris', 'kostnad', '', '',
                    'Pris fra prosjekt', 'Opprinnelig enhetspris'])
