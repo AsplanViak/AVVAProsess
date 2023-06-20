@@ -109,7 +109,7 @@ def SaveListToExcel(filePath, exportData):
 def convert_radius_in_feet_to_DN_and_round_to_nearest_five_if_off_by_one(value_in_feet):
     DN = (value_in_feet * 304.8 * 2)
     nearest_DN = round(DN/5)*5
-    if abs(DN - nearest_DN) <= 1:
+    if abs(DN - nearest_DN) <= 1 and DN>35:
         DN = nearest_DN
     return 'DN' + str(int(DN))
 
