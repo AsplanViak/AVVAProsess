@@ -208,13 +208,13 @@ for i in PA:
             connectors = i.MEPModel.ConnectorManager.Connectors
             # DN = int(connectors[0]).Radius*2
             for kk in connectors:
-                DN = 'DN' + str(int(kk.Radius * 304.8 * 2))
+                DN = 'DN' + str(int(math.ceil(kk.Radius * 304.8 * 2)))
                 break
         except:
             try:
                 connectors = i.ConnectorManager.Connectors
                 for kk in connectors:
-                    DN = 'DN' + str(int(kk.Radius * 304.8 * 2))
+                    DN = 'DN' + str(int(math.ceil(kk.Radius * 304.8 * 2)))
                     break
             except:
                 DN = 'udefinert DN PA'
@@ -289,7 +289,7 @@ for i in PF:
         connectors = i.MEPModel.ConnectorManager.Connectors
         DNs = []
         for kk in connectors:
-            DNs.append('DN' + str(int(kk.Radius * 304.8 * 2)))
+            DNs.append('DN' + str(int(math.ceil(kk.Radius * 304.8 * 2))))
         DN_list = list(set(DNs))
         DN = DN_list[0]
         if len(DN_list) == 2:
@@ -304,7 +304,7 @@ for i in PF:
             connectors = i.ConnectorManager.Connectors
             DN = []
             for kk in connectors:
-                DNs.append('DN' + str(int(kk.Radius * 304.8 * 2)))
+                DNs.append('DN' + str(int(math.ceil(kk.Radius * 304.8 * 2))))
             DN_list = list(set(DNs))
             DN = DN_list[0]
             if len(DN_list) > 1:
