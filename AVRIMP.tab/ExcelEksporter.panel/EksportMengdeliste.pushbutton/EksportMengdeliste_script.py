@@ -106,6 +106,13 @@ def SaveListToExcel(filePath, exportData):
 #result = UI.TaskDialogResult.Ok
 #UI.TaskDialog.Show('Connector elementer lagt til og oppdater', report_tekst, button)
 
+def convert_radius_in_feet_to_DN_and_round_to_nearest_five_if_off_by_one(value_in_feet):
+    DN = (value_in_feet * 304.8 * 2)
+    nearest_DN = round(DN/5)*5
+    if abs(DN - nearest_DN) <= 1:
+        DN = nearest_DN
+    return 'DN' + str(int(DN))
+
 def keyn(k):
     nums = set(list("0123456789"))
     chars = set(list(k))
@@ -161,13 +168,15 @@ for i in PA:
                 connectors = i.MEPModel.ConnectorManager.Connectors
                 # DN = int(connectors[0]).Radius*2
                 for kk in connectors:
-                    DN = 'DN' + str(int(kk.Radius * 304.8 * 2))
+                    #DN = 'DN' + str(int(kk.Radius * 304.8 * 2))
+                    DN = convert_radius_in_feet_to_DN_and_round_to_nearest_five_if_off_by_one(kk.Radius)
                     break
             except:
                 try:
                     connectors = i.ConnectorManager.Connectors
                     for kk in connectors:
-                        DN = 'DN' + str(int(kk.Radius * 304.8 * 2))
+                        #DN = 'DN' + str(int(kk.Radius * 304.8 * 2))
+                        DN = convert_radius_in_feet_to_DN_and_round_to_nearest_five_if_off_by_one(kk.Radius)
                         break
                 except:
                     DN = 'udefinert DN PA'
@@ -237,7 +246,8 @@ for i in PF:
         connectors = i.MEPModel.ConnectorManager.Connectors
         DNs = []
         for kk in connectors:
-            DNs.append('DN' + str(int(kk.Radius * 304.8 * 2)))
+            #DNs.append('DN' + str(int(kk.Radius * 304.8 * 2)))
+            DNs.append(convert_radius_in_feet_to_DN_and_round_to_nearest_five_if_off_by_one(kk.Radius))
         DN_list = list(set(DNs))
         DN = DN_list[0]
         if len(DN_list) == 2:
@@ -252,7 +262,8 @@ for i in PF:
             connectors = i.ConnectorManager.Connectors
             DN = []
             for kk in connectors:
-                DNs.append('DN' + str(int(kk.Radius * 304.8 * 2)))
+                #DNs.append('DN' + str(int(kk.Radius * 304.8 * 2)))
+                DNs.append(convert_radius_in_feet_to_DN_and_round_to_nearest_five_if_off_by_one(kk.Radius))
             DN_list = list(set(DNs))
             DN = DN_list[0]
             if len(DN_list) > 1:
