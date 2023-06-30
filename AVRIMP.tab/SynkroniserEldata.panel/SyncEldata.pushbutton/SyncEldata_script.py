@@ -672,6 +672,15 @@ def MainFunction():
             # går til neste category
             continue
 
+        if cat == BuiltInCategory.OST_DetailComponents:
+            #Lag liste over alle detail item tags. Brukes senere for å kryssjekke om detail item er tagget på tegning
+            c_list = [DB.BuiltInCategory.OST_DetailComponentTags]
+            t_list = List[DB.BuiltInCategory](c_list)
+            filt = DB.ElementMulticategoryFilter(t_list)
+            DetailItemTags = DB.FilteredElementCollector(doc).WherePasses(filt).WhereElementIsNotElementType().ToElements().TagTex
+
+
+
         # loop elements in category
         EQ = FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().ToElements()
         n_elements = 0
@@ -865,18 +874,28 @@ def MainFunction():
                     familytype = 'udefinert familietype'
                     # header : komp_skjema.append(['element_id', 'TAG', 'Family', 'FamilyType', 'Tegning'])
 
-                # Sjekk om tag_label er vist på tegning. Dersom ikke: Stor sannsynlighet for at feil tag. Fjernes derfor fra eksport
+                # Sjekk om tag_label er synlig. Kan være vist enten som label innebygget i detail item, eller som tag by catebory
+                # Dersom ikke synlig tag: Stor sannsynlighet for at feil tag. Fjernes derfor fra eksport.
                 try:
                     tag_label = k.LookupParameter('Tag label').AsInteger()
                     DebugPrint('tag_label: ' + str(tag_label))
-                    #summaryReport = summaryReport + (' \n tag_label: ' + str(tag_label))
-                    if tag_label == 1:
+                except:
+                    DebugPrint('tag_label undefined')
+                    tag_label = 0
+                if (tag in DetailItemTags):
+                    finnes_tagget = 1
+                #Sjekker om detail item er vist på tegning som plottes, dvs tegning med tegningsnummer. Dersom ikke, sannsynligvis kok, eller uferdig. Tas ikke med på eksport.
+                try:
+                    sheetelem = doc.GetElement(k.OwnerViewId)
+                    sheetparameter = sheetelem.get_Parameter(DB.BuiltInParameter.VIEWPORT_SHEET_NUMBER)
+                    skjemanr = sheetparameter.AsString()
+                    DebugPrint('skjema: ' + skjemanr)
+                    # summaryReport = summaryReport + (' \n tag_label: ' + str(tag_label))
+                    if tag_label == 1 or finnes_tagget == 1:
                         komp_skjema.append([k.Id, tag, family, familytype, ''])
                 except:
-                # Blir med på eksport dersom tag_label parameter ikke definert
-                    DebugPrint('tag_label undefined')
-                    #summaryReport = summaryReport + (' \n tag_label undefined')
-                    komp_skjema.append([k.Id, tag, family, familytype, ''])
+                    # Blir ikke med på eksport siden ikke vist på tegning
+                    DebugPrint('detail item ikke med på eksport siden ikke vist på tegning')
 
         DebugPrint('n_elements: ' + str(n_elements))
 
