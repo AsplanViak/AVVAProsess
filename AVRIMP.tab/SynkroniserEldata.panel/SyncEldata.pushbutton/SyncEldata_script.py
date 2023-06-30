@@ -677,9 +677,7 @@ def MainFunction():
             c_list = [DB.BuiltInCategory.OST_DetailComponentTags]
             t_list = List[DB.BuiltInCategory](c_list)
             filt = DB.ElementMulticategoryFilter(t_list)
-            DetailItemTags = DB.FilteredElementCollector(doc).WherePasses(filt).WhereElementIsNotElementType().ToElements().TagTex
-
-
+            DetailItemTags = DB.FilteredElementCollector(doc).WherePasses(filt).WhereElementIsNotElementType().ToElements().TagText
 
         # loop elements in category
         EQ = FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().ToElements()
