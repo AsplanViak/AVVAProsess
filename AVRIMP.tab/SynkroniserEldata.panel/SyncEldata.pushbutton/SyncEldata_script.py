@@ -886,6 +886,7 @@ def MainFunction():
                 except:
                     DebugPrint('tag_label undefined')
                     tag_label = 0
+                finnes_tagget = 0
                 if (tag in DetailItemTags):
                     finnes_tagget = 1
                 #Sjekker om detail item er vist på tegning som plottes, dvs tegning med tegningsnummer. Dersom ikke, sannsynligvis kok, eller uferdig. Tas ikke med på eksport.
