@@ -221,7 +221,8 @@ def CheckConnectors(family, typeid):
     for a in fam_connections:
         try:
             if a.get_Parameter(
-                    DB.BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM) != typeid:
+                    DB.BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM) != typeid and a.get_Parameter(
+                DB.BuiltInParameter.RBS_PIPE_CONNECTOR_SYSTEM_CLASSIFICATION_PARAM) != 28:
 
                 try:  # this might fail if the parameter exists or for some other reason
                     if (changecontype(a, typeid)):
