@@ -72,6 +72,9 @@ from Autodesk.Revit.UI import TaskDialog
 import datetime
 import string
 
+clr.AddReference("System.Windows.Forms")
+from System.Windows.Forms import Application, Form, Label, TextBox, Button
+
 
 #printer en del meldinger til terminal i revit dersom man setter debug_mode til 1
 def DebugPrint(tekst):
@@ -116,124 +119,83 @@ def n2a(n,b=string.ascii_uppercase):
    d, m = divmod(n,len(b))
    return n2a(d-1,b)+b[m] if d else b[m]
 
-#funksjon for å lagre dataset (2d-lister) til excel, og lukke dem etterpå
-def SaveListToExcel(filePath, exportData):
-    try:
-        wb = xl.Workbooks.Add()
-        ws = wb.Worksheets[1]
-        ws.name = 'komp'
-        rows = len(exportData)
-        cols = max(len(i) for i in exportData)
-        a = Array.CreateInstance(object, rows, cols)  # row and column
-        for r in range(rows):
-            for c in range(cols):
-                try:
-                    a[r, c] = exportData[r][c]
-                except:
-                    a[r, c] = ''
-        xlrange = ws.Range["A1", chr(ord('@') + cols) + str(rows)]
-        xlrange.Value2 = a
-        wb.SaveAs(filePath)
-        wb.Close()
-        return True
-    except:
-        DebugPrint('Feil med lagring av excel-eksport')
-        return False
 
-def OppdaterEldata(cat, IO_liste_row, k, n_elements, p_s_IO_cat_kol, p_s_IO_cat_guid, p_s_IO_cat_name, p_r_IO_cat_name, p_r_IO_cat_kol):
-    # loop shared params
-    global presync_top_row
-    global presync_3d_row
-    global presync_skjema_row
-    global IOliste
+class InputFormGammel(Form):
+    def __init__(self):
+        self.Text = "Gammelt skilletegn tag"
+        self.label = Label(Text="Skriv inn gammelt skilletegn:")
+        self.label.Dock = DockStyle.Top
 
-    for i, kol in enumerate(p_s_IO_cat_kol):
-        # DebugPrint('Looping shared params')
-        if n_elements == 1:
-            DebugPrint('i: ' + str(i) + ', kol: ' + str(kol))
-        # presync header
-        #if n_elements == 1:
-            # DebugPrint('presync header')
-        #    presync_top_row.append(p_s_IO_cat_name[i])
-        # presync data
-        #try:
-            # DebugPrint('Check if detail item')
-         #   if cat <> BuiltInCategory.OST_DetailComponents:
-                # DebugPrint('Is not detail item')
-          #      presync_3d_row.append(k.get_Parameter(p_s_IO_cat_guid[i]).AsString())
-           # else:
-                # DebugPrint('Is detail item')
-            #    presync_skjema_row.append(k.get_Parameter(p_s_IO_cat_guid[i]).AsString())
-        #except:
-         #   if cat <> BuiltInCategory.OST_DetailComponents:
-          #      presync_3d_row.append('')
-          #  else:
-           #     presync_skjema_row.append('')
-        if IO_liste_row != (-1):
-            # sync
-            # DebugPrint('Syncing')
-            IOliste_tekst = IOliste[IO_liste_row][kol]
-            if IOliste_tekst is None:
-                IOliste_tekst = ' '
-            # DebugPrint('IOliste_tekst: ' + str(IOliste_tekst))
-            try:
-                #rad under er den som utfører selve endringen av parameter-verdi i Revit
+        self.input_box = TextBox()
+        self.input_box.Dock = DockStyle.Top
 
+        self.ok_button = Button(Text="OK", DialogResult=DialogResult.OK)
+        self.ok_button.Dock = DockStyle.Top
+        self.ok_button.Click += self.ok_button_click
 
-                res = k.get_Parameter(p_s_IO_cat_guid[i]).Set(IOliste_tekst)
-                if (res):
-                    SummaryPrint('shared parameter ' + p_s_IO_cat_name[i] + ': ok')
-                else:
-                    SummaryPrint('shared parameter ' + p_s_IO_cat_name[i] + ': feil')
-            except Exception, ex:
-                DebugPrint('shared parameter ' + p_s_IO_cat_name[i] + ': exception')
-                DebugPrint('k.get_Parameter(' + str(p_s_IO_cat_guid[i]) + ').Set(' + str(IOliste_tekst) + ')')
-                DebugPrint(ex.message)
+        self.cancel_button = Button(Text="Cancel", DialogResult=DialogResult.Cancel)
+        self.cancel_button.Dock = DockStyle.Top
 
-    # loop remaining params
-    for j, kol2 in enumerate(p_r_IO_cat_kol):
-        # presync header
-        if n_elements == 1:
-            presync_top_row.append(p_r_IO_cat_name[j])
-        # presync data
-        try:
-            if cat <> BuiltInCategory.OST_DetailComponents:
-                presync_3d_row.append(k.LookupParameter(p_r_IO_cat_name[j]).AsString())
-            else:
-                presync_skjema_row.append(k.LookupParameter(p_r_IO_cat_name[j]).AsString())
-        except:
-            if cat <> BuiltInCategory.OST_DetailComponents:
-                presync_3d_row.append('')
-            else:
-                presync_skjema_row.append('')
-        if IO_liste_row != (-1):
-            # sync
-            IOliste_tekst = IOliste[IO_liste_row][kol2]
-            if IOliste_tekst is None:
-                IOliste_tekst = ' '
-            # DebugPrint('IOliste_tekst: ' + str(IOliste_tekst))
-            try:
-                #rad under er den som utfører selve endringen av parameter-verdi i Revit
-                ############SKAL TROLIG STÅ kol ISTEDET FOR j PÅ RAD UNDER!!!!!!!!!!!!!!!!!!!!!
-                res = k.LookupParameter(p_r_IO_cat_name[j]).Set(IOliste_tekst)
-                if (res):
-                    SummaryPrint('remaining parameter ' + p_r_IO_cat_name[j] + ': ok')
-                else:
-                    SummaryPrint('remaining parameter ' + p_r_IO_cat_name[j] + ': feil')
-            except Exception, ex:
-                DebugPrint('remaining parameter ' + p_r_IO_cat_name[j] + ': exception')
-                DebugPrint('k.LookupParameter(' + str(p_r_IO_cat_name[j]) + ').Set(' + str(IOliste_tekst) + ')')
-                DebugPrint(ex.message)
+        self.Controls.Add(self.label)
+        self.Controls.Add(self.input_box)
+        self.Controls.Add(self.ok_button)
+        self.Controls.Add(self.cancel_button)
 
-    # Update TAG if GUID sync????
-    # Funksjon må legges til her!!
-    return
+    def ok_button_click(self, sender, event):
+        self.Close()
+
+class InputFormNytt(Form):
+    def __init__(self):
+        self.Text = "Nytt skilletegn tag"
+        self.label = Label(Text="Skriv inn nytt skilletegn:")
+        self.label.Dock = DockStyle.Top
+
+        self.input_box = TextBox()
+        self.input_box.Dock = DockStyle.Top
+
+        self.ok_button = Button(Text="OK", DialogResult=DialogResult.OK)
+        self.ok_button.Dock = DockStyle.Top
+        self.ok_button.Click += self.ok_button_click
+
+        self.cancel_button = Button(Text="Cancel", DialogResult=DialogResult.Cancel)
+        self.cancel_button.Dock = DockStyle.Top
+
+        self.Controls.Add(self.label)
+        self.Controls.Add(self.input_box)
+        self.Controls.Add(self.ok_button)
+        self.Controls.Add(self.cancel_button)
+
+    def ok_button_click(self, sender, event):
+        self.Close()
 
 def MainFunction():
 
     global IOliste
-    gammelt_skilletegn = input("Skriv inn gammelt skilletegn: ")
-    nytt_skilletegn = input("Skriv inn nytt skilletegn: ")
+    #gammelt_skilletegn = input("Skriv inn gammelt skilletegn: ")
+    #nytt_skilletegn = input("Skriv inn nytt skilletegn: ")
+
+    # Create and run the application
+    form = InputFormGammel()
+    result = form.ShowDialog()
+
+    # Check if the OK button was clicked
+    if result == DialogResult.OK:
+        gammelt_skilletegn = form.input_box.Text
+        #print("You entered:", user_input)
+    else:
+        print("User canceled the input.")
+
+    # Create and run the application
+    form = InputFormNytt()
+    result = form.ShowDialog()
+
+    # Check if the OK button was clicked
+    if result == DialogResult.OK:
+        nytt_skilletegn = form.input_box.Text
+        #print("You entered:", user_input)
+    else:
+        print("User canceled the input.")
+
     #kritiske feil:
     errorReport = ""
     #ikke-kritiske feil og generell info:
