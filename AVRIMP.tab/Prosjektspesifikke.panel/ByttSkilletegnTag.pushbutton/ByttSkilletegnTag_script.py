@@ -180,7 +180,7 @@ def MainFunction():
     # Check if the OK button was clicked
     if result == DialogResult.OK:
         gammelt_skilletegn = form.input_box.Text
-        DebugPrint("G You entered:", gammelt_skilletegn)
+        DebugPrint("G You entered:"+ gammelt_skilletegn)
     else:
         DebugPrint("User canceled the input.")
 
@@ -191,7 +191,7 @@ def MainFunction():
     # Check if the OK button was clicked
     if result == DialogResult.OK:
         nytt_skilletegn = form.input_box.Text
-        DebugPrint("Nytt You entered:", nytt_skilletegn)
+        DebugPrint("Nytt You entered:"+ nytt_skilletegn)
     else:
         DebugPrint("User canceled the input.")
 
