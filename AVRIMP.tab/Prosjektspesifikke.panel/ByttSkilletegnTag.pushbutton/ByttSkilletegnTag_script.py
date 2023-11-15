@@ -59,9 +59,9 @@ import os
 import time
 import csv
 
-clr.AddReferenceByName(
-    'Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')
-from Microsoft.Office.Interop import Excel
+#clr.AddReferenceByName(
+#    'Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')
+#from Microsoft.Office.Interop import Excel
 
 from System.Collections.Generic import List
 from System import Guid
@@ -108,10 +108,11 @@ def TryGetRoom(room, phase):
         pass
     return inRoom
 
-#definer excel-applikasjon
+'''#definer excel-applikasjon
 xl = Excel.ApplicationClass()
 xl.Visible = False
 xl.DisplayAlerts = False
+'''
 
 #funksjon for å returnere kolonnenavn for excel.
 def n2a(n,b=string.ascii_uppercase):
@@ -179,7 +180,7 @@ def MainFunction():
     # Check if the OK button was clicked
     if result == DialogResult.OK:
         gammelt_skilletegn = form.input_box.Text
-        #print("You entered:", user_input)
+        print("G You entered:", gammelt_skilletegn)
     else:
         print("User canceled the input.")
 
@@ -190,7 +191,7 @@ def MainFunction():
     # Check if the OK button was clicked
     if result == DialogResult.OK:
         nytt_skilletegn = form.input_box.Text
-        #print("You entered:", user_input)
+        print("Nytt You entered:", nytt_skilletegn)
     else:
         print("User canceled the input.")
 
@@ -340,8 +341,8 @@ def MainFunction():
 
 
 
-    xl.DisplayAlerts = True
-    xl.Visible = True
+    #xl.DisplayAlerts = True
+    #xl.Visible = True
     DebugPrint(' Etter excel-eksport, før transaction ' + str(time.time() - start))
     transaction.Commit()
     DebugPrint(' Etter transaction ' + str(time.time() - start))
