@@ -275,6 +275,8 @@ def MainFunction():
     TFM11FkSamlet_guid = '6b52eb8b-6935-45f9-a509-bb76724ba272'
 
 
+    #tag_param = input("Skriv inn navn på parameter for TAG, f.eks. TAG eller TFM11FkSamlet")
+    tag_param = TAG
 
 
     if tag_param.upper() == 'TAG':
