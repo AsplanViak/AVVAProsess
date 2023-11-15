@@ -122,24 +122,23 @@ def n2a(n,b=string.ascii_uppercase):
 class InputFormGammel(Form):
     def __init__(self):
         self.Text = "Gammelt skilletegn tag"
+        self.label = Label(Text="Skriv inn gammelt skilletegn:")
+        self.label.Dock = DockStyle.Top
 
-        self.cancel_button = Button(Text="Cancel", DialogResult=DialogResult.Cancel)
-        self.cancel_button.Dock = DockStyle.Top
+        self.input_box = TextBox()
+        self.input_box.Dock = DockStyle.Top
 
         self.ok_button = Button(Text="OK", DialogResult=DialogResult.OK)
         self.ok_button.Dock = DockStyle.Top
         self.ok_button.Click += self.ok_button_click
 
-        self.input_box = TextBox()
-        self.input_box.Dock = DockStyle.Top
+        self.cancel_button = Button(Text="Cancel", DialogResult=DialogResult.Cancel)
+        self.cancel_button.Dock = DockStyle.Top
 
-        self.label = Label(Text="Skriv inn gammelt skilletegn:")
-        self.label.Dock = DockStyle.Top
-
-        self.Controls.Add(self.label)
-        self.Controls.Add(self.input_box)
-        self.Controls.Add(self.ok_button)
         self.Controls.Add(self.cancel_button)
+        self.Controls.Add(self.ok_button)
+        self.Controls.Add(self.input_box)
+        self.Controls.Add(self.label)
 
     def ok_button_click(self, sender, event):
         self.Close()
@@ -219,8 +218,6 @@ def MainFunction():
 
     # finn kolonne i Io liste med tag/tfm, og finn project parametre
     tag_kol = -1
-
-    DebugPrint(IOliste[0])
 
     cat_list = [BuiltInCategory.OST_PipeAccessory, BuiltInCategory.OST_MechanicalEquipment,
                BuiltInCategory.OST_GenericModel, BuiltInCategory.OST_DuctAccessory, BuiltInCategory.OST_Sprinklers,
