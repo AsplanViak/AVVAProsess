@@ -16,7 +16,7 @@ Fungerende autocomplete i pycharm.
 """
 
 # Start MÅ ha
-__title__ = 'Bytt Skilletegn Tag'  # Denne overstyrer navnet på scriptfilen
+__title__ = 'Søk-erstatt funksjon i Tag'  # Denne overstyrer navnet på scriptfilen
 __author__ = 'Asplan Viak'  # Dette kommer opp som navnet på utvikler av knappen
 __doc__ = "Gir mulighet for å endre skilletegn på alle TAG i flytskjema og 3D objekter."  # Dette blir hjelp teksten som kommer opp når man holder musepekeren over knappen.
 # End MÅ ha
@@ -122,8 +122,8 @@ def n2a(n,b=string.ascii_uppercase):
 
 class InputFormGammel(Form):
     def __init__(self):
-        self.Text = "Gammelt skilletegn tag"
-        self.label = Label(Text="Skriv inn gammelt skilletegn:")
+        self.Text = "Søketekst som skal erstattes"
+        self.label = Label(Text="Skriv inn søketekst som skal erstattes:")
         self.label.Dock = DockStyle.Top
 
         self.input_box = TextBox()
@@ -146,8 +146,8 @@ class InputFormGammel(Form):
 
 class InputFormNytt(Form):
     def __init__(self):
-        self.Text = "Nytt skilletegn tag"
-        self.label = Label(Text="Skriv inn nytt skilletegn:")
+        self.Text = "Ny tekst"
+        self.label = Label(Text="Skriv inn ny tekst:")
         self.label.Dock = DockStyle.Top
 
         self.input_box = TextBox()
