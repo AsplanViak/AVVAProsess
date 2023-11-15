@@ -16,9 +16,9 @@ Fungerende autocomplete i pycharm.
 """
 
 # Start MÅ ha
-__title__ = 'ByttSkilletegnTag'  # Denne overstyrer navnet på scriptfilen
+__title__ = 'Bytt Skilletegn Tag'  # Denne overstyrer navnet på scriptfilen
 __author__ = 'Asplan Viak'  # Dette kommer opp som navnet på utvikler av knappen
-__doc__ = "Klikk for å synkronisere postnr på rørsystemer med beskrivelsen."  # Dette blir hjelp teksten som kommer opp når man holder musepekeren over knappen.
+__doc__ = "Gir mulighet for å endre skilletegn på alle TAG i flytskjema og 3D objekter."  # Dette blir hjelp teksten som kommer opp når man holder musepekeren over knappen.
 # End MÅ ha
 
 # Kan sløyfes
