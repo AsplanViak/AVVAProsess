@@ -348,7 +348,7 @@ def MainFunction():
     button = UI.TaskDialogCommonButtons.None
     result = UI.TaskDialogResult.Ok
 
-    UI.TaskDialog.Show('Bytt skilletegn ferdig', summaryReport, button)
+    UI.TaskDialog.Show('Søk-erstatt ferdig', summaryReport, button)
     DebugPrint(str(time.time() - start))
     return
 
