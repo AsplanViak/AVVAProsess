@@ -122,18 +122,19 @@ def n2a(n,b=string.ascii_uppercase):
 class InputFormGammel(Form):
     def __init__(self):
         self.Text = "Gammelt skilletegn tag"
-        self.label = Label(Text="Skriv inn gammelt skilletegn:")
-        self.label.Dock = DockStyle.Top
 
-        self.input_box = TextBox()
-        self.input_box.Dock = DockStyle.Top
+        self.cancel_button = Button(Text="Cancel", DialogResult=DialogResult.Cancel)
+        self.cancel_button.Dock = DockStyle.Top
 
         self.ok_button = Button(Text="OK", DialogResult=DialogResult.OK)
         self.ok_button.Dock = DockStyle.Top
         self.ok_button.Click += self.ok_button_click
 
-        self.cancel_button = Button(Text="Cancel", DialogResult=DialogResult.Cancel)
-        self.cancel_button.Dock = DockStyle.Top
+        self.input_box = TextBox()
+        self.input_box.Dock = DockStyle.Top
+
+        self.label = Label(Text="Skriv inn gammelt skilletegn:")
+        self.label.Dock = DockStyle.Top
 
         self.Controls.Add(self.label)
         self.Controls.Add(self.input_box)
@@ -159,11 +160,10 @@ class InputFormNytt(Form):
         self.cancel_button = Button(Text="Cancel", DialogResult=DialogResult.Cancel)
         self.cancel_button.Dock = DockStyle.Top
 
-        self.Controls.Add(self.label)
-        self.Controls.Add(self.input_box)
-        self.Controls.Add(self.ok_button)
         self.Controls.Add(self.cancel_button)
-
+        self.Controls.Add(self.ok_button)
+        self.Controls.Add(self.input_box)
+        self.Controls.Add(self.label)
     def ok_button_click(self, sender, event):
         self.Close()
 
@@ -206,7 +206,7 @@ def MainFunction():
 
 
     #tag_param = input("Skriv inn navn på parameter for TAG, f.eks. TAG eller TFM11FkSamlet")
-    tag_param = TAG
+    tag_param = 'TAG'
 
     if tag_param.upper() == 'TAG':
         tguid = Guid(TAG_guid)
