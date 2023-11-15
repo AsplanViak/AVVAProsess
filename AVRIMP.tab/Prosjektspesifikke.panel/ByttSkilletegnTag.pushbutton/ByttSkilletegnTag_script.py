@@ -240,7 +240,7 @@ def MainFunction():
             catel = FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().FirstElement()
             if catel is not None:
                 for param in catel.Parameters:
-                    if param.Definition.Name in parametre_project_name:
+                    '''if param.Definition.Name in parametre_project_name:
                         i = parametre_project_name.index(param.Definition.Name)
                         if param.IsShared == True and param.GUID == parametre_project_guid[i]:
                             p_s_IO_cat_kol.append(parametre_project_IO_liste_kolonne[i])    # s = shared
@@ -249,6 +249,7 @@ def MainFunction():
                         else:
                             p_r_IO_cat_kol.append(parametre_project_IO_liste_kolonne[i])  # r = remaining (dvs. not shared)
                             p_r_IO_cat_name.append(parametre_project_name[i])
+                    '''
                     if param.IsShared == True and param.GUID == tguid:
                         tag_cat_status = 1  # status 1 betyr at den finnes som shared parameter, og at definisjonen stemmer overens med offisiel AV standard.
                     elif param.Definition.Name == tag_param:
