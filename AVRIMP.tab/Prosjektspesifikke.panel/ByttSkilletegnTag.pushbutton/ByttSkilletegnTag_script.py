@@ -202,44 +202,12 @@ def MainFunction():
     summaryReport = ""
     start = time.time()
 
-    DebugPrint('Tag parameter: ' + str(tag_param))
-    DebugPrint('sync_guid: ' + str(sync_guid))
-
-    #parametre_shared_name = ['Entreprise', 'Tekstlinje 1', 'Tekstlinje 2', 'Driftsform', 'AV_MMI',
-    #                         'BUS-kommunikasjon',
-    #                         'Sikkerhetsbryter', 'Kommentar', 'Fabrikat', 'Modell', 'Merkespenning', 'Merkeeffekt',
-    #                         'Merkestrøm', 'Status', 'Access_TagType', 'Access_TagType beskrivelse', 'IO-er', 'Datablad']
-
-    #parametre_guid = ['2c78b93c-2c2d-4bf5-a4cd-b5ab37d40b3f', '88e7a061-da67-44a8-bdab-19fd0e111277',
-    #                  '8bd618c5-4b04-4089-8c1c-d3329c359af7', 'da7bed97-096f-4949-840f-3125bdf40605',
-     #                 'fd766c10-96b3-470b-aa1e-3b1b5b572492', '18f9c00a-61cf-4429-b022-311b2ce6a667',
-      #                'daf45c3a-35fc-4994-a29a-180483305de1', '3df6ebff-09dd-475f-8ca7-6eb31e697fd5',
-       #               'c4a831f8-4d5f-46a3-a40c-41f987c910f6', 'e854697d-4f77-4882-b709-72bcc27ee040',
-        #              'c6dde6a0-ab66-4102-9e09-30ab645e56bb', 'ed0e58dd-3954-47f7-b7eb-f561f2b55ff9',
-         #             '55e65789-9ba8-40fe-9795-287755774934', '57e99ba0-ecc1-43aa-8de5-60155ae1e99d',
-          #            '78d27e5c-b652-4ef5-b19c-767de086fe46', '2603489f-989b-4df2-b87f-0cbfbe9d4f5b',
-           #           '1c7f04a2-ed1a-412e-a7c1-170dde0c203c', 'bf7410c5-c78b-4463-8b39-fefedd6b4ac7']
-
-    #for i, g in enumerate(parametre_guid):
-    #    parametre_guid[i] = Guid(g)
-
-    #parametre_shared_name_lc = [x.lower() for x in parametre_shared_name]
-
-    parametre_signalinfo_lc = ['tekst', 'signaltag', 'type', 'signalkilde', 'spenning', 'tilleggstekst', 'TypeAnalogtSignal']
-    parametre_ikke_sync_lc = ['sortering', 'tag', 'guid', ' tfm11fksamlet']
-
-    # Last inn alle ubrukte parametre fra IO liste i list. Slik at de ikke trenger å defineres noe sted.
-    parametre_project_name = []
-    parametre_project_IO_liste_kolonne = []
-    parametre_project_guid = []
-
     TAG_guid = '141d33b4-0f91-4dd8-a8b6-be1fa232d39f'
     TFM11FkSamlet_guid = '6b52eb8b-6935-45f9-a509-bb76724ba272'
 
 
     #tag_param = input("Skriv inn navn på parameter for TAG, f.eks. TAG eller TFM11FkSamlet")
     tag_param = TAG
-
 
     if tag_param.upper() == 'TAG':
         tguid = Guid(TAG_guid)
@@ -259,11 +227,6 @@ def MainFunction():
                BuiltInCategory.OST_GenericModel, BuiltInCategory.OST_DuctAccessory, BuiltInCategory.OST_Sprinklers,
                 BuiltInCategory.OST_PlumbingFixtures, BuiltInCategory.OST_DuctTerminal,
                 BuiltInCategory.OST_DetailComponents]
-    #cat_list = [BuiltInCategory.OST_PipeFitting,BuiltInCategory.OST_PipeCurves]
-    #cat_list = [BuiltInCategory.OST_PipeCurves,BuiltInCategory.OST_PipeFitting,BuiltInCategory.OST_PipingSystem]
-    #cat_list = [BuiltInCategory.OST_PipingSystem_Reference,BuiltInCategory.OST_PipingSystem]
-
-    # BuiltInCategory.OST_PipeSegments,
 
     transaction = DB.Transaction(doc)
     transaction.Start("Bytt skilletegn")
@@ -316,11 +279,11 @@ def MainFunction():
 
             # Ny kode starter her
 
-            EQ = FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().ToElements()
-            n_elements = 0
+        EQ = FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().ToElements()
+        n_elements = 0
 
-            DebugPrint('parameteromfang klarert')
-            DebugPrint(str(time.time() - start))
+        DebugPrint('parameteromfang klarert')
+        DebugPrint(str(time.time() - start))
 
         for k in EQ:
             # Tag reset
@@ -379,95 +342,7 @@ def MainFunction():
 
             n_elements += 1
 
-        # lag lister over parametre som finnes for category
-        #p_s_IO_cat_kol = []  # parametre_shared_IO_liste_category_kolonne
-        #p_s_IO_cat_name = []
-        #p_s_IO_cat_guid = []
-        #p_r_IO_cat_kol = []
-        #p_r_IO_cat_name = []
 
-        # bruker try her for å unngå feil for categorier som ikke er i bruk, og dermed ikke har firstElement
-        # find all parameters defined for the category
-        #try:
-        #if(1):
-            #if(cat == BuiltInCategory.OST_PipingSystem):
-            #    catel = FilteredElementCollector(doc).OfClass(PipingSystemType).FirstElement()
-                #else:
-            #catel = FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().FirstElement()
-        '''
-            if catel is not None:
-                for param in catel.Parameters:
-                    if param.Definition.Name in parametre_project_name:
-                        i = parametre_project_name.index(param.Definition.Name)
-                        if param.IsShared == True and param.GUID == parametre_project_guid[i]:
-                            p_s_IO_cat_kol.append(parametre_project_IO_liste_kolonne[i])  # s = shared
-                            p_s_IO_cat_name.append(parametre_project_name[i])
-                            p_s_IO_cat_guid.append(parametre_project_guid[i])
-                        else:
-                            p_r_IO_cat_kol.append(parametre_project_IO_liste_kolonne[i])  # r = remaining (dvs. not shared)
-                            p_r_IO_cat_name.append(parametre_project_name[i])
-                    if param.IsShared == True and param.GUID == tguid:
-                        tag_cat_status = 1  # status 1 betyr at den finnes som shared parameter, og at definisjonen stemmer overens med offisiel AV standard.
-                    elif param.Definition.Name == tag_param:
-                        if tag_cat_status == -1:
-                            tag_cat_status = 0  # status 0 betyr at den finnes, men at man ikke kan bruke GUID (enten fordi tag_param er ulik både tfm og tag, eller fordi det ikke er brukt shared parameter for denne)
-            else:
-                DebugPrint('Ingen elementer i cat. Ingen parameter testing')
-                continue
-        except:
-        #else:
-            # bør legge inn en advarsel her
-            DebugPrint('failed parameter testing')
-            continue
-    
-
-        if tag_cat_status == -1 and cat == BuiltInCategory.OST_DetailComponents:
-            if tag_param == 'TFM11FkSamlet' or tag_param == 'TFM':
-                tag_cat_status = 2  # Betyr at man bruker denne som tag: SystemVar + '-' + TFM11FkKompGruppe + TFM11FkKompLNR
-
-        DebugPrint('tag_cat_status: ' + str(tag_cat_status))
-        if tag_cat_status == (-1):
-            # category mangler definert tag-parameter
-            DebugPrint('category mangler definert tag-parameter')
-            # går til neste category
-            #continue
-
-        for k in EQ:
-            # Tag reset
-            #tag = k.LookupParameter("System Type").AsString()
-
-            try:
-                if(cat==BuiltInCategory.OST_PipingSystem):
-                    tag = Element.Name.GetValue(k)
-                else:
-                    tag = k.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM).AsValueString()
-
-            except:
-                DebugPrint('asdfasfd')
-            IO_liste_row = -1
-            # tag/tfm-sync
-            for b in range(1, len(IOliste)):
-                # if k.LookupParameter('TAG').AsString() == IOliste[l][tag_kol]:
-                #tag = k.LookupParameter(tag_param).AsString()
-
-                #bruker "in" siden tag/system type har ekstra benevnelser som PN16 etc.
-                #men dette kan gi feil siden kan forveksles med komponenter som ikke er rørsystemer
-                if IOliste[b][tag_kol] in tag:
-                    if 'L_' in IOliste[b][tag_kol]:
-                        IO_liste_row = b
-
-                        #if IOliste[b][tag_kol] == tag:
-                        break
-            #DebugPrint('IO_liste_row :' + str(IO_liste_row))
-            if IO_liste_row <> -1:
-                OppdaterEldata(cat, IO_liste_row, k, 3, p_s_IO_cat_kol, p_s_IO_cat_guid, p_s_IO_cat_name,
-                           p_r_IO_cat_name, p_r_IO_cat_kol)
-            else:
-                DebugPrint('Fant ikke rad i IO-liste for system type: ' + tag)
-
-
-        DebugPrint('n_elements: ' + str(n_elements))
-        '''
 
     xl.DisplayAlerts = True
     xl.Visible = True
@@ -476,11 +351,8 @@ def MainFunction():
     DebugPrint(' Etter transaction ' + str(time.time() - start))
     button = UI.TaskDialogCommonButtons.None
     result = UI.TaskDialogResult.Ok
-    if summaryReport == "":
-        summaryReport = 'Synkronisering gjennomført uten feil'
-    else:
-        summaryReport =  'Synkronisering ferdig.\n\n' + summaryReport
-    UI.TaskDialog.Show('Synkronisering eldata ferdig', summaryReport, button)
+
+    UI.TaskDialog.Show('Bytt skilletegn ferdig', summaryReport, button)
     DebugPrint(str(time.time() - start))
     return
 
