@@ -180,9 +180,9 @@ def MainFunction():
     # Check if the OK button was clicked
     if result == DialogResult.OK:
         gammelt_skilletegn = form.input_box.Text
-        print("G You entered:", gammelt_skilletegn)
+        DebugPrint("G You entered:", gammelt_skilletegn)
     else:
-        print("User canceled the input.")
+        DebugPrint("User canceled the input.")
 
     # Create and run the application
     form = InputFormNytt()
@@ -191,9 +191,9 @@ def MainFunction():
     # Check if the OK button was clicked
     if result == DialogResult.OK:
         nytt_skilletegn = form.input_box.Text
-        print("Nytt You entered:", nytt_skilletegn)
+        DebugPrint("Nytt You entered:", nytt_skilletegn)
     else:
-        print("User canceled the input.")
+        DebugPrint("User canceled the input.")
 
     #kritiske feil:
     errorReport = ""
@@ -339,8 +339,6 @@ def MainFunction():
 
             n_elements += 1
 
-
-
     #xl.DisplayAlerts = True
     #xl.Visible = True
     DebugPrint(' Etter excel-eksport, før transaction ' + str(time.time() - start))
@@ -352,10 +350,5 @@ def MainFunction():
     UI.TaskDialog.Show('Bytt skilletegn ferdig', summaryReport, button)
     DebugPrint(str(time.time() - start))
     return
-
-presync_top_row = []
-presync_3d_row = []
-presync_skjema_row = []
-IOliste = []
 
 MainFunction()
