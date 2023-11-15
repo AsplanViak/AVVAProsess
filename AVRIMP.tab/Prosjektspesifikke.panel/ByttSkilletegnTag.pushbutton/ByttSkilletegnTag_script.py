@@ -73,8 +73,7 @@ import datetime
 import string
 
 clr.AddReference("System.Windows.Forms")
-from System.Windows.Forms import Application, Form, Label, TextBox, Button
-
+from System.Windows.Forms import Application, Form, Label, TextBox, Button, DockStyle, DialogResult
 
 #printer en del meldinger til terminal i revit dersom man setter debug_mode til 1
 def DebugPrint(tekst):
