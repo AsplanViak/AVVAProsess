@@ -376,12 +376,11 @@ def MainFunction():
                     tag = k.get_Parameter(tguid).AsString()
 
                     # Kode for å endre tag her
-                    res = k.get_Parameter(tguid).Set(tag.replace(gammelt_skilletegn, nytt_skilletegn)
+                    res = k.get_Parameter(tguid).Set(tag.replace(gammelt_skilletegn, nytt_skilletegn))
 
                     # DebugPrint('k.get_Parameter(tguid).AsString() : ' + k.get_Parameter(tguid).AsString())
                     # DebugPrint('k.LookupParameter(TAG).AsString() : ' + k.LookupParameter('TAG').AsString())
                 except:
-
                     SummaryPrint(
                         "Feil. Skyldes trolig at parameter TAG ikke er lagt til som project parameter for Detail Item. Skipper element")
                     continue
@@ -396,7 +395,7 @@ def MainFunction():
                 tag = k.LookupParameter(tag_param).AsString()
 
                 #Kode for å endre tag her
-                res = k.LookupParameter(tag_param).Set(tag.replace(gammelt_skilletegn, nytt_skilletegn)
+                res = k.LookupParameter(tag_param).Set(tag.replace(gammelt_skilletegn, nytt_skilletegn))
                 if (res):
                     SummaryPrint('remaining parameter : ok')
                 else:
