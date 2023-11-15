@@ -18,7 +18,7 @@ Fungerende autocomplete i pycharm.
 # Start MÅ ha
 __title__ = 'Søk-erstatt funksjon i Tag'  # Denne overstyrer navnet på scriptfilen
 __author__ = 'Asplan Viak'  # Dette kommer opp som navnet på utvikler av knappen
-__doc__ = "Gir mulighet for å endre skilletegn på alle TAG i flytskjema og 3D objekter."  # Dette blir hjelp teksten som kommer opp når man holder musepekeren over knappen.
+__doc__ = "Gir mulighet for å f.eks. endre skilletegn på alle TAG i flytskjema og 3D objekter."  # Dette blir hjelp teksten som kommer opp når man holder musepekeren over knappen.
 # End MÅ ha
 
 # Kan sløyfes
