@@ -350,7 +350,7 @@ def MainFunction():
     # Liste over alle komponenter i skjema. Skal eksporters til excel og importeres til database.
     komp_skjema = []
     #Første rad inneholder headers
-    komp_skjema.append(['element_id', 'TAG', 'Family', 'FamilyType', 'Tegning'])
+    komp_skjema.append(['element_id', 'TAG', 'Family', 'FamilyType', 'Tegning', 'Komponent', 'Funksjon'])
 
     #"Presync" er lister over eldata slik det så ut før synkronisering. Blir sjelden brukt, men fungerer som backup dersom noen av en eller
     #annen grunn har fyllt ut masse eldata direkte i modell. Dette blir jo overskrevet av script.
@@ -877,6 +877,15 @@ def MainFunction():
                 except:
                     familytype = 'udefinert familietype'
                     # header : komp_skjema.append(['element_id', 'TAG', 'Family', 'FamilyType', 'Tegning'])
+                # Finn verdier av felter "Komponent" og "Funksjon". Tekstfelter med metadata som VVS bruker
+                try:
+                    funksjon = k.LookupParameter('Funksjon').AsString()
+                else:
+                    funksjon = ''
+                try:
+                    komponent = k.LookupParameter('Komponent').AsString()
+                else:
+                    komponent = ''
 
                 # Sjekk om tag_label er synlig. Kan være vist enten som label innebygget i detail item, eller som tag by catebory
                 # Dersom ikke synlig tag: Stor sannsynlighet for at feil tag. Fjernes derfor fra eksport.
@@ -897,7 +906,7 @@ def MainFunction():
                     DebugPrint('skjema: ' + skjemanr)
                     # summaryReport = summaryReport + (' \n tag_label: ' + str(tag_label))
                     if tag_label == 1 or finnes_tagget == 1:
-                        komp_skjema.append([k.Id, tag, family, familytype, ''])
+                        komp_skjema.append([k.Id, tag, family, familytype, '', komponent, funksjon])
                 except:
                     # Blir ikke med på eksport siden ikke vist på tegning
                     DebugPrint('detail item ikke med på eksport siden ikke vist på tegning')
@@ -963,10 +972,14 @@ def MainFunction():
             continue
         if e[1] in finnes:
             i = finnes.index(e[1])
+            #komp_skjema.append([k.Id, tag, family, familytype, '', komponent, funksjon])
             #komp_skjema_ny[i][0] += ', ' + e[0]       #element_id
             komp_skjema_ny[i][2] += ', ' + e[2]       #Family
             komp_skjema_ny[i][3] += ', ' + e[3]       #FamilyType
             komp_skjema_ny[i][4] += ', ' + e[4]       #Tegning            DETTE ER DEN VIKTIGSTE HER
+            komp_skjema_ny[i][5] += ', ' + e[5]       #Komponent
+            komp_skjema_ny[i][6] += ', ' + e[6]       #Funksjon
+
         else:
             finnes.append(komp_skjema[n][1])
             komp_skjema_ny.append(e)
