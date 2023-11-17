@@ -479,21 +479,21 @@ def MainFunction():
             summaryReport += "Fant ikke csv-fil med IO-liste på plassering angitt i ark 'kobling mot IO-liste' \n Sync avbrutt."
             button = UI.TaskDialogCommonButtons.None
             result = UI.TaskDialogResult.Ok
-            UI.TaskDialog.Show('Synkronisering avbrutt', errorReport, button)
+            UI.TaskDialog.Show('Synkronisering avbrutt. Fant ikke csv-fil med IO-liste på plassering angitt i ark "kobling mot IO-liste"', errorReport, button)
             return
 
     elif IO_liste_filplassering =="":
         errorReport +=  "Ingen fil med IO-liste angitt i ark 'kobling mot IO-liste'. \n Sync avbrutt."
         button = UI.TaskDialogCommonButtons.None
         result = UI.TaskDialogResult.Ok
-        UI.TaskDialog.Show('Synkronisering avbrutt', errorReport, button)
+        UI.TaskDialog.Show('Synkronisering avbrutt. Ingen fil med IO-liste angitt i ark "kobling mot IO-liste"', errorReport, button)
         return
 
     else:
         errorReport +=  "Ingen gyldig fil med IO-liste angitt i ark 'kobling mot IO-liste'. Mangler kanskje filtype i filnavn. \n Sync avbrutt"
         button = UI.TaskDialogCommonButtons.None
         result = UI.TaskDialogResult.Ok
-        UI.TaskDialog.Show('Synkronisering avbrutt', errorReport, button)
+        UI.TaskDialog.Show('Synkronisering avbrutt. Ingen gyldig fil med IO-liste angitt i ark "kobling mot IO-liste". Mangler kanskje filtype i filnavn', errorReport, button)
         return
 
 
@@ -585,7 +585,7 @@ def MainFunction():
         ## må legge til en avbryt-funksjon her
         button = UI.TaskDialogCommonButtons.None
         result = UI.TaskDialogResult.Ok
-        UI.TaskDialog.Show('Synkronisering avbrutt', errorReport, button)
+        UI.TaskDialog.Show('Synkronisering avbrutt. Fant ikke kolonne med TAG', errorReport, button)
         return
     DebugPrint('tag_kol: ' + str(tag_kol))
     DebugPrint('Behandle parameternavn i første rad IO liste '+ str(time.time() - start))
