@@ -680,9 +680,11 @@ def MainFunction():
             filt = DB.ElementMulticategoryFilter(t_list)
             DItags= DB.FilteredElementCollector(doc).WherePasses(filt).WhereElementIsNotElementType().ToElements()
             DetailItemTags = []
+            DetailTtemTagObjects = []
             for i in DItags:
                 try:
                     DetailItemTags.append(i.TagText)
+                    DetailTtemTagObjects.append(i)
                 except :
                     pass
 
@@ -777,8 +779,6 @@ def MainFunction():
                         IO_liste_row = b
                         break
             DebugPrint('IO_liste_row :' + str(IO_liste_row))
-
-
 
             # Presync data
             # lag tom header list for denne category (antall parametre kan variere mellom categories)
@@ -911,17 +911,30 @@ def MainFunction():
                     DebugPrint('tag_label undefined')
                     tag_label = 0
                 finnes_tagget = 0
-                if (tag in DetailItemTags):
-                    finnes_tagget = 1
                 #Sjekker om detail item er vist på tegning som plottes, dvs tegning med tegningsnummer. Dersom ikke, sannsynligvis kok, eller uferdig. Tas ikke med på eksport.
                 try:
                     sheetelem = doc.GetElement(k.OwnerViewId)
                     sheetparameter = sheetelem.get_Parameter(DB.BuiltInParameter.VIEWPORT_SHEET_NUMBER)
                     skjemanr = sheetparameter.AsString()
+                    #DetailTtemTagObjects
+
                     DebugPrint('skjema: ' + skjemanr)
                     # summaryReport = summaryReport + (' \n tag_label: ' + str(tag_label))
-                    if tag_label == 1 or finnes_tagget == 1:
+                    if tag_label == 1 or tag in DetailItemTags:
                         komp_skjema.append([k.Id, tag, family, familytype, '', komponent, funksjon])
+                    elif TFMkode in DetailItemTags:
+                        taglabelindex = DetailItemTags.index(TFMkode)
+                        taglabelindex = [j for j, y in enumerate(DetailItemTags) if y == TFMkode]
+                        for m in taglabelindex:
+                            sheetelemtag = doc.GetElement(DetailTtemTagObjects[m].OwnerViewId)
+                            sheetparametertag = sheetelemtag.get_Parameter(DB.BuiltInParameter.VIEWPORT_SHEET_NUMBER)
+                            skjemanrtag = sheetparametertag.AsString()
+                            #  antar at dersom detail item er tagget på samme tegning som detail item er vist, og TFM-kode er lik så er det det objektet som er tagget.
+                            #  Kan ikke vær e100% sikker siden systemnr ikke er vist på tegning
+
+                            if skjemanrtag = skjemanr:
+                                komp_skjema.append([k.Id, tag, family, familytype, '', komponent, funksjon])
+                                break
                 except:
                     # Blir ikke med på eksport siden ikke vist på tegning
                     DebugPrint('detail item ikke med på eksport siden ikke vist på tegning')
