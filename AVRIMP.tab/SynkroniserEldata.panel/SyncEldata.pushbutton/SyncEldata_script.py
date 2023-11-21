@@ -724,7 +724,7 @@ def MainFunction():
             elif tag_cat_status == 2:
                 DebugPrint('tag_cat_status 2 start ')
                 # skjema TFM
-                try:
+                if(1):
                     #SystemVar = i.LookupParameter('SystemVar').AsString()
                     #TFM11FkKompLNR = i.LookupParameter('TFM11FkKompLNR').AsString()
                     #TFM11FkKompGruppe = i.Symbol.LookupParameter('TFM11FkKompGruppe').AsString()
@@ -741,7 +741,8 @@ def MainFunction():
                     else:
                         #DebugPrint('Klarte ikke lage sammenslått tag')
                         continue
-                except:
+                #except:
+                else :
                     SummaryPrint('feil ved sammenslåing/avlesing av parametre som inngår i TFM for skjema')
                     DebugPrint('feil ved sammenslåing/avlesing av parametre som inngår i TFM for skjema')
                     errorReport += 'feil ved sammenslåing/avlesing av parametre som inngår i TFM for skjema'
