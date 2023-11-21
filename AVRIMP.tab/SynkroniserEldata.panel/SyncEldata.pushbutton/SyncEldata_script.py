@@ -731,9 +731,12 @@ def MainFunction():
                     TFMkode = i.LookupParameter('TFM-kode').AsString()
                     Systemnummer = i.LookupParameter('Systemnummer').AsString()
                     #Bør trolig legge inn sjekk her mot tomme verdier
-                    if TFMkode <>'' and Systemnummer <> '' :
+                    DebugPrint('tag_cat_status 2 ')
+                    if TFMkode !='' and Systemnummer != '' :
                         tag = Systemnummer + '-' + TFM11kode
+                        DebugPrint('Sammenslått tag: ' + tag)
                     else:
+                        DebugPrint('Klarte ikke lage sammenslått tag')
                         continue
                 except:
                     SummaryPrint('feil ved sammenslåing/avlesing av parametre som inngår i TFM for skjema')
