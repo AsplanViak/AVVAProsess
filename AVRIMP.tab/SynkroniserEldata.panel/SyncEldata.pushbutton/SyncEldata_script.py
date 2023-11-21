@@ -723,11 +723,17 @@ def MainFunction():
             elif tag_cat_status == 2:
                 # skjema TFM
                 try:
-                    SystemVar = i.LookupParameter('SystemVar').AsString()
-                    TFM11FkKompLNR = i.LookupParameter('TFM11FkKompLNR').AsString()
-                    TFM11FkKompGruppe = i.Symbol.LookupParameter('TFM11FkKompGruppe').AsString()
-                    tag = r"'" + '=' + SystemVar + '-' + TFM11FkKompGruppe + TFM11FkKompLNR
+                    #SystemVar = i.LookupParameter('SystemVar').AsString()
+                    #TFM11FkKompLNR = i.LookupParameter('TFM11FkKompLNR').AsString()
+                    #TFM11FkKompGruppe = i.Symbol.LookupParameter('TFM11FkKompGruppe').AsString()
+                    #tag = r"'" + '=' + SystemVar + '-' + TFM11FkKompGruppe + TFM11FkKompLNR
+                    TFMkode = i.LookupParameter('TFM-kode').AsString()
+                    Systemnummer = i.LookupParameter('Systemnummer').AsString()
                     #Bør trolig legge inn sjekk her mot tomme verdier
+                    if TFMkode <>'' and Systemnummer <> '' :
+                        tag = Systemnummer + '-' + TFM11kode
+                    else:
+                        continue
                 except:
                     SummaryPrint('feil ved sammenslåing/avlesing av parametre som inngår i TFM for skjema')
                     errorReport += 'feil ved sammenslåing/avlesing av parametre som inngår i TFM for skjema'
@@ -973,7 +979,7 @@ def MainFunction():
         if e[1] in finnes:
             i = finnes.index(e[1])
             #komp_skjema.append([k.Id, tag, family, familytype, '', komponent, funksjon])
-            #komp_skjema_ny[i][0] += ', ' + e[0]       #element_id
+            #komp_skjema_ny[i][0] += ', ' + e[0]      #element_id
             komp_skjema_ny[i][2] += ', ' + e[2]       #Family
             komp_skjema_ny[i][3] += ', ' + e[3]       #FamilyType
             komp_skjema_ny[i][4] += ', ' + e[4]       #Tegning            DETTE ER DEN VIKTIGSTE HER
