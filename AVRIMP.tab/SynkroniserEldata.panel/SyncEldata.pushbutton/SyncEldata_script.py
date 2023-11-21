@@ -886,11 +886,11 @@ def MainFunction():
                 # Finn verdier av felter "Komponent" og "Funksjon". Tekstfelter med metadata som VVS bruker
                 try:
                     funksjon = k.LookupParameter('Funksjon').AsString()
-                else:
+                except:
                     funksjon = ''
                 try:
                     komponent = k.LookupParameter('Komponent').AsString()
-                else:
+                except:
                     komponent = ''
 
                 # Sjekk om tag_label er synlig. Kan være vist enten som label innebygget i detail item, eller som tag by catebory
