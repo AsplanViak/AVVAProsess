@@ -929,7 +929,8 @@ def MainFunction():
                     elif TFMkode in DetailItemTags:
                         taglabelindex = DetailItemTags.index(TFMkode)
                         taglabelindex = [j for j, y in enumerate(DetailItemTags) if y == TFMkode]
-                        DebugPrint('Treff på komponentkode: ' + taglabelindex)
+                        DebugPrint('Treff på komponentkode:')
+                        DebugPrint(taglabelindex)
                         for m in taglabelindex:
                             sheetelemtag = doc.GetElement(DetailTtemTagObjects[m].OwnerViewId)
                             sheetparametertag = sheetelemtag.get_Parameter(DB.BuiltInParameter.VIEWPORT_SHEET_NUMBER)
