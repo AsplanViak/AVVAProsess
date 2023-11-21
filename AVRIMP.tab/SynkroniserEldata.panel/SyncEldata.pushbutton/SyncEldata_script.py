@@ -934,7 +934,7 @@ def MainFunction():
                             #  antar at dersom detail item er tagget på samme tegning som detail item er vist, og TFM-kode er lik så er det det objektet som er tagget.
                             #  Kan ikke vær e100% sikker siden systemnr ikke er vist på tegning
 
-                            if skjemanrtag = skjemanr:
+                            if skjemanrtag == skjemanr:
                                 komp_skjema.append([k.Id, tag, family, familytype, '', komponent, funksjon])
                                 break
                 #except:
