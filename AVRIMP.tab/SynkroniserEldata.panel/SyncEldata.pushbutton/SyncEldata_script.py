@@ -912,8 +912,8 @@ def MainFunction():
                     tag_label = 0
                 finnes_tagget = 0
                 #Sjekker om detail item er vist på tegning som plottes, dvs tegning med tegningsnummer. Dersom ikke, sannsynligvis kok, eller uferdig. Tas ikke med på eksport.
-                #try:
-                if(1):
+                try:
+                #if(1):
 
                     sheetelem = doc.GetElement(k.OwnerViewId)
                     sheetparameter = sheetelem.get_Parameter(DB.BuiltInParameter.VIEWPORT_SHEET_NUMBER)
@@ -941,8 +941,8 @@ def MainFunction():
                             if skjemanrtag == skjemanr:
                                 komp_skjema.append([k.Id, tag, family, familytype, '', komponent, funksjon])
                                 break
-                #except:
-                else:
+                except:
+                #else:
                     # Blir ikke med på eksport siden ikke vist på tegning
                     DebugPrint('detail item ikke med på eksport siden ikke vist på tegning')
 
