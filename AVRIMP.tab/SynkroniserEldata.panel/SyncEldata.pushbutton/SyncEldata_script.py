@@ -898,9 +898,9 @@ def MainFunction():
                 except:
                     funksjon = ''
                 try:
-                    komponent = k.LookupParameter('Komponent').AsString()
+                    komponentbeskrivelse = k.LookupParameter('Komponent').AsString()
                 except:
-                    komponent = ''
+                    komponentbeskrivelse = ''
 
                 # Sjekk om tag_label er synlig. Kan være vist enten som label innebygget i detail item, eller som tag by catebory
                 # Dersom ikke synlig tag: Stor sannsynlighet for at feil tag. Fjernes derfor fra eksport.
@@ -924,7 +924,7 @@ def MainFunction():
 
                     # summaryReport = summaryReport + (' \n tag_label: ' + str(tag_label))
                     if tag_label == 1 or tag in DetailItemTags:
-                        komp_skjema.append([k.Id, tag, family, familytype, '', komponent, funksjon])
+                        komp_skjema.append([k.Id, tag, family, familytype, '', komponentbeskrivelse, funksjon])
                         DebugPrint ('Lagt til fordi full tag label')
                     elif TFMkode in DetailItemTags:
                         taglabelindex = DetailItemTags.index(TFMkode)
@@ -939,7 +939,7 @@ def MainFunction():
                             #  Kan ikke vær e100% sikker siden systemnr ikke er vist på tegning
                             DebugPrint('skjemanrtag :' +skjemanrtag)
                             if skjemanrtag == skjemanr:
-                                komp_skjema.append([k.Id, tag, family, familytype, '', komponent, funksjon])
+                                komp_skjema.append([k.Id, tag, family, familytype, '', komponentbeskrivelse, funksjon])
                                 break
                 except:
                 #else:
@@ -1012,7 +1012,7 @@ def MainFunction():
             komp_skjema_ny[i][2] += ', ' + e[2]       #Family
             komp_skjema_ny[i][3] += ', ' + e[3]       #FamilyType
             komp_skjema_ny[i][4] += ', ' + e[4]       #Tegning            DETTE ER DEN VIKTIGSTE HER
-            komp_skjema_ny[i][5] += ', ' + e[5]       #Komponent
+            komp_skjema_ny[i][5] += ', ' + e[5]       #Komponentbeskrivelse
             komp_skjema_ny[i][6] += ', ' + e[6]       #Funksjon
 
         else:
