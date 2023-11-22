@@ -350,7 +350,7 @@ def MainFunction():
     # Liste over alle komponenter i skjema. Skal eksporters til excel og importeres til database.
     komp_skjema = []
     #Første rad inneholder headers
-    komp_skjema.append(['element_id', 'TAG', 'Family', 'FamilyType', 'Tegning', 'Komponentfunksjon', 'Funksjon'])
+    komp_skjema.append(['element_id', 'TAG', 'Family', 'FamilyType', 'Tegning', 'Komponentbeskrivelse', 'Funksjon'])
 
     #"Presync" er lister over eldata slik det så ut før synkronisering. Blir sjelden brukt, men fungerer som backup dersom noen av en eller
     #annen grunn har fyllt ut masse eldata direkte i modell. Dette blir jo overskrevet av script.
