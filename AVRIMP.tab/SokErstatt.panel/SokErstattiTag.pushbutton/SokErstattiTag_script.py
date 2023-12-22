@@ -203,8 +203,8 @@ def MainFunction():
 
     # Check if the OK button was clicked
     if result == DialogResult.OK:
-        tag_param = form.input_box.Text
-        DebugPrint("Nytt You entered:"+ tag_param)
+        find_replace_param = form.input_box.Text
+        DebugPrint("Nytt You entered:"+ find_replace_param )
     else:
         DebugPrint("User canceled the input.")
 
@@ -242,17 +242,17 @@ def MainFunction():
     #tag_param = input("Skriv inn navn på parameter for TAG, f.eks. TAG eller TFM11FkSamlet")
     #tag_param = 'TAG'
 
-    if tag_param.upper() == 'TAG':
+    if find_replace_param .upper() == 'TAG':
         tguid = Guid(TAG_guid)
-    elif tag_param == 'TFM11FkSamlet':
+    elif find_replace_param  == 'TFM11FkSamlet':
         tguid = Guid(TFM11FkSamlet_guid)
-    elif tag_param.upper() == 'TFM':
-        tguid = Guid(TFM11FkSamlet_guid)
+    #elif tag_paramfind_replace_param .upper() == 'TFM':
+    #    tguid = Guid(TFM11FkSamlet_guid)
     else:
         tguid = -1
 
     # finn kolonne i Io liste med tag/tfm, og finn project parametre
-    tag_kol = -1
+    #tag_kol = -1
 
     cat_list = [BuiltInCategory.OST_PipeAccessory, BuiltInCategory.OST_MechanicalEquipment,
                BuiltInCategory.OST_GenericModel, BuiltInCategory.OST_DuctAccessory, BuiltInCategory.OST_Sprinklers,
@@ -268,27 +268,17 @@ def MainFunction():
         DebugPrint(cat)
 
         # sjekk om tag/tfm parameter finnes, og om den er shared, og om den er definert med samme GUID som den riktige shared parameteren
-        tag_cat_status = (-1)
+        find_replace_cat_status = (-1)
 
         try:
             catel = FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().FirstElement()
             if catel is not None:
                 for param in catel.Parameters:
-                    '''if param.Definition.Name in parametre_project_name:
-                        i = parametre_project_name.index(param.Definition.Name)
-                        if param.IsShared == True and param.GUID == parametre_project_guid[i]:
-                            p_s_IO_cat_kol.append(parametre_project_IO_liste_kolonne[i])    # s = shared
-                            p_s_IO_cat_name.append(parametre_project_name[i])
-                            p_s_IO_cat_guid.append(parametre_project_guid[i])
-                        else:
-                            p_r_IO_cat_kol.append(parametre_project_IO_liste_kolonne[i])  # r = remaining (dvs. not shared)
-                            p_r_IO_cat_name.append(parametre_project_name[i])
-                    '''
                     if param.IsShared == True and param.GUID == tguid:
-                        tag_cat_status = 1  # status 1 betyr at den finnes som shared parameter, og at definisjonen stemmer overens med offisiel AV standard.
-                    elif param.Definition.Name == tag_param:
-                        if tag_cat_status == -1:
-                            tag_cat_status = 0  # status 0 betyr at den finnes, men at man ikke kan bruke GUID (enten fordi tag_param er ulik både tfm og tag, eller fordi det ikke er brukt shared parameter for denne)
+                        find_replace_cat_status = 1  # status 1 betyr at den finnes som shared parameter, og at definisjonen stemmer overens med offisiel AV standard.
+                    elif param.Definition.Name == find_replace_param:
+                        if find_replace_cat_status == -1:
+                            find_replace_cat_status = 0  # status 0 betyr at den finnes, men at man ikke kan bruke GUID (enten fordi tag_param er ulik både tfm og tag, eller fordi det ikke er brukt shared parameter for denne)
             else:
                 DebugPrint('Ingen elementer i cat. Ingen parameter testing')
                 continue
@@ -297,13 +287,9 @@ def MainFunction():
             DebugPrint('failed parameter testing')
             continue
 
-        if tag_cat_status == -1 and cat == BuiltInCategory.OST_DetailComponents:
-            if tag_param == 'TFM11FkSamlet' or tag_param == 'TFM':
-                # summaryReport += "Advarsel. Skyldes trolig at tag-parameter ikke er lagt til som project parameter for Detail Item. \n"
-                tag_cat_status = 2  # Betyr at man bruker denne som tag: SystemVar + '-' + TFM11FkKompGruppe + TFM11FkKompLNR
-
-        DebugPrint('tag_cat_status: ' + str(tag_cat_status))
-        if tag_cat_status == (-1):
+        
+        DebugPrint('find_replace_cat_status: ' + str(find_replace_cat_status))
+        if find_replace_cat_status == (-1):
             # category mangler definert tag-parameter
             DebugPrint('category mangler definert tag-parameter')
             # går til neste category
@@ -318,22 +304,19 @@ def MainFunction():
         DebugPrint(str(time.time() - start))
 
         for k in EQ:
-            # Tag reset
-            tag = ''
-
+            
             # sjekk om tag/tfm er blank, og finn tekstverdi på tag i revit
-            if tag_cat_status == 1:
+            if find_replace_cat_status == 1:
                 try:
-                    if k.get_Parameter(tguid).AsString() == 'null' or k.get_Parameter(
-                            tguid).AsString() == '=-' or k.get_Parameter(tguid).AsString() == '' or k.get_Parameter(
+                    if k.get_Parameter(tguid).AsString() == 'null' or k.get_Parameter(tguid).AsString() == '' or k.get_Parameter(
                         tguid).AsString() is None:
                         # gå til neste element dersom blank tag/tfm
                         SummaryPrint('blank tag/tfm (shared param):')
                         continue
-                    tag = k.get_Parameter(tguid).AsString()
+                    verdi = k.get_Parameter(tguid).AsString()
 
                     # Kode for å endre tag her
-                    res = k.get_Parameter(tguid).Set(tag.replace(gammelt_skilletegn, nytt_skilletegn))
+                    res = k.get_Parameter(tguid).Set(verdi.replace(gammelt_skilletegn, nytt_skilletegn))
 
                     # DebugPrint('k.get_Parameter(tguid).AsString() : ' + k.get_Parameter(tguid).AsString())
                     # DebugPrint('k.LookupParameter(TAG).AsString() : ' + k.LookupParameter('TAG').AsString())
@@ -342,35 +325,19 @@ def MainFunction():
                         "Feil. Skyldes trolig at parameter TAG ikke er lagt til som project parameter for Detail Item. Skipper element")
                     continue
             elif tag_cat_status == 0:
-                if k.LookupParameter(tag_param).AsString() == 'null' or k.LookupParameter(
-                        tag_param).AsString() == '=-' or k.LookupParameter(
-                    tag_param).AsString() == '' or k.LookupParameter(
+                if k.LookupParameter(tag_param).AsString() == 'null' or k.LookupParameter(tag_param).AsString() == '' or k.LookupParameter(
                     tag_param).AsString() is None:
                     # gå til neste element dersom blank tag/tfm
                     SummaryPrint('blank tag/tfm (project param) for:')
                     continue
-                tag = k.LookupParameter(tag_param).AsString()
+                verdi = k.LookupParameter(tag_param).AsString()
 
                 #Kode for å endre tag her
-                res = k.LookupParameter(tag_param).Set(tag.replace(gammelt_skilletegn, nytt_skilletegn))
+                res = k.LookupParameter(tag_param).Set(verdi.replace(gammelt_skilletegn, nytt_skilletegn))
                 if (res):
                     SummaryPrint('remaining parameter : ok')
                 else:
                     SummaryPrint('remaining parameter : feil')
-
-            elif tag_cat_status == 2:
-                # skjema TFM
-                try:
-                    SystemVar = i.LookupParameter('SystemVar').AsString()
-                    TFM11FkKompLNR = i.LookupParameter('TFM11FkKompLNR').AsString()
-                    TFM11FkKompGruppe = i.Symbol.LookupParameter('TFM11FkKompGruppe').AsString()
-                    tag = r"'" + '=' + SystemVar + '-' + TFM11FkKompGruppe + TFM11FkKompLNR
-                    # Bør trolig legge inn sjekk her mot tomme verdier
-                except:
-                    SummaryPrint('feil ved sammenslåing/avlesing av parametre som inngår i TFM for skjema')
-                    errorReport += 'feil ved sammenslåing/avlesing av parametre som inngår i TFM for skjema'
-                    continue
-            DebugPrint('Tag: ' + tag)
 
             n_elements += 1
 
