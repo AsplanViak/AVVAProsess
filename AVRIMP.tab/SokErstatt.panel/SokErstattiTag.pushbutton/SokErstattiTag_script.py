@@ -324,7 +324,7 @@ def MainFunction():
                     SummaryPrint(
                         "Feil. Skyldes trolig at parameter TAG ikke er lagt til som project parameter for Detail Item. Skipper element")
                     continue
-            elif tag_cat_status == 0:
+            elif find_replace_cat_status == 0:
                 if k.LookupParameter(tag_param).AsString() == 'null' or k.LookupParameter(tag_param).AsString() == '' or k.LookupParameter(
                     tag_param).AsString() is None:
                     # gå til neste element dersom blank tag/tfm
