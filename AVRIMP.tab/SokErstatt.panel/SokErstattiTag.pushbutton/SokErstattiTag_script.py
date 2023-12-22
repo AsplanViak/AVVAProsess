@@ -16,7 +16,7 @@ Fungerende autocomplete i pycharm.
 """
 
 # Start MÅ ha
-__title__ = 'Søk-erstatt funksjon i Tag'  # Denne overstyrer navnet på scriptfilen
+__title__ = 'Søk-erstatt funksjon'  # Denne overstyrer navnet på scriptfilen
 __author__ = 'Asplan Viak'  # Dette kommer opp som navnet på utvikler av knappen
 __doc__ = "Gir mulighet for å f.eks. endre skilletegn på alle TAG i flytskjema og 3D objekter."  # Dette blir hjelp teksten som kommer opp når man holder musepekeren over knappen.
 # End MÅ ha
@@ -119,6 +119,30 @@ def n2a(n,b=string.ascii_uppercase):
    d, m = divmod(n,len(b))
    return n2a(d-1,b)+b[m] if d else b[m]
 
+class InputFormParameter(Form):
+    def __init__(self):
+        self.Text = "Parameter"
+        self.label = Label(Text="Skriv inn parameter (f.eks. TAG):")
+        self.label.Dock = DockStyle.Top
+
+        self.input_box = TextBox()
+        self.input_box.Dock = DockStyle.Top
+
+        self.ok_button = Button(Text="OK", DialogResult=DialogResult.OK)
+        self.ok_button.Dock = DockStyle.Top
+        self.ok_button.Click += self.ok_button_click
+
+        self.cancel_button = Button(Text="Cancel", DialogResult=DialogResult.Cancel)
+        self.cancel_button.Dock = DockStyle.Top
+
+        self.Controls.Add(self.cancel_button)
+        self.Controls.Add(self.ok_button)
+        self.Controls.Add(self.input_box)
+        self.Controls.Add(self.label)
+
+    def ok_button_click(self, sender, event):
+        self.Close()
+
 
 class InputFormGammel(Form):
     def __init__(self):
@@ -174,6 +198,17 @@ def MainFunction():
     #nytt_skilletegn = input("Skriv inn nytt skilletegn: ")
 
     # Create and run the application
+    form = InputFormParameter()
+    result = form.ShowDialog()
+
+    # Check if the OK button was clicked
+    if result == DialogResult.OK:
+        tag_param = form.input_box.Text
+        DebugPrint("Nytt You entered:"+ tag_param)
+    else:
+        DebugPrint("User canceled the input.")
+
+    # Create and run the application
     form = InputFormGammel()
     result = form.ShowDialog()
 
@@ -203,7 +238,6 @@ def MainFunction():
 
     TAG_guid = '141d33b4-0f91-4dd8-a8b6-be1fa232d39f'
     TFM11FkSamlet_guid = '6b52eb8b-6935-45f9-a509-bb76724ba272'
-
 
     #tag_param = input("Skriv inn navn på parameter for TAG, f.eks. TAG eller TFM11FkSamlet")
     tag_param = 'TAG'
