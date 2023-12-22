@@ -325,15 +325,15 @@ def MainFunction():
                         "Feil. Skyldes trolig at parameter TAG ikke er lagt til som project parameter for Detail Item. Skipper element")
                     continue
             elif find_replace_cat_status == 0:
-                if k.LookupParameter(tag_param).AsString() == 'null' or k.LookupParameter(tag_param).AsString() == '' or k.LookupParameter(
-                    tag_param).AsString() is None:
+                if k.LookupParameter(find_replace_param).AsString() == 'null' or k.LookupParameter(find_replace_param).AsString() == '' or k.LookupParameter(
+                    find_replace_param).AsString() is None:
                     # gå til neste element dersom blank tag/tfm
                     SummaryPrint('blank tag/tfm (project param) for:')
                     continue
-                verdi = k.LookupParameter(tag_param).AsString()
+                verdi = k.LookupParameter(find_replace_param).AsString()
 
                 #Kode for å endre tag her
-                res = k.LookupParameter(tag_param).Set(verdi.replace(gammelt_skilletegn, nytt_skilletegn))
+                res = k.LookupParameter(find_replace_param).Set(verdi.replace(gammelt_skilletegn, nytt_skilletegn))
                 if (res):
                     SummaryPrint('remaining parameter : ok')
                 else:
