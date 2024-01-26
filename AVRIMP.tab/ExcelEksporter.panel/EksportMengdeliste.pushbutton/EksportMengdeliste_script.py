@@ -91,12 +91,19 @@ def SaveListToExcel(filePath, exportData):
         a = Array.CreateInstance(object, rows, cols) #row and column
         for r in range(rows):
             for c in range (cols):
+            #for c in range (4):
                 try:
                     a[r,c] = exportData[r][c]
                 except:
                     a[r,c] = ''
+            
         xlrange = ws.Range["A1", chr(ord('@')+cols) + str(rows)]
         xlrange.Value2 = a
+        for r in range(rows):
+            if ws.Cells(r,5).Value == 1 or r == 1:
+                bold_range = ws.Range[ws.Cells[row, 1], ws.Cells[row, 4]]  # Columns A to D
+                bold_range.Font.Bold = True
+        ws.Columns[5].Delete()
         wb.SaveAs(filePath)
         return True
     except:
@@ -228,6 +235,14 @@ for i in PF:
 
     try:
         family = i.Symbol.FamilyName
+        if 'magi_sewer_bend_NOR' in family:
+            family = 'Bend'
+        if 'magi_sewer_tee_wye_NOR' in family:
+            family = 'T-rør'
+        if 'magi_sewer_transition_NOR' in family:
+            family = 'Overgang'
+        if 'M_Pipe Straight Coupling' in family:
+            continue
         if 'Bend ' in family:
             vinkel = i.LookupParameter('Angle').AsDouble() / math.pi * 180
             vinkel = int(vinkel)
