@@ -100,9 +100,11 @@ def SaveListToExcel(filePath, exportData):
         xlrange = ws.Range["A1", chr(ord('@')+cols) + str(rows)]
         xlrange.Value2 = a
         for r in range(rows):
+            print(r)
             if ws.Cells(r,5).Value == 1 or r == 1:
+                print('bold row')
                 bold_range = ws.Range[ws.Cells[r, 1], ws.Cells[r, 4]]  # Columns A to D
-                bold_range.Cells.Font.Bold = True
+                bold_range.Font.Bold = True
 
         #bold_range2 = ws.Range[ws.Cells [4, 1], ws.Cells[5, 4]]  # Columns A to D
         ws.Cells[1,1].Font.Bold = True
