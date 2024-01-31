@@ -87,7 +87,7 @@ def SaveListToExcel(filePath, exportData):
         ws = wb.Worksheets[1]
         #ws.title = 'komp'
         rows = len(exportData)
-        print(rows)
+        #print(rows)
         cols = max(len(i) for i in exportData)
         a = Array.CreateInstance(object, rows, cols) #row and column
         for r in range(rows):
@@ -103,7 +103,7 @@ def SaveListToExcel(filePath, exportData):
         for r in range(rows):
             #if ws.Cells[r,5].Value == 1 or r == 1:
             if exportData[r][4] == 1 or r == 0:
-                bold_range = ws.Range[ws.Cells[r, 1], ws.Cells[r, 4]]  # Columns A to D
+                bold_range = ws.Range[ws.Cells[r+1, 1], ws.Cells[r+1, 4]]  # Columns A to D
                 bold_range.Cells.Font.Bold = True        
         ws.Columns[5].Delete()
         wb.SaveAs(filePath)
