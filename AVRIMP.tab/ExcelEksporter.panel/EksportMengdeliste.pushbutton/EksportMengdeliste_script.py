@@ -107,7 +107,7 @@ def SaveListToExcel(filePath, exportData):
             #try:
             #print('try')
             #if ws.Cells[r,5].Value == 1 or r == 1:
-            if exportData[r][5] == 1:
+            if exportData[r][4] == 1:
                 print('bold row')
                 #bold_range = ws.Range[ws.Cells[r, 1], ws.Cells[r, 4]]  # Columns A to D
                 #bold_range.Font.Bold = True
