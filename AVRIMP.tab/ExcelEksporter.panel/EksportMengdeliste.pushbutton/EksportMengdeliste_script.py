@@ -91,7 +91,6 @@ def SaveListToExcel(filePath, exportData):
         cols = max(len(i) for i in exportData)
         a = Array.CreateInstance(object, rows, cols) #row and column
         for r in range(rows):
-            print(r)
             for c in range (cols):
             #for c in range (4):
                 try:
@@ -101,22 +100,11 @@ def SaveListToExcel(filePath, exportData):
             
         xlrange = ws.Range["A1", chr(ord('@')+cols) + str(rows)]
         xlrange.Value2 = a
-        print('fet')
         for r in range(rows):
-            print(r)
-            #try:
-            #print('try')
             #if ws.Cells[r,5].Value == 1 or r == 1:
-            if exportData[r][4] == 1:
-                print('bold row')
-                #bold_range = ws.Range[ws.Cells[r, 1], ws.Cells[r, 4]]  # Columns A to D
-                #bold_range.Font.Bold = True
-            #except:
-            #    print('error')    
-        bold_range2 = ws.Range[ws.Cells [1, 1], ws.Cells[1, 4]]  # Columns A to D
-        bold_range2.Cells.Font.Bold = True
-        #fungerer     ws.Cells[1,1].Font.Bold = True
-        
+            if exportData[r][4] == 1 or r == 0:
+                bold_range = ws.Range[ws.Cells[r, 1], ws.Cells[r, 4]]  # Columns A to D
+                bold_range.Cells.Font.Bold = True        
         ws.Columns[5].Delete()
         wb.SaveAs(filePath)
         return True
