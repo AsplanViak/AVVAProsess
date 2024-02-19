@@ -197,13 +197,14 @@ for k in picked:
 
 
 
+
 for i in PA:
     #Legger inn parameter for sortering. Default er PA1. I Praksis vil denne brukes mest til instrumentering. Mengdemålere vil ha PA0.
     #Ventiler får PA2. Flenser PA3.
     sortering = 'PA1'
     #sjekk om markert
-    #if not i.ElementID in EQ:
-    if not i in picked:
+    #if not i in picked:
+    if not i in EQ:
         continue
     # Finn family
     try:
