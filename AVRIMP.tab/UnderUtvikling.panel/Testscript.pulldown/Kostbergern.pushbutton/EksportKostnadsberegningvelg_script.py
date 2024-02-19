@@ -183,7 +183,7 @@ names = []
 
 
 # make selection in UI for selecting pipe accessories and mech eq ++
-cat_list = ['Pipe Accessories', 'Mechanical Equipment', 'Generic Model']
+cat_list = ['Pipe Accessories', 'Pipe Fittings', 'Pipes']
 picked = []
 try:
     picked = uidoc.Selection.PickObjects(ObjectType.Element)
@@ -202,7 +202,8 @@ for i in PA:
     #Ventiler får PA2. Flenser PA3.
     sortering = 'PA1'
     #sjekk om markert
-    if not i.ElementID in EQ:
+    #if not i.ElementID in EQ:
+    if not i in picked:
         continue
     # Finn family
     try:
