@@ -270,7 +270,7 @@ for i in PA:
 
 for i in PI:
     #sjekk om markert
-    if not i.ElementID in EQ:
+    if not i in picked:
         continue
     # Finn system type
     try:
@@ -300,7 +300,7 @@ for i in PI:
 
 for i in PF:
     #sjekk om markert
-    if not i.ElementID in EQ:
+    if not i in picked:
         continue
     #Resett parameter for å telle deler av bend.
     n_PF = 1
