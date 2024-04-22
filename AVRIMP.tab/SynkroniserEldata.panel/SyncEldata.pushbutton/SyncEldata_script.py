@@ -664,7 +664,7 @@ def MainFunction():
         if cat == BuiltInCategory.OST_DetailComponents:
             if tag_param == 'TFM11FkSamlet' or tag_param == 'TFM':
                  # summaryReport += "Advarsel. Skyldes trolig at tag-parameter ikke er lagt til som project parameter for Detail Item. \n"
-                tag_cat_status = 2  # Betyr at man bruker sammenslått streng som tag/TFM
+                #tag_cat_status = 2  # Betyr at man bruker sammenslått streng som tag/TFM
 
         DebugPrint('tag_cat_status: ' + str(tag_cat_status))
         if tag_cat_status == (-1):
