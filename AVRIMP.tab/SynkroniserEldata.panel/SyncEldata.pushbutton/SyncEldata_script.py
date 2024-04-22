@@ -660,11 +660,11 @@ def MainFunction():
         #p_s_IO_cat_guid = [x for (y, x) in sorted(zip(p_s_IO_cat_kol, p_s_IO_cat_guid), key=lambda pair: pair[0])]
         #p_s_IO_cat_kol = sorted(p_s_IO_cat_kol)
 
-        if tag_cat_status == -1 and cat == BuiltInCategory.OST_DetailComponents:
+        #if tag_cat_status == -1 and cat == BuiltInCategory.OST_DetailComponents:
         #if cat == BuiltInCategory.OST_DetailComponents:
-            if tag_param == 'TFM11FkSamlet' or tag_param == 'TFM':
+         #   if tag_param == 'TFM11FkSamlet' or tag_param == 'TFM':
                  # summaryReport += "Advarsel. Skyldes trolig at tag-parameter ikke er lagt til som project parameter for Detail Item. \n"
-                tag_cat_status = 2  # Betyr at man bruker sammenslått streng som tag/TFM
+          #      tag_cat_status = 2  # Betyr at man bruker sammenslått streng som tag/TFM
 
         DebugPrint('tag_cat_status: ' + str(tag_cat_status))
         if tag_cat_status == (-1):
