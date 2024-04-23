@@ -681,10 +681,11 @@ def MainFunction():
             DItags= DB.FilteredElementCollector(doc).WherePasses(filt).WhereElementIsNotElementType().ToElements()
             DetailItemTags = []
             DetailTtemTagObjects = []
+
             for i in DItags:
                 try:
                     #fjerne \n\n\n og diverse metadata i tags
-                    lines = i.TagText('\n')
+                    lines = i.TagText.split('\n')
                     tagtekst_stripped = lines[0].strip()
                     if tagtekst_stripped != '-':
                         DetailItemTags.append(tagtekst_stripped)
