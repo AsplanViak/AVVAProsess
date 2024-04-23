@@ -746,10 +746,10 @@ def MainFunction():
                 except:
                 #else :
                     SummaryPrint('feil ved sammenslåing/avlesing av parametre som inngår i TFM for skjema')
-                    DebugPrint('feil ved sammenslåing/avlesing av parametre som inngår i TFM for skjema')
+                    #DebugPrint('feil ved sammenslåing/avlesing av parametre som inngår i TFM for skjema')
                     errorReport += 'feil ved sammenslåing/avlesing av parametre som inngår i TFM for skjema'
                     continue
-            DebugPrint('Tag: ' + tag)
+            #DebugPrint('Tag: ' + tag)
 
             n_elements += 1
 
@@ -778,7 +778,7 @@ def MainFunction():
                     if tag == IOliste[b][tag_kol]:
                         IO_liste_row = b
                         break
-            DebugPrint('IO_liste_row :' + str(IO_liste_row))
+            #DebugPrint('IO_liste_row :' + str(IO_liste_row))
 
             # Presync data
             # lag tom header list for denne category (antall parametre kan variere mellom categories)
@@ -794,9 +794,9 @@ def MainFunction():
 
             # oppdater_eldata(IO_liste_row, k)
             try:
-                DebugPrint('presync_top_row')
-                DebugPrint(presync_top_row)
-                DebugPrint('IO_liste_row: ' + str(IO_liste_row) + ', n_elements: ' + str(n_elements))
+            #    DebugPrint('presync_top_row')
+            #    DebugPrint(presync_top_row)
+             #   DebugPrint('IO_liste_row: ' + str(IO_liste_row) + ', n_elements: ' + str(n_elements))
                 OppdaterEldata(cat, IO_liste_row, k, n_elements, p_s_IO_cat_kol, p_s_IO_cat_guid, p_s_IO_cat_name,
                                p_r_IO_cat_name, p_r_IO_cat_kol)
             except:
@@ -807,7 +807,7 @@ def MainFunction():
                     presync_3d.append(presync_top_row)
                 presync_3d.append(presync_3d_row)
             else:
-                DebugPrint('skjemaleement presync')
+            #    DebugPrint('skjemaleement presync')
                 if n_elements == 1:
                     presync_skjema.append(presync_top_row)
                 presync_skjema.append(presync_skjema_row)
@@ -878,7 +878,7 @@ def MainFunction():
             # komp_skjema
             else:
                 # Finn family
-                DebugPrint('skjemaelement')
+                #DebugPrint('skjemaelement')
                 #DebugPrint(tag)
                 # Finn family
                 try:
@@ -906,9 +906,9 @@ def MainFunction():
                 # Dersom ikke synlig tag: Stor sannsynlighet for at feil tag. Fjernes derfor fra eksport.
                 try:
                     tag_label = k.LookupParameter('Tag label').AsInteger()
-                    DebugPrint('tag_label: ' + str(tag_label))
+                #   DebugPrint('tag_label: ' + str(tag_label))
                 except:
-                    DebugPrint('tag_label undefined')
+                 #   DebugPrint('tag_label undefined')
                     tag_label = 0
                 finnes_tagget = 0
                 #Sjekker om detail item er vist på tegning som plottes, dvs tegning med tegningsnummer. Dersom ikke, sannsynligvis kok, eller uferdig. Tas ikke med på eksport.
@@ -920,7 +920,7 @@ def MainFunction():
                     skjemanr = sheetparameter.AsString()
                     #DetailTtemTagObjects
 
-                    DebugPrint('skjema: ' + skjemanr)
+                    #DebugPrint('skjema: ' + skjemanr)
 
                     # summaryReport = summaryReport + (' \n tag_label: ' + str(tag_label))
                     if tag_label == 1 or tag in DetailItemTags:
@@ -929,24 +929,24 @@ def MainFunction():
                     elif TFMkode in DetailItemTags:
                         taglabelindex = DetailItemTags.index(TFMkode)
                         taglabelindex = [j for j, y in enumerate(DetailItemTags) if y == TFMkode]
-                        DebugPrint('Treff på komponentkode:')
-                        DebugPrint(taglabelindex)
+                        #DebugPrint('Treff på komponentkode:')
+                        #DebugPrint(taglabelindex)
                         for m in taglabelindex:
                             sheetelemtag = doc.GetElement(DetailTtemTagObjects[m].OwnerViewId)
                             sheetparametertag = sheetelemtag.get_Parameter(DB.BuiltInParameter.VIEWPORT_SHEET_NUMBER)
                             skjemanrtag = sheetparametertag.AsString()
                             #  antar at dersom detail item er tagget på samme tegning som detail item er vist, og TFM-kode er lik så er det det objektet som er tagget.
                             #  Kan ikke vær e100% sikker siden systemnr ikke er vist på tegning
-                            DebugPrint('skjemanrtag :' +skjemanrtag)
+                            #DebugPrint('skjemanrtag :' +skjemanrtag)
                             if skjemanrtag == skjemanr:
                                 komp_skjema.append([k.Id, tag, family, familytype, '', komponentbeskrivelse, funksjon])
                                 break
                 except:
                 #else:
                     # Blir ikke med på eksport siden ikke vist på tegning
-                    DebugPrint('detail item ikke med på eksport siden ikke vist på tegning')
+                    #DebugPrint('detail item ikke med på eksport siden ikke vist på tegning')
 
-        DebugPrint('n_elements: ' + str(n_elements))
+        #DebugPrint('n_elements: ' + str(n_elements))
 
     #########################################################################################################################################
     # Loop tegninger
