@@ -972,7 +972,7 @@ def MainFunction():
                                         break
                                 except:
                                     DebugPrint('Skipper detail item tag, trolig fordi ikke vist på tegningsark')    
-                                if finnes_tagget == 0:
+                            if finnes_tagget == 0:
                                 # Blir ikke med på eksport siden ikke vist på tegning
                                 DebugPrint('detail item ikke med på eksport siden ikke vist på tegning')
                         else: 
