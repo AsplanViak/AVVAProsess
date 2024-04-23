@@ -944,7 +944,7 @@ def MainFunction():
                 except:
                 #else:
                     # Blir ikke med på eksport siden ikke vist på tegning
-                    #DebugPrint('detail item ikke med på eksport siden ikke vist på tegning')
+                    DebugPrint('detail item ikke med på eksport siden ikke vist på tegning')
 
         #DebugPrint('n_elements: ' + str(n_elements))
 
