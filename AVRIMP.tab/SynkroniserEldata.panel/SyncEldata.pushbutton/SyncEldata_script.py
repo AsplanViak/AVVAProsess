@@ -687,7 +687,7 @@ def MainFunction():
                     DetailTtemTagObjects.append(i)
                 except :
                     pass
-        DebugPrint(DetailItemTags)
+            DebugPrint(DetailItemTags)
 
         # loop elements in category
         EQ = FilteredElementCollector(doc).OfCategory(cat).WhereElementIsNotElementType().ToElements()
