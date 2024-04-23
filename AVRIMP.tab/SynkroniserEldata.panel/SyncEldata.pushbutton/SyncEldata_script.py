@@ -755,6 +755,7 @@ def MainFunction():
                 if tag_param == 'TFM11FkSamlet' or tag_param == 'TFM':
                     #Parameter "TMFkode" blir brukt om objekt-koden av tag, dvs. det som er etter bindestrek. Parameter brukes for å sjekke om komponent er vist på tegning.
                     TFMkode = tag.split('-')[-1]
+                    DebugPrint('TFM kode: ' + TFMkode)
 
             n_elements += 1
 
@@ -933,6 +934,7 @@ def MainFunction():
                         DebugPrint ('Lagt til fordi full tag label')
                     #sjekker om komponentledd av TFM-kode er vist på tegning (vanlig praksis for vVS å kun vise siste ledd)
                     elif TFMkode in DetailItemTags:
+                        DebugPrint('TFMkode in DetailItemTags:')
                         taglabelindex = DetailItemTags.index(TFMkode)
                         taglabelindex = [j for j, y in enumerate(DetailItemTags) if y == TFMkode]
                         #DebugPrint('Treff på komponentkode:')
@@ -945,6 +947,7 @@ def MainFunction():
                             #  Kan ikke vær e100% sikker siden systemnr ikke er vist på tegning
                             #DebugPrint('skjemanrtag :' +skjemanrtag)
                             if skjemanrtag == skjemanr:
+                                DebugPrint('skjemanrtag == skjemanr:')
                                 komp_skjema.append([k.Id, tag, family, familytype, '', komponentbeskrivelse, funksjon])
                                 break
                 #except:
