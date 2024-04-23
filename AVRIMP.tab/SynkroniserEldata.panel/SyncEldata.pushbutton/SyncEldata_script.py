@@ -771,7 +771,7 @@ def MainFunction():
             if tag.startswith('-'):
                 DebugPrint('TAG/TFM starter med bindestrek. Skyldes trolig at ledd 2 System ikke er fyllt ut. Objekt ikke med på eksport/import til Access.')
                 DebugPrint(' TAG som er utelukket fra videre kjøring: ' + tag)
-                break
+                next
 
             #############################################################################################################
             # SYNC DATA TIL REVIT. Inkl. eksport presync
@@ -934,12 +934,8 @@ def MainFunction():
                 #Sjekker om detail item er vist på tegning som plottes, dvs tegning med tegningsnummer. Dersom ikke, sannsynligvis kok, eller uferdig. Tas ikke med på eksport.
                 #try:
                 if(1):
-
-                   
                     #DetailTtemTagObjects
-
                     #DebugPrint('skjema: ' + skjemanr)
-
                     # summaryReport = summaryReport + (' \n tag_label: ' + str(tag_label))
                     if tag_label == 1 or tag in DetailItemTags:
                         komp_skjema.append([k.Id, tag, family, familytype, '', komponentbeskrivelse, funksjon])
