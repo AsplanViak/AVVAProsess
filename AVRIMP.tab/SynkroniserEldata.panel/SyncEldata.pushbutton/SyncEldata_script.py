@@ -683,10 +683,12 @@ def MainFunction():
             DetailTtemTagObjects = []
             for i in DItags:
                 try:
-                    DetailItemTags.append(i.TagText)
+                    lines = i.TagText('\n')
+                    DetailItemTags.append(lines[0].strip())
                     DetailTtemTagObjects.append(i)
                 except :
                     pass
+            
             DebugPrint(DetailItemTags)
 
         # loop elements in category
