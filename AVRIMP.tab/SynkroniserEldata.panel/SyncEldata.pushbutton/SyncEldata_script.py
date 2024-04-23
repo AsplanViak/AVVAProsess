@@ -686,7 +686,7 @@ def MainFunction():
                     #fjerne \n\n\n og diverse metadata i tags
                     lines = i.TagText('\n')
                     tagtekst_stripped = lines[0].strip()
-                    if tagtekst_stripped <> '-':
+                    if tagtekst_stripped != '-':
                         DetailItemTags.append(tagtekst_stripped)
                         DetailTtemTagObjects.append(i)
                 except :
@@ -937,7 +937,7 @@ def MainFunction():
                     if tag_label == 1 or tag in DetailItemTags:
                         komp_skjema.append([k.Id, tag, family, familytype, '', komponentbeskrivelse, funksjon])
                         DebugPrint ('Lagt til fordi full tag label')
-                    #sjekker om komponentledd av TFM-kode er vist på tegning (vanlig praksis for vVS å kun vise siste ledd)
+                    #sjekker om komponentledd av TFM-kode er vist på tegning (vanlig praksis for VVS å kun vise siste ledd)
                     elif tag_param == 'TFM11FkSamlet' or tag_param == 'TFM':
                         if TFMkode in DetailItemTags:
                             DebugPrint('TFMkode in DetailItemTags:')
@@ -1053,8 +1053,8 @@ def MainFunction():
 
     excel_eksport = [komp_3d, komp_skjema, presync_3d, presync_skjema]
 
-    DebugPrint('presync skjema')
-    DebugPrint(presync_skjema)
+    #DebugPrint('presync skjema')
+    #DebugPrint(presync_skjema)
     DebugPrint(' Før excel-eksport ' +str(time.time() - start))
 
     for i in range(4):
