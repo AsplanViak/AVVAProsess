@@ -938,34 +938,39 @@ def MainFunction():
                         komp_skjema.append([k.Id, tag, family, familytype, '', komponentbeskrivelse, funksjon])
                         DebugPrint ('Lagt til fordi full tag label')
                     #sjekker om komponentledd av TFM-kode er vist på tegning (vanlig praksis for vVS å kun vise siste ledd)
-                    elif TFMkode in DetailItemTags:
-                        DebugPrint('TFMkode in DetailItemTags:')
-                        taglabelindex = DetailItemTags.index(TFMkode)
-                        taglabelindex = [j for j, y in enumerate(DetailItemTags) if y == TFMkode]
-                        #DebugPrint('Treff på komponentkode:')
-                        #DebugPrint(taglabelindex)
-                        sheetelem = doc.GetElement(k.OwnerViewId)
-                        sheetparameter = sheetelem.get_Parameter(DB.BuiltInParameter.VIEWPORT_SHEET_NUMBER)
-                        skjemanr = sheetparameter.AsString()
-                        DebugPrint('Skjemanr: ' + skjemanr)
-                        for m in taglabelindex:
-                            sheetelemtag = doc.GetElement(DetailTtemTagObjects[m].OwnerViewId)
-                            sheetparametertag = sheetelemtag.get_Parameter(DB.BuiltInParameter.VIEWPORT_SHEET_NUMBER)
-                            skjemanrtag = sheetparametertag.AsString()
-                            DebugPrint('Skjemanrtag: ' + skjemanrtag)
-                            #  antar at dersom detail item er tagget på samme tegning som detail item er vist, og TFM-kode er lik så er det det objektet som er tagget.
-                            #  Kan ikke vær e100% sikker siden systemnr ikke er vist på tegning
-                            #DebugPrint('skjemanrtag :' +skjemanrtag)
-                            if skjemanrtag == skjemanr:
-                                DebugPrint('skjemanrtag == skjemanr:')
-                                komp_skjema.append([k.Id, tag, family, familytype, '', komponentbeskrivelse, funksjon])
-                                break
-                    else: 
-                        DebugPrint('Ingen treff på på TFMkode eller tag i DetailItemTags')
+                    elif tag_param == 'TFM11FkSamlet' or tag_param == 'TFM':
+                        if TFMkode in DetailItemTags:
+                            DebugPrint('TFMkode in DetailItemTags:')
+                            taglabelindex = DetailItemTags.index(TFMkode)
+                            taglabelindex = [j for j, y in enumerate(DetailItemTags) if y == TFMkode]
+                            #DebugPrint('Treff på komponentkode:')
+                            #DebugPrint(taglabelindex)
+                            sheetelem = doc.GetElement(k.OwnerViewId)
+                            sheetparameter = sheetelem.get_Parameter(DB.BuiltInParameter.VIEWPORT_SHEET_NUMBER)
+                            skjemanr = sheetparameter.AsString()
+                            DebugPrint('Skjemanr: ' + skjemanr)
+                            for m in taglabelindex:
+                                sheetelemtag = doc.GetElement(DetailTtemTagObjects[m].OwnerViewId)
+                                sheetparametertag = sheetelemtag.get_Parameter(DB.BuiltInParameter.VIEWPORT_SHEET_NUMBER)
+                                skjemanrtag = sheetparametertag.AsString()
+                                DebugPrint('Skjemanrtag: ' + skjemanrtag)
+                                #  antar at dersom detail item er tagget på samme tegning som detail item er vist, og TFM-kode er lik så er det det objektet som er tagget.
+                                #  Kan ikke vær e100% sikker siden systemnr ikke er vist på tegning
+                                #DebugPrint('skjemanrtag :' +skjemanrtag)
+                                if skjemanrtag == skjemanr:
+                                    DebugPrint('skjemanrtag == skjemanr:')
+                                    komp_skjema.append([k.Id, tag, family, familytype, '', komponentbeskrivelse, funksjon])
+                                    break
+                            # Blir ikke med på eksport siden ikke vist på tegning
+                            DebugPrint('detail item ikke med på eksport siden ikke vist på tegning')
+                        else: 
+                            DebugPrint('Ingen treff på TFMkode eller tag i DetailItemTags')
+                    else:
+                        DebugPrint('Ingen treff på tag i DetailItemTags')
                 #except:
-                else:
+                #else:
                     # Blir ikke med på eksport siden ikke vist på tegning
-                    DebugPrint('detail item ikke med på eksport siden ikke vist på tegning')
+                    #DebugPrint('detail item ikke med på eksport siden ikke vist på tegning')
 
         #DebugPrint('n_elements: ' + str(n_elements))
 
