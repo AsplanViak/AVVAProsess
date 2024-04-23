@@ -948,26 +948,29 @@ def MainFunction():
                             taglabelindex = [j for j, y in enumerate(DetailItemTags) if y == TFMkode]
                             #DebugPrint('Treff på komponentkode:')
                             #DebugPrint(taglabelindex)
-                            sheetelem = doc.GetElement(k.OwnerViewId)
-                            sheetparameter = sheetelem.get_Parameter(DB.BuiltInParameter.VIEWPORT_SHEET_NUMBER)
-                            skjemanr = sheetparameter.AsString()
-                            DebugPrint('Skjemanr: ' + skjemanr)
-                            for m in taglabelindex:
-                                try:
-                                    sheetelemtag = doc.GetElement(DetailTtemTagObjects[m].OwnerViewId)
-                                    sheetparametertag = sheetelemtag.get_Parameter(DB.BuiltInParameter.VIEWPORT_SHEET_NUMBER)
-                                    skjemanrtag = sheetparametertag.AsString()
-                                    DebugPrint('Skjemanrtag: ' + skjemanrtag)
-                                    #  antar at dersom detail item er tagget på samme tegning som detail item er vist, og TFM-kode er lik så er det det objektet som er tagget.
-                                    #  Kan ikke vær e100% sikker siden systemnr ikke er vist på tegning
-                                    #DebugPrint('skjemanrtag :' +skjemanrtag)
-                                    if skjemanrtag == skjemanr:
-                                        DebugPrint('skjemanrtag == skjemanr:')
-                                        komp_skjema.append([k.Id, tag, family, familytype, '', komponentbeskrivelse, funksjon])
-                                        finnes_tagget = 1
-                                        break
-                                except:
-                                    DebugPrint('Skipper detail item tag, trolig fordi ikke vist på tegningsark')    
+                            try:
+                                sheetelem = doc.GetElement(k.OwnerViewId)
+                                sheetparameter = sheetelem.get_Parameter(DB.BuiltInParameter.VIEWPORT_SHEET_NUMBER)
+                                skjemanr = sheetparameter.AsString()
+                                DebugPrint('Skjemanr: ' + skjemanr)
+                                for m in taglabelindex:
+                                    try:
+                                        sheetelemtag = doc.GetElement(DetailTtemTagObjects[m].OwnerViewId)
+                                        sheetparametertag = sheetelemtag.get_Parameter(DB.BuiltInParameter.VIEWPORT_SHEET_NUMBER)
+                                        skjemanrtag = sheetparametertag.AsString()
+                                        DebugPrint('Skjemanrtag: ' + skjemanrtag)
+                                        #  antar at dersom detail item er tagget på samme tegning som detail item er vist, og TFM-kode er lik så er det det objektet som er tagget.
+                                        #  Kan ikke vær e100% sikker siden systemnr ikke er vist på tegning
+                                        #DebugPrint('skjemanrtag :' +skjemanrtag)
+                                        if skjemanrtag == skjemanr:
+                                            DebugPrint('skjemanrtag == skjemanr:')
+                                            komp_skjema.append([k.Id, tag, family, familytype, '', komponentbeskrivelse, funksjon])
+                                            finnes_tagget = 1
+                                            break
+                                    except:
+                                        DebugPrint('Skipper detail item tag, trolig fordi DetailItemTag ikke er vist på tegningsark')    
+                            except:
+                                DebugPrint('Skipper detail item tag, trolig fordi DetailItem ikke er vist på tegningsark')    
                             if finnes_tagget == 0:
                                 # Blir ikke med på eksport siden ikke vist på tegning
                                 DebugPrint('detail item ikke med på eksport siden ikke vist på tegning')
