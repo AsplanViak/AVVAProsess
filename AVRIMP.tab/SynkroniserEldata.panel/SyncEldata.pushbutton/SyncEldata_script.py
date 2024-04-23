@@ -683,12 +683,15 @@ def MainFunction():
             DetailTtemTagObjects = []
             for i in DItags:
                 try:
+                    #fjerne \n\n\n og diverse metadata i tags
                     lines = i.TagText('\n')
-                    DetailItemTags.append(lines[0].strip())
-                    DetailTtemTagObjects.append(i)
+                    tagtekst_stripped = lines[0].strip()
+                    if tagtekst_stripped <> '-':
+                        DetailItemTags.append(tagtekst_stripped)
+                        DetailTtemTagObjects.append(i)
                 except :
                     pass
-            
+            DebugPrint('DetailItemTags')
             DebugPrint(DetailItemTags)
 
         # loop elements in category
@@ -758,7 +761,8 @@ def MainFunction():
                 if tag_param == 'TFM11FkSamlet' or tag_param == 'TFM':
                     #Parameter "TMFkode" blir brukt om objekt-koden av tag, dvs. det som er etter bindestrek. Parameter brukes for å sjekke om komponent er vist på tegning.
                     TFMkode = tag.split('-')[-1]
-                    DebugPrint('TFM kode: ' + TFMkode)
+                    DebugPrint('TFMkode: ' + TFMkode)
+                    DebugPrint('tag: ' + tag)
 
             n_elements += 1
 
@@ -919,7 +923,7 @@ def MainFunction():
                 except:
                  #   DebugPrint('tag_label undefined')
                     tag_label = 0
-                finnes_tagget = 0
+                #finnes_tagget = 0
                 #Sjekker om detail item er vist på tegning som plottes, dvs tegning med tegningsnummer. Dersom ikke, sannsynligvis kok, eller uferdig. Tas ikke med på eksport.
                 #try:
                 if(1):
