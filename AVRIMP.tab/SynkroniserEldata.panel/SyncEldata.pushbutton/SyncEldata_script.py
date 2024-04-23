@@ -921,9 +921,7 @@ def MainFunction():
                 #try:
                 if(1):
 
-                    sheetelem = doc.GetElement(k.OwnerViewId)
-                    sheetparameter = sheetelem.get_Parameter(DB.BuiltInParameter.VIEWPORT_SHEET_NUMBER)
-                    skjemanr = sheetparameter.AsString()
+                   
                     #DetailTtemTagObjects
 
                     #DebugPrint('skjema: ' + skjemanr)
@@ -939,10 +937,15 @@ def MainFunction():
                         taglabelindex = [j for j, y in enumerate(DetailItemTags) if y == TFMkode]
                         #DebugPrint('Treff på komponentkode:')
                         #DebugPrint(taglabelindex)
+                        sheetelem = doc.GetElement(k.OwnerViewId)
+                        sheetparameter = sheetelem.get_Parameter(DB.BuiltInParameter.VIEWPORT_SHEET_NUMBER)
+                        skjemanr = sheetparameter.AsString()
+                        DebugPrint('Skjemanr: ' + skjemanr)
                         for m in taglabelindex:
                             sheetelemtag = doc.GetElement(DetailTtemTagObjects[m].OwnerViewId)
                             sheetparametertag = sheetelemtag.get_Parameter(DB.BuiltInParameter.VIEWPORT_SHEET_NUMBER)
                             skjemanrtag = sheetparametertag.AsString()
+                            DebugPrint('Skjemanrtag: ' + skjemanrtag)
                             #  antar at dersom detail item er tagget på samme tegning som detail item er vist, og TFM-kode er lik så er det det objektet som er tagget.
                             #  Kan ikke vær e100% sikker siden systemnr ikke er vist på tegning
                             #DebugPrint('skjemanrtag :' +skjemanrtag)
@@ -950,6 +953,8 @@ def MainFunction():
                                 DebugPrint('skjemanrtag == skjemanr:')
                                 komp_skjema.append([k.Id, tag, family, familytype, '', komponentbeskrivelse, funksjon])
                                 break
+                    else: 
+                        DebugPrint('Ingen treff på på TFMkode eller tag i DetailItemTags')
                 #except:
                 else:
                     # Blir ikke med på eksport siden ikke vist på tegning
