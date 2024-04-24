@@ -772,6 +772,9 @@ def MainFunction():
                 DebugPrint('TAG/TFM starter med bindestrek. Skyldes trolig at ledd 2 System ikke er fyllt ut. Objekt ikke med på eksport/import til Access.')
                 DebugPrint(' TAG som er utelukket fra videre kjøring: ' + tag)
                 next
+            #fjerner erlik tegn fra TFM-kode
+            if tag.startswith('='):
+                tag = tag[1:]
 
             #############################################################################################################
             # SYNC DATA TIL REVIT. Inkl. eksport presync
